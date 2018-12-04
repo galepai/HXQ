@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>hxqClass</class>
+ <widget class="QMainWindow" name="hxqClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1027</width>
+    <height>810</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>换向器外观检测系统</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="HXQ.qrc">
+    <normaloff>:/logo/Resources/fivision.ico</normaloff>:/logo/Resources/fivision.ico</iconset>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QScrollArea" name="scrollArea_Left">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContentsLeft">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>499</width>
+           <height>343</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QGraphicsView" name="LeftPicView">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>1677215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 0, 0);</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QScrollArea" name="scrollArea_Middle">
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContentsMiddle">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>498</width>
+           <height>343</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QGraphicsView" name="MiddlePicView">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 0, 0);</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>实时曝光设置</string>
+        </property>
+        <widget class="QSpinBox" name="spinBox_11">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>20</y>
+           <width>51</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="maximum">
+          <number>90</number>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="spinBox_07">
+         <property name="geometry">
+          <rect>
+           <x>120</x>
+           <y>20</y>
+           <width>51</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="maximum">
+          <number>190</number>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="spinBox_02">
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>20</y>
+           <width>51</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="maximum">
+          <number>900</number>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton_exposure">
+         <property name="geometry">
+          <rect>
+           <x>510</x>
+           <y>20</y>
+           <width>81</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>曝光</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="minimumSize">
+         <size>
+          <width>350</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <widget class="QLCDNumber" name="lcdNumber_good">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>20</y>
+           <width>64</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 255);</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
+         </property>
+        </widget>
+        <widget class="QLCDNumber" name="lcdNumber_bad">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>20</y>
+           <width>64</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(255, 0, 0);</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>54</width>
+           <height>12</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Aharoni</family>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>良品:</string>
+         </property>
+        </widget>
+        <widget class="QLCDNumber" name="lcdNumber_total">
+         <property name="geometry">
+          <rect>
+           <x>270</x>
+           <y>20</y>
+           <width>64</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_2">
+         <property name="geometry">
+          <rect>
+           <x>120</x>
+           <y>30</y>
+           <width>54</width>
+           <height>12</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Aharoni</family>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>不良品:</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_3">
+         <property name="geometry">
+          <rect>
+           <x>240</x>
+           <y>30</y>
+           <width>54</width>
+           <height>12</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Aharoni</family>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>总数:</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1027</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string> 关于</string>
+    </property>
+    <addaction name="About"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>权限</string>
+    </property>
+    <addaction name="OnEnginer"/>
+    <addaction name="OnOperator"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>功能</string>
+    </property>
+    <addaction name="OnLRC"/>
+    <addaction name="OnDeltaDebug"/>
+   </widget>
+   <addaction name="menu_2"/>
+   <addaction name="menu"/>
+   <addaction name="menu_3"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>15000</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="sizeIncrement">
+    <size>
+     <width>0</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>48</width>
+     <height>48</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="Open"/>
+   <addaction name="OnRun"/>
+   <addaction name="separator"/>
+   <addaction name="Configure"/>
+   <addaction name="OnLineRun"/>
+   <addaction name="OnStop"/>
+   <addaction name="ShutDown"/>
+   <addaction name="Configure2"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <action name="Configure">
+   <property name="icon">
+    <iconset>
+     <normalon>:/icon/Resources/icon/01.ico</normalon>
+     <activeon>:/icon/Resources/icon/02.ico</activeon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>配置</string>
+   </property>
+  </action>
+  <action name="OnRun">
+   <property name="icon">
+    <iconset resource="HXQ.qrc">
+     <normaloff>:/icon/Resources/icon/15.ico</normaloff>
+     <normalon>:/icon/Resources/icon/15.ico</normalon>
+     <activeoff>:/icon/Resources/icon/16.ico</activeoff>
+     <activeon>:/icon/Resources/icon/16.ico</activeon>:/icon/Resources/icon/15.ico</iconset>
+   </property>
+   <property name="text">
+    <string>单次</string>
+   </property>
+  </action>
+  <action name="Open">
+   <property name="icon">
+    <iconset>
+     <normalon>:/icon/Resources/icon/13.ico</normalon>
+     <activeon>:/icon/Resources/icon/14.ico</activeon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="About">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>关于……</string>
+   </property>
+   <property name="toolTip">
+    <string>关于……</string>
+   </property>
+  </action>
+  <action name="Configure2">
+   <property name="icon">
+    <iconset resource="HXQ.qrc">
+     <normaloff>:/icon/Resources/icon/01.ico</normaloff>:/icon/Resources/icon/01.ico</iconset>
+   </property>
+   <property name="text">
+    <string>配置2</string>
+   </property>
+   <property name="toolTip">
+    <string>配置2</string>
+   </property>
+  </action>
+  <action name="ShutDown">
+   <property name="icon">
+    <iconset resource="HXQ.qrc">
+     <normaloff>:/icon/Resources/icon/09.ico</normaloff>:/icon/Resources/icon/09.ico</iconset>
+   </property>
+   <property name="text">
+    <string>关闭系统</string>
+   </property>
+   <property name="toolTip">
+    <string>关闭系统</string>
+   </property>
+  </action>
+  <action name="OnLineRun">
+   <property name="icon">
+    <iconset resource="HXQ.qrc">
+     <normaloff>:/icon/Resources/icon/03.ico</normaloff>
+     <activeoff>:/icon/Resources/icon/04.ico</activeoff>:/icon/Resources/icon/03.ico</iconset>
+   </property>
+   <property name="text">
+    <string>在线检测</string>
+   </property>
+   <property name="toolTip">
+    <string>在线检测</string>
+   </property>
+  </action>
+  <action name="button_other">
+   <property name="icon">
+    <iconset resource="HXQ.qrc">
+     <normaloff>:/icon/Resources/icon/11.ico</normaloff>
+     <activeoff>:/icon/Resources/icon/12.ico</activeoff>:/icon/Resources/icon/11.ico</iconset>
+   </property>
+   <property name="text">
+    <string>other</string>
+   </property>
+   <property name="toolTip">
+    <string>其他</string>
+   </property>
+  </action>
+  <action name="OnStop">
+   <property name="icon">
+    <iconset resource="HXQ.qrc">
+     <normaloff>:/icon/Resources/icon/07.ico</normaloff>
+     <activeoff>:/icon/Resources/icon/08.ico</activeoff>:/icon/Resources/icon/07.ico</iconset>
+   </property>
+   <property name="text">
+    <string>停止</string>
+   </property>
+   <property name="toolTip">
+    <string>停止</string>
+   </property>
+  </action>
+  <action name="OnEnginer">
+   <property name="text">
+    <string>工程师</string>
+   </property>
+  </action>
+  <action name="OnOperator">
+   <property name="text">
+    <string>操作员</string>
+   </property>
+  </action>
+  <action name="OnLRC">
+   <property name="text">
+    <string>LRC</string>
+   </property>
+  </action>
+  <action name="OnDeltaDebug">
+   <property name="text">
+    <string>调试</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="HXQ.qrc"/>
+ </resources>
+ <connections/>
+</ui>

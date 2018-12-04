@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;cxx;c;def</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{899d914f-c4c0-48e5-991f-4a3a3f4f7b3e}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{2fe20942-5b18-4238-b4aa-da3fa967aa09}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Header Files\Widgets">
+      <UniqueIdentifier>{ba7b2723-1707-4959-9ad2-72b866980322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Widgets">
+      <UniqueIdentifier>{8ca9543c-be40-489b-9a04-992c87a96f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Form Files\Widgets">
+      <UniqueIdentifier>{9af197a9-7d3a-4d9f-bbae-5cf483552a52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ProcessImageThread">
+      <UniqueIdentifier>{b436688e-0933-4cbe-8ca1-77bb99631f8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CameraThread">
+      <UniqueIdentifier>{e4e62268-7fc1-4635-8a9f-6ae737721abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ProcessImageThread">
+      <UniqueIdentifier>{849e4ce5-4f68-4c13-baa8-ba250a4dd355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CameraThread">
+      <UniqueIdentifier>{496b30e7-459a-4705-8093-2504eea6a58f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="aboutdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Func.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeltaThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ComDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CommDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigureDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PicThreadLeft.cpp">
+      <Filter>Source Files\ProcessImageThread</Filter>
+    </ClCompile>
+    <ClCompile Include="PicThreadMiddle.cpp">
+      <Filter>Source Files\ProcessImageThread</Filter>
+    </ClCompile>
+    <ClCompile Include="PicThreadRight.cpp">
+      <Filter>Source Files\ProcessImageThread</Filter>
+    </ClCompile>
+    <ClCompile Include="PicThreadSecondRight.cpp">
+      <Filter>Source Files\ProcessImageThread</Filter>
+    </ClCompile>
+    <ClCompile Include="PylonCameraThread.cpp">
+      <Filter>Source Files\CameraThread</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraThread.cpp">
+      <Filter>Source Files\CameraThread</Filter>
+    </ClCompile>
+    <ClCompile Include="Widgets\cameraWidget.cpp">
+      <Filter>Source Files\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Widgets\serialWidget.cpp">
+      <Filter>Source Files\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="CHH2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Widgets\modelWidget.cpp">
+      <Filter>Source Files\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="hxq.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="aboutdialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtMoc Include="aboutdialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="DeltaThread.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtUic Include="ComDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtMoc Include="ComDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtUic Include="CommDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtMoc Include="CommDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtUic Include="TestDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtMoc Include="TestDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtUic Include="ConfigureDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtMoc Include="ConfigureDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="PicThreadLeft.h">
+      <Filter>Header Files\ProcessImageThread</Filter>
+    </QtMoc>
+    <QtMoc Include="PicThreadMiddle.h">
+      <Filter>Header Files\ProcessImageThread</Filter>
+    </QtMoc>
+    <QtMoc Include="PicThreadRight.h">
+      <Filter>Header Files\ProcessImageThread</Filter>
+    </QtMoc>
+    <QtMoc Include="PicThreadSecondRight.h">
+      <Filter>Header Files\ProcessImageThread</Filter>
+    </QtMoc>
+    <QtMoc Include="CameraThread.h">
+      <Filter>Header Files\CameraThread</Filter>
+    </QtMoc>
+    <QtMoc Include="PylonCameraThread.h">
+      <Filter>Header Files\CameraThread</Filter>
+    </QtMoc>
+    <QtUic Include="Widgets\cameraWidget.ui">
+      <Filter>Form Files\Widgets</Filter>
+    </QtUic>
+    <QtMoc Include="Widgets\cameraWidget.h">
+      <Filter>Header Files\Widgets</Filter>
+    </QtMoc>
+    <QtUic Include="Widgets\serialWidget.ui">
+      <Filter>Form Files\Widgets</Filter>
+    </QtUic>
+    <QtMoc Include="Widgets\serialWidget.h">
+      <Filter>Header Files\Widgets</Filter>
+    </QtMoc>
+    <QtUic Include="Widgets\modelWidget.ui">
+      <Filter>Form Files\Widgets</Filter>
+    </QtUic>
+    <QtMoc Include="Widgets\modelWidget.h">
+      <Filter>Header Files\Widgets</Filter>
+    </QtMoc>
+    <QtMoc Include="hxq.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtUic Include="hxq.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CHH.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_aboutdialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Func.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_ComDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_CommDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_TestDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstParam.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_ConfigureDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_cameraWidget.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_serialWidget.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHH2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_modelWidget.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_hxq.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\qss\css.h">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\fivision.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="HXQ.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+</Project>

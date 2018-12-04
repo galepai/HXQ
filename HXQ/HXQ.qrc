@@ -1,0 +1,30 @@
+<RCC>
+  <qresource prefix="/logo">
+    <file>Resources/fivision.ico</file>
+  </qresource>
+  <qresource prefix="/icon">
+    <file>Resources/icon/01.ico</file>
+    <file>Resources/icon/02.ico</file>
+    <file>Resources/icon/03.ico</file>
+    <file>Resources/icon/04.ico</file>
+    <file>Resources/icon/05.ico</file>
+    <file>Resources/icon/06.ico</file>
+    <file>Resources/icon/07.ico</file>
+    <file>Resources/icon/08.ico</file>
+    <file>Resources/icon/09.ico</file>
+    <file>Resources/icon/10.ico</file>
+    <file>Resources/icon/11.ico</file>
+    <file>Resources/icon/12.ico</file>
+    <file>Resources/icon/13.ico</file>
+    <file>Resources/icon/14.ico</file>
+    <file>Resources/icon/15.ico</file>
+    <file>Resources/icon/16.ico</file>
+  </qresource>
+  <qresource prefix="/png">
+    <file>Resources/slider.png</file>
+  </qresource>
+  <qresource prefix="/bmp">
+    <file>Resources/logo.bmp</file>
+    <file>Resources/minilogo.bmp</file>
+  </qresource>
+</RCC>

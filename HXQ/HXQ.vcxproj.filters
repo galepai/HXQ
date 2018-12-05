@@ -116,6 +116,9 @@
     <ClCompile Include="hxq.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GalilThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="aboutdialog.ui">
@@ -252,5 +255,10 @@
     <QtRcc Include="HXQ.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="GalilThread.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

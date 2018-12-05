@@ -14,6 +14,8 @@
 #include "PicThreadRight.h"
 #include "PicThreadSecondRight.h"
 
+#include "GalilThread.h"
+
 
 hxq::hxq(QWidget *parent)
 	: QMainWindow(parent)
@@ -55,7 +57,13 @@ hxq::hxq(QWidget *parent)
 	ReadExposure();
 	connect(ui.pushButton_exposure, SIGNAL(clicked()), this, SLOT(OnSetExposure()));
 
+	/****/
+	Galil_Thread galil;
+	galil.GcLibVersion();
+	galil.Open("192.168.0.43 -d");
 	
+	/****/
+
 }
 
 //»´∆¡œ‘ æ

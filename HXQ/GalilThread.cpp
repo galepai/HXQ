@@ -101,6 +101,5 @@ Galil_Thread::~Galil_Thread()
 	if (isRunning())
 		wait();
 
-
 	qDebug() << "~Galil_Thread";
 }

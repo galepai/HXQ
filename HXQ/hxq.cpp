@@ -35,6 +35,7 @@ hxq::hxq(QWidget *parent)
 	connect(ui.Configure, SIGNAL(triggered()), this, SLOT(OnConfigure()));
 	connect(ui.ShutDown, SIGNAL(triggered()), this, SLOT(OnShutDown()));
 	connect(ui.Configure2, SIGNAL(triggered()), this, SLOT(OnTest()));
+	connect(ui.AreaCamera, SIGNAL(triggered()), this, SLOT(OnOpen()));
 	
 	
 	ui.OnStop->setEnabled(false);
@@ -55,7 +56,7 @@ hxq::hxq(QWidget *parent)
 	m_peviousProductDectectEnd = true;
 	
 	ReadExposure();
-	connect(ui.pushButton_exposure, SIGNAL(clicked()), this, SLOT(OnSetExposure()));
+	
 
 	/****/
 	Galil_Thread galil;
@@ -142,6 +143,25 @@ void hxq::OnOpen()
 	}
 
 	
+}
+
+void hxq::OnDisplayAreaCamera()
+{
+	QVariant ExposureValue;
+	/**	海康面阵相机	*/
+	m_camera_thread_11_Clock = new Camera_Thread(Camera_Thread::ConnectionType::GigEVision2, LineCameraId_Dalsa_11_Clock, this);
+	m_camera_thread_11_Clock->setSaveImageDirName("Camera1");
+	m_camera_thread_11_Clock->setSaveImageNum(999);
+	ReadConfigure("config.ini", "Camera_11_Clock", "Exposure", ExposureValue);
+	m_camera_thread_11_Clock->SetExposureTime(ExposureValue.toFloat());
+	//m_camera_thread_11_Clock->SetAcquisitionLineRate(10000.0);
+	//m_camera_thread_11_Clock->SetHeight(10000);
+	connect(m_camera_thread_11_Clock, SIGNAL(signal_error(QString)), this, SLOT(genErrorDialog(QString)));
+	connect(m_camera_thread_11_Clock, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
+	connect(m_camera_thread_11_Clock, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
+	connect(m_camera_thread_11_Clock, SIGNAL(signal_image(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
+	connect(m_camera_thread_11_Clock, SIGNAL(finished()), m_camera_thread_11_Clock, SLOT(deleteLater()));
+	m_camera_thread_11_Clock->start();
 }
 
 //OffLine处理图像
@@ -610,22 +630,49 @@ void hxq::OnDetectEnd()
 }
 
 
-//******对应视图显示图片,并处理图片
+//******对应视图显示图片
 void hxq::receiveLeftImage(void* image)
 {
 	HImage ima = *(HImage*)image;
-	DispPic(ima, LeftView);
-	OnHandleImageThread(ima, LeftView);
+	DispPic(ima, LeftView);	
 }
 
 void hxq::receiveMiddleImage(void* image)
 {
 	HImage ima = *(HImage*)image;
 	DispPic(ima, MiddleView);
-	OnHandleImageThread(ima, MiddleView);
 }
 
 void hxq::receiveSecondRightImage(void* image)
+{
+	HImage ima = *(HImage*)image;
+	DispPic(ima, SecondRightView);
+	
+}
+
+void hxq::receiveRightImage(void* image)
+{
+	HImage ima = *(HImage*)image;
+	DispPic(ima, RightView);
+}
+/********/
+
+//******对应视图显示图片,并处理图片
+void hxq::receiveLeftImageAndHandle(void* image)
+{
+	HImage ima = *(HImage*)image;
+	DispPic(ima, LeftView);
+	OnHandleImageThread(ima, LeftView);
+}
+
+void hxq::receiveMiddleImageAndHandle(void* image)
+{
+	HImage ima = *(HImage*)image;
+	DispPic(ima, MiddleView);
+	OnHandleImageThread(ima, MiddleView);
+}
+
+void hxq::receiveSecondRightImageAndHandle(void* image)
 {
 	HImage ima = *(HImage*)image;
 	DispPic(ima, SecondRightView);
@@ -633,7 +680,7 @@ void hxq::receiveSecondRightImage(void* image)
 
 }
 
-void hxq::receiveRightImage(void* image)
+void hxq::receiveRightImageAndHandle(void* image)
 {
 	HImage ima = *(HImage*)image;
 	DispPic(ima, RightView);
@@ -867,18 +914,7 @@ void hxq::handleResults(int singleResult)
 void hxq::ReadExposure()
 {
 
-	QVariant Value;
-	ReadConfigure("config.ini", "Camera_02_Clock", "Exposure", Value);
-	ui.spinBox_02->setValue(Value.toInt());
-
-	ReadConfigure("config.ini", "Camera_07_Clock", "Exposure", Value);
-	ui.spinBox_07->setValue(Value.toInt());
-
-	/*ReadConfigure("config.ini", "Camera_10_Clock", "Exposure", Value);
-	ui.spinBox_10->setValue(Value.toInt());*/
-
-	ReadConfigure("config.ini", "Camera_11_Clock", "Exposure", Value);
-	ui.spinBox_11->setValue(Value.toInt());
+	
 
 }
 
@@ -886,24 +922,7 @@ void hxq::ReadExposure()
 void hxq::OnSetExposure()
 {
 
-	if (m_Pylon_camera_thread_2_Clock
-		//&& m_Pylon_camera_thread_10_Clock
-		&& m_camera_thread_11_Clock
-		&& m_camera_thread_7_Clock)
-	{
-		//m_Pylon_camera_thread_10_Clock->SetExposureTime(ui.spinBox_10->value());
-		m_Pylon_camera_thread_2_Clock->SetExposureTime(ui.spinBox_02->value());
-		m_camera_thread_11_Clock->SetExposureTime(ui.spinBox_11->value());
-		m_camera_thread_7_Clock->SetExposureTime(ui.spinBox_07->value());
 
-		QMessageBox::StandardButton reply;
-		reply = QMessageBox::information(this, G2U("信息"), G2U("曝光实时修改成功"));
-	}
-	else
-	{
-		QMessageBox::StandardButton reply;
-		reply = QMessageBox::information(this, G2U("信息"), G2U("相机未正确设置"));
-	}
 	
 }
 

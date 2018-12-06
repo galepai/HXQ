@@ -123,87 +123,13 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QGroupBox" name="groupBox_2">
+       <widget class="QGroupBox" name="groupBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>70</height>
-         </size>
-        </property>
-        <property name="title">
-         <string>实时曝光设置</string>
-        </property>
-        <widget class="QSpinBox" name="spinBox_11">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>20</y>
-           <width>51</width>
-           <height>41</height>
-          </rect>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <property name="maximum">
-          <number>90</number>
-         </property>
-        </widget>
-        <widget class="QSpinBox" name="spinBox_07">
-         <property name="geometry">
-          <rect>
-           <x>120</x>
-           <y>20</y>
-           <width>51</width>
-           <height>41</height>
-          </rect>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <property name="maximum">
-          <number>190</number>
-         </property>
-        </widget>
-        <widget class="QSpinBox" name="spinBox_02">
-         <property name="geometry">
-          <rect>
-           <x>210</x>
-           <y>20</y>
-           <width>51</width>
-           <height>41</height>
-          </rect>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <property name="maximum">
-          <number>900</number>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="pushButton_exposure">
-         <property name="geometry">
-          <rect>
-           <x>510</x>
-           <y>20</y>
-           <width>81</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>曝光</string>
-         </property>
-        </widget>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBox">
         <property name="minimumSize">
          <size>
           <width>350</width>
@@ -217,19 +143,19 @@
          </size>
         </property>
         <property name="title">
-         <string/>
+         <string>统计</string>
         </property>
         <widget class="QLCDNumber" name="lcdNumber_good">
          <property name="geometry">
           <rect>
-           <x>40</x>
+           <x>60</x>
            <y>20</y>
            <width>64</width>
            <height>31</height>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">color: rgb(0, 0, 255);</string>
+          <string notr="true">color: rgb(255, 0, 0);</string>
          </property>
          <property name="segmentStyle">
           <enum>QLCDNumber::Flat</enum>
@@ -238,7 +164,7 @@
         <widget class="QLCDNumber" name="lcdNumber_bad">
          <property name="geometry">
           <rect>
-           <x>160</x>
+           <x>210</x>
            <y>20</y>
            <width>64</width>
            <height>31</height>
@@ -268,13 +194,13 @@
           </font>
          </property>
          <property name="text">
-          <string>良品:</string>
+          <string>槽不良：</string>
          </property>
         </widget>
         <widget class="QLCDNumber" name="lcdNumber_total">
          <property name="geometry">
           <rect>
-           <x>270</x>
+           <x>780</x>
            <y>20</y>
            <width>64</width>
            <height>31</height>
@@ -287,7 +213,7 @@
         <widget class="QLabel" name="label_2">
          <property name="geometry">
           <rect>
-           <x>120</x>
+           <x>160</x>
            <y>30</y>
            <width>54</width>
            <height>12</height>
@@ -301,13 +227,13 @@
           </font>
          </property>
          <property name="text">
-          <string>不良品:</string>
+          <string>钩不良：</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_3">
          <property name="geometry">
           <rect>
-           <x>240</x>
+           <x>740</x>
            <y>30</y>
            <width>54</width>
            <height>12</height>
@@ -321,7 +247,79 @@
           </font>
          </property>
          <property name="text">
-          <string>总数:</string>
+          <string>总数：</string>
+         </property>
+        </widget>
+        <widget class="QLCDNumber" name="lcdNumber_total_2">
+         <property name="geometry">
+          <rect>
+           <x>350</x>
+           <y>20</y>
+           <width>64</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(255, 0, 0);</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_4">
+         <property name="geometry">
+          <rect>
+           <x>310</x>
+           <y>30</y>
+           <width>54</width>
+           <height>12</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Aharoni</family>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>粘铜：</string>
+         </property>
+        </widget>
+        <widget class="QLCDNumber" name="lcdNumber_total_3">
+         <property name="geometry">
+          <rect>
+           <x>560</x>
+           <y>20</y>
+           <width>64</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 255);</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_5">
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>30</y>
+           <width>54</width>
+           <height>12</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Aharoni</family>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>良品：</string>
          </property>
         </widget>
        </widget>
@@ -400,8 +398,11 @@
    <addaction name="Configure"/>
    <addaction name="OnLineRun"/>
    <addaction name="OnStop"/>
-   <addaction name="ShutDown"/>
+   <addaction name="separator"/>
+   <addaction name="AreaCamera"/>
+   <addaction name="separator"/>
    <addaction name="Configure2"/>
+   <addaction name="ShutDown"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="enabled">
@@ -534,6 +535,20 @@
   <action name="OnDeltaDebug">
    <property name="text">
     <string>调试</string>
+   </property>
+  </action>
+  <action name="AreaCamera">
+   <property name="icon">
+    <iconset resource="HXQ.qrc">
+     <normaloff>:/icon/Resources/icon/11.ico</normaloff>
+     <disabledoff>:/icon/Resources/icon/12.ico</disabledoff>
+     <activeoff>:/icon/Resources/icon/12.ico</activeoff>:/icon/Resources/icon/11.ico</iconset>
+   </property>
+   <property name="text">
+    <string>实时面阵</string>
+   </property>
+   <property name="toolTip">
+    <string>实时面阵</string>
    </property>
   </action>
  </widget>

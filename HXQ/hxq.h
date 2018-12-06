@@ -50,6 +50,7 @@ public slots:
 	void OnConfigure();
 	void OnShutDown();	//关闭系统
 	void OnTest();
+	void OnDisplayAreaCamera();
 
 	/***********右端电气功能************/
 	void DebugDialog();
@@ -64,6 +65,10 @@ public slots:
 	void receiveMiddleImage(void* image);
 	void receiveSecondRightImage(void* image);
 	void receiveRightImage(void* image);
+	void receiveLeftImageAndHandle(void* image);
+	void receiveMiddleImageAndHandle(void* image);
+	void receiveSecondRightImageAndHandle(void* image);
+	void receiveRightImageAndHandle(void* image);
 	//生成错误对话提示框
 	void genErrorDialog(QString error);
 	void receiveCorrectImage(int value);

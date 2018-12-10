@@ -14,7 +14,7 @@
 #include "PicThreadRight.h"
 #include "PicThreadSecondRight.h"
 
-#include "GalilThread.h"
+
 
 
 hxq::hxq(QWidget *parent)
@@ -50,6 +50,8 @@ hxq::hxq(QWidget *parent)
 	m_Pylon_camera_thread_2_Clock = nullptr;
 	m_Pylon_camera_thread_10_Clock = nullptr;
 
+	m_Galil = nullptr;
+
 	m_AllResult = 0;
 	m_good = m_bad = m_total = 0;
 
@@ -58,33 +60,32 @@ hxq::hxq(QWidget *parent)
 	ReadExposure();
 	
 
+
+	std::vector<bool> num = Parse_Galil_Input(7);
+
+
 	/****/
-	Galil_Thread* galil = new Galil_Thread(this);
-	connect(galil, SIGNAL(finished()), galil, SLOT(deleteLater()));
-	galil->GcLibVersion();
-	galil->Open(QString(GalilIp) + "");
-	QString version;
-	galil->CmdT("\x12\x16", version);
-
-	galil->start();
-	
+	if (!m_Galil)
+	{
+		m_Galil = new Galil_Thread(this);
+	}
+	connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater())); 
+	connect(m_Galil, SIGNAL(triggerSinal()), m_Galil, SLOT(OnWakeCamera()));
+	m_Galil->GcLibVersion();
+	if (m_Galil->Open(QString(GalilIp) + ""))
+	{
+		m_Galil->start();
+		if (m_Galil->Cmd("SB0"))
+		{
+			qDebug() << "SB0 Sucess!";
+		}
+	}
+	else
+	{
+		delete m_Galil;
+	}
 	/****/
 
-	GCon g;
-	GOpen((QString(GalilIp) + "").toStdString().c_str(), &g);
-	int input;
-	GCmdI(g, "TI", &input);
-	char buf[24];
-	char* front = new char[24];
-	GCmdT(g, "\x12\x16", buf, sizeof(buf), &front);
-
-	GCon g2;
-	GOpen((QString(GalilIp) + "").toStdString().c_str(), &g2);
-	int input2;
-	GCmdI(g2, "TI", &input2);
-	char buf2[24];
-	char* front2 = new char[24];
-	GCmdT(g2, "\x12\x16", buf2, sizeof(buf2), &front2);
 
 }
 

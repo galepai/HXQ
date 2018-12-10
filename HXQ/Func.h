@@ -64,6 +64,9 @@ std::string Delta_Ascii_CR(const std::string& Slave, const std::string& Function
 std::vector<bool> Parse_Delta_Ascii(const std::string& data);	//Delta接收信息，解析功能
 std::vector<ushort> Parse_Delta_Ascii_03(const std::string& data);	//Delta接收信息，解析功能
 
+
+std::vector<bool> Parse_Galil_Input(int value); //解析Galil的Input信息
+
 bool CreateImagetDir();
 
 bool isCorrectImage(HalconCpp::HImage& image, double threshold_gray);

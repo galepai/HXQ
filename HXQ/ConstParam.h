@@ -24,8 +24,13 @@ static const char* LineCameraId_Pylon_Basler_2_Clock = "Basler raL2048-48gm#0030
 //"Basler raL2048-48gm#003053255252#192.168.3.7:3956"
 
 
-static const char* GalilIp = "192.168.2.7";
+static const char* GalilIp = "192.168.2.7";	//Galil控制卡的网口通信地址
+static const int IOPoint = 4;  //Galil控制卡的触发相机的input点
 
+
+
+
+/****************************************************/
 static const int LeftGood			= 0x10;
 static const int LeftBad			= 0x11;
 static const int MiddleGood			= 0x20;

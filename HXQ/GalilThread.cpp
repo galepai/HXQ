@@ -12,8 +12,8 @@ Galil_Thread::Galil_Thread(QObject *parent)
 	: QThread(parent)
 {
 	qDebug() << "Galil_Thread construct func(),  Thread : " << QThread::currentThreadId();
-	
-	g = 0; 
+
+	g = 0;
 
 	front = new char[G_SMALL_BUFFER];
 
@@ -21,13 +21,10 @@ Galil_Thread::Galil_Thread(QObject *parent)
 
 bool Galil_Thread::GcLibVersion()
 {
-	//int buf_size = G_SMALL_BUFFER;
-	//char buf[G_SMALL_BUFFER]; //traffic buffer
-
 	try
 	{
 		check(GVersion(buf, sizeof(buf))); //library version
-		qDebug() << "Library versions: " << buf << "\n";
+		qDebug() << "Library Version: " << buf << "\n";
 		return true;
 	}
 	catch (GReturn gr) //for x_e() function
@@ -43,11 +40,14 @@ bool Galil_Thread::Open(QString address)
 {
 	try
 	{
-		//check(GOpen("192.168.0.43 -d", &g));
+		//check(GOpen("192.168.2.7", &g));
 		check(GOpen(address.toStdString().c_str(), &g));
-		int input;
-		GCmdI(g, "TI", &input);
-		
+
+		qDebug() << "Connection Galil sucess.";
+		QString Revision;
+		CmdT("\x12\x16", Revision);
+		qDebug() << "Galil Revision : " << Revision;
+
 		return true;
 
 	}
@@ -60,11 +60,28 @@ bool Galil_Thread::Open(QString address)
 
 }
 
-bool Galil_Thread::CmdI(QString command,int* value)
+bool Galil_Thread::Cmd(QString command)
 {
 	try
 	{
-		check(GCmdI(g,command.toStdString().c_str(), value));
+		check(GCmd(g, command.toStdString().c_str()));
+		return true;
+
+	}
+	catch (GReturn gr) //for x_e() function
+	{
+
+		ExceptionInformation(gr);
+		return false;
+	}
+
+}
+
+bool Galil_Thread::CmdI(QString command, int* value)
+{
+	try
+	{
+		check(GCmdI(g, command.toStdString().c_str(), value));
 
 		return true;
 
@@ -103,7 +120,7 @@ bool Galil_Thread::CmdT(QString command, QString& value)
 	try
 	{
 		ZeroMemory(buf, sizeof(buf));
-		check(GCmdT(g, command.toStdString().c_str(),buf,sizeof(buf),&front));
+		check(GCmdT(g, command.toStdString().c_str(), buf, sizeof(buf), &front));
 		value = buf;
 
 		return true;
@@ -133,7 +150,7 @@ void Galil_Thread::ExceptionInformation(GReturn gr)
 		GClose(g); //close g
 	}
 
-	g = 0; 
+	g = 0;
 
 }
 
@@ -146,12 +163,18 @@ void Galil_Thread::run()
 	{
 		value = 0;
 		CmdI("TI", &value);
-		
 		qDebug() << "Input : " << value;
+
+		m_input.clear();
+		m_input = Parse_Galil_Input(value);
+		if (m_input[IOPoint - 1])  //发射触发相机信号
+		{
+			emit triggerSinal();
+		}
 
 		Sleep(100);
 	}
-	
+
 }
 
 

@@ -10,7 +10,7 @@
 #include "CameraThread.h"
 #include "PylonCameraThread.h"
 #include <queue>
-
+#include "GalilThread.h"
 
 using namespace HalconCpp;
 
@@ -110,6 +110,9 @@ public:
 	
 	PylonCamera_Thread* m_Pylon_camera_thread_2_Clock;
 	PylonCamera_Thread* m_Pylon_camera_thread_10_Clock;
+
+
+	Galil_Thread* m_Galil;
 
 };
 

@@ -87,7 +87,7 @@ std::string Delta_Ascii_CR(const std::string& data)
 
 	std::string all_data(":");
 	all_data += data + Gen_Delta_Ascii_CR(data) + "\r\n";
-	
+
 	return all_data;
 }
 
@@ -101,12 +101,12 @@ std::string Gen_Delta_Ascii_CR(const std::string& data)
 	{
 		unsigned char high = data[index * 2];
 		unsigned char low = data[index * 2 + 1];
-		if (high<0x3a)
+		if (high < 0x3a)
 			high = (high - 0x30) << 4;
 		else
 			high = (high - 0x37) << 4;
 
-		if (low<0x3a)
+		if (low < 0x3a)
 			low = low - 0x30;
 		else
 			low = low - 0x37;
@@ -162,7 +162,7 @@ std::vector<bool> Parse_Delta_Ascii(const std::string& data)
 		{
 			std::string byte_count = temp.substr(4, 2);
 			int count = atoi(byte_count.c_str());
-			temp = data.substr(7, count*2);
+			temp = data.substr(7, count * 2);
 		}
 		else if (function_code == "02")	//读取X00 - X47返回的数据
 		{
@@ -170,17 +170,17 @@ std::vector<bool> Parse_Delta_Ascii(const std::string& data)
 			int count = atoi(byte_count.c_str());
 			temp = data.substr(7, count * 2);
 		}
-		
+
 		for (int index = 0; index < temp.length() / 2; index++)
 		{
 			unsigned char high = temp[index * 2];
 			unsigned char low = temp[index * 2 + 1];
-			if (high<0x3a)
+			if (high < 0x3a)
 				high = (high - 0x30) << 4;
 			else
 				high = (high - 0x37) << 4;
 
-			if (low<0x3a)
+			if (low < 0x3a)
 				low = low - 0x30;
 			else
 				low = low - 0x37;
@@ -193,7 +193,7 @@ std::vector<bool> Parse_Delta_Ascii(const std::string& data)
 				{
 					nums.push_back(true);
 					bit <<= 1;
-				}	
+				}
 				else
 				{
 					nums.push_back(false);
@@ -212,14 +212,14 @@ std::vector<bool> Parse_Delta_Ascii(const std::string& data)
 				{
 					nums.push_back(false);
 				}
-			}		
+			}
 		}
 	}
 	else
 	{
 		// 数据不完整或者数据有错
 	}
-	
+
 	return nums;
 }
 
@@ -238,12 +238,12 @@ std::vector<ushort> Parse_Delta_Ascii_03(const std::string& data)
 		std::string byte_count = temp.substr(4, 2);
 		unsigned char high = byte_count[0];
 		unsigned char low = byte_count[1];
-		if (high<0x3a)
+		if (high < 0x3a)
 			high = (high - 0x30) << 4;
 		else
 			high = (high - 0x37) << 4;
 
-		if (low<0x3a)
+		if (low < 0x3a)
 			low = low - 0x30;
 		else
 			low = low - 0x37;
@@ -257,12 +257,12 @@ std::vector<ushort> Parse_Delta_Ascii_03(const std::string& data)
 		{
 			unsigned char high = temp[index * 2];
 			unsigned char low = temp[index * 2 + 1];
-			if (high<0x3a)
+			if (high < 0x3a)
 				high = (high - 0x30) << 4;
 			else
 				high = (high - 0x37) << 4;
 
-			if (low<0x3a)
+			if (low < 0x3a)
 				low = low - 0x30;
 			else
 				low = low - 0x37;
@@ -271,9 +271,9 @@ std::vector<ushort> Parse_Delta_Ascii_03(const std::string& data)
 			total_char.push_back(byte);
 		}
 
-		
+
 		int DataNum = total_char.size() / 2;
-		
+
 		for (int index = 0; index < DataNum; index++)
 		{
 			ushort Hi = total_char[index * 2];
@@ -291,14 +291,36 @@ std::vector<ushort> Parse_Delta_Ascii_03(const std::string& data)
 	return nums;
 }
 
+std::vector<bool> Parse_Galil_Input(int value)
+{
+	std::vector<bool> vec;
+	quint8 i = value;
+	std::bitset<8> bar(i);
+	for (int i = 0; i < 8; i++)
+	{
+		if (bar[i] == 1)
+		{
+			vec.push_back(true);
+		}
+		else
+		{
+			vec.push_back(false);
+		}
+	}
+
+	return vec;
+}
+
+
+
 //	Use QFile faster than QSetting
 void QtWriteFile(const QString& path_filename, const QStringList& writeinfo_list)
 {
-	
+
 	QFile file(path_filename);
 
 	if (file.open(QFile::WriteOnly | QFile::Truncate))
-	{  
+	{
 		QTextStream out(&file);
 		foreach(QString str, writeinfo_list)
 		{
@@ -326,7 +348,7 @@ void QtReadFile(const QString& path_filename, QStringList& readinfo_list)
 			readinfo_list.append(str);
 			str = file.readLine();
 		}
-			
+
 	}
 	else
 	{
@@ -346,10 +368,10 @@ bool CreateImagetDir()
 	if (!dir.exists())
 	{
 		QDir dir1;
-		QStringList path_list = { currentDate, 
+		QStringList path_list = { currentDate,
 			currentDate + "/camera1",
-			currentDate + "/camera2", 
-			currentDate + "/camera3", 
+			currentDate + "/camera2",
+			currentDate + "/camera3",
 			currentDate + "/camera4" };
 
 		int index = 0;

@@ -12,6 +12,7 @@
 #include <QtSerialPort/QtSerialPort>
 #include <atomic>
 #include <queue>
+#include <vector>
 #include <QMutex>
 
 #include "gclib.h"
@@ -42,6 +43,7 @@ public:
 
 	bool GcLibVersion();
 	bool Open(QString address);
+	bool Cmd(QString command);
 	bool CmdI(QString command, int* value);
 	bool CmdD(QString command, double* value);
 	bool CmdT(QString command, QString& value);
@@ -61,9 +63,12 @@ private:
 	int buf_size = G_SMALL_BUFFER;
 	char buf[G_SMALL_BUFFER]; //traffic buffer
 	char *front;
+	std::vector<bool> m_input;
+
 
 signals:
 	void sendSerialData(QByteArray receiveData);
+	void triggerSinal();
 
 };
 

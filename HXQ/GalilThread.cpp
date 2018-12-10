@@ -149,7 +149,7 @@ void Galil_Thread::run()
 		
 		qDebug() << "Input : " << value;
 
-		sleep(100);
+		Sleep(100);
 	}
 	
 }

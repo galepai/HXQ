@@ -161,7 +161,6 @@ Galil_Thread::~Galil_Thread()
 		wait();
 
 	delete front;
-	delete[] buf;
 
 	if (g)
 	{

@@ -43,6 +43,9 @@ bool Galil_Thread::Open(QString address)
 	{
 		//check(GOpen("192.168.0.43 -d", &g));
 		check(GOpen(address.toStdString().c_str(), &g));
+		int input;
+		GCmdI(g, "TI", &input);
+		
 		return true;
 
 	}

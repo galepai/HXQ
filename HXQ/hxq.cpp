@@ -65,6 +65,22 @@ hxq::hxq(QWidget *parent)
 	
 	/****/
 
+	GCon g;
+	GOpen("192.168.0.43 -d", &g);
+	int input;
+	GCmdI(g, "TI", &input);
+	char buf[24];
+	char* front = new char[24];
+	GCmdT(g, "/x14/x16", buf, sizeof(buf), &front);
+
+	GCon g2;
+	GOpen("192.168.0.43 -d", &g2);
+	int input2;
+	GCmdI(g2, "TI", &input2);
+	char buf2[24];
+	char* front2 = new char[24];
+	GCmdT(g2, "/x14/x16", buf2, sizeof(buf2), &front2);
+
 }
 
 //»´∆¡œ‘ æ

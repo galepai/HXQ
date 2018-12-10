@@ -24,6 +24,8 @@ static const char* LineCameraId_Pylon_Basler_2_Clock = "Basler raL2048-48gm#0030
 //"Basler raL2048-48gm#003053255252#192.168.3.7:3956"
 
 
+static const char* GalilIp = "192.168.2.7";
+
 static const int LeftGood			= 0x10;
 static const int LeftBad			= 0x11;
 static const int MiddleGood			= 0x20;

@@ -61,12 +61,12 @@ hxq::hxq(QWidget *parent)
 	/****/
 	Galil_Thread galil;
 	galil.GcLibVersion();
-	galil.Open("192.168.2.7 -d");
+	galil.Open(QString(GalilIp) + " -d");
 	
 	/****/
 
 	GCon g;
-	GOpen("192.168.2.7 -d", &g);
+	GOpen((QString(GalilIp) + "").toStdString().c_str(), &g);
 	int input;
 	GCmdI(g, "TI", &input);
 	char buf[24];
@@ -74,7 +74,7 @@ hxq::hxq(QWidget *parent)
 	GCmdT(g, "\x12\x16", buf, sizeof(buf), &front);
 
 	GCon g2;
-	GOpen("192.168.2.7 -d", &g2);
+	GOpen((QString(GalilIp) + "").toStdString().c_str(), &g2);
 	int input2;
 	GCmdI(g2, "TI", &input2);
 	char buf2[24];

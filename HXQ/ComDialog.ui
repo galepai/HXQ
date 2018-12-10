@@ -14,7 +14,7 @@
    <string>关于</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="hello.qrc">
+   <iconset resource="HXQ.qrc">
     <normaloff>:/logo/Resources/fivision.ico</normaloff>:/logo/Resources/fivision.ico</iconset>
   </property>
   <widget class="QLineEdit" name="lineEdit_OtherInfo">
@@ -298,7 +298,7 @@
   <tabstop>lineEdit_LRC</tabstop>
  </tabstops>
  <resources>
-  <include location="hello.qrc"/>
+  <include location="HXQ.qrc"/>
  </resources>
  <connections/>
 </ui>

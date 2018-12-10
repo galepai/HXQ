@@ -42,6 +42,10 @@ public:
 
 	bool GcLibVersion();
 	bool Open(QString address);
+	bool CmdI(QString command, int* value);
+	bool CmdD(QString command, double* value);
+	bool CmdT(QString command, QString& value);
+
 
 protected:
 	virtual void run() Q_DECL_OVERRIDE;
@@ -49,12 +53,14 @@ protected:
 	
 
 	static std::atomic<bool> m_bIsStop;
+	
 
 
 private:
 	GCon g; //var used to refer to a unique connection. A valid connection is nonzero.
 	int buf_size = G_SMALL_BUFFER;
 	char buf[G_SMALL_BUFFER]; //traffic buffer
+	char *front;
 
 signals:
 	void sendSerialData(QByteArray receiveData);

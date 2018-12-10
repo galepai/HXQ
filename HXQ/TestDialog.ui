@@ -14,7 +14,7 @@
    <string>关于</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="hello.qrc">
+   <iconset resource="HXQ.qrc">
     <normaloff>:/logo/Resources/fivision.ico</normaloff>:/logo/Resources/fivision.ico</iconset>
   </property>
   <property name="toolTip">
@@ -1214,7 +1214,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="hello.qrc"/>
+  <include location="HXQ.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -15,6 +15,8 @@ Galil_Thread::Galil_Thread(QObject *parent)
 	
 	g = 0; 
 
+	front = new char[G_SMALL_BUFFER];
+
 }
 
 bool Galil_Thread::GcLibVersion()
@@ -58,6 +60,64 @@ bool Galil_Thread::Open(QString address)
 
 }
 
+bool Galil_Thread::CmdI(QString command,int* value)
+{
+	try
+	{
+		check(GCmdI(g,command.toStdString().c_str(), value));
+
+		return true;
+
+	}
+	catch (GReturn gr) //for x_e() function
+	{
+
+		ExceptionInformation(gr);
+		return false;
+	}
+
+}
+
+bool Galil_Thread::CmdD(QString command, double* value)
+{
+	try
+	{
+		check(GCmdD(g, command.toStdString().c_str(), value));
+		int input;
+		GCmdI(g, "TI", &input);
+
+		return true;
+
+	}
+	catch (GReturn gr) //for x_e() function
+	{
+
+		ExceptionInformation(gr);
+		return false;
+	}
+
+}
+
+bool Galil_Thread::CmdT(QString command, QString& value)
+{
+	try
+	{
+		ZeroMemory(buf, sizeof(buf));
+		check(GCmdT(g, command.toStdString().c_str(),buf,sizeof(buf),&front));
+		value = buf;
+
+		return true;
+
+	}
+	catch (GReturn gr) //for x_e() function
+	{
+
+		ExceptionInformation(gr);
+		return false;
+	}
+
+}
+
 void Galil_Thread::ExceptionInformation(GReturn gr)
 {
 	qDebug() << "Function returned " << gr << '\n';
@@ -74,27 +134,23 @@ void Galil_Thread::ExceptionInformation(GReturn gr)
 	}
 
 	g = 0; 
+
 }
 
 void Galil_Thread::run()
 {
-	//std::string test = ":00050520FF00D7\r\n";
-
 	qDebug() << "Galil_Thread Run Thread : " << QThread::currentThreadId();
+	int value = 0;
 
 	while (!m_bIsStop)
 	{
-		try
-		{
-			check(GCommand(g, "MG TIME", buf, sizeof(buf), 0)); //Send MG TIME. Because response is ASCII, don't care about bytes read.
-		}
-		catch (GReturn gr) //for x_e() function
-		{
-			ExceptionInformation(gr);
-		}
-	}
-	
+		value = 0;
+		CmdI("TI", &value);
+		
+		qDebug() << "Input : " << value;
 
+		sleep(100);
+	}
 	
 }
 
@@ -104,5 +160,12 @@ Galil_Thread::~Galil_Thread()
 	if (isRunning())
 		wait();
 
+	delete front;
+	delete[] buf;
+
+	if (g)
+	{
+		GClose(g); //close g
+	}
 	qDebug() << "~Galil_Thread";
 }

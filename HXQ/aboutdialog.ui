@@ -14,7 +14,7 @@
    <string>关于</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="hello.qrc">
+   <iconset resource="HXQ.qrc">
     <normaloff>:/logo/Resources/fivision.ico</normaloff>:/logo/Resources/fivision.ico</iconset>
   </property>
   <widget class="QLabel" name="label">
@@ -30,7 +30,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="hello.qrc">:/bmp/Resources/logo.bmp</pixmap>
+    <pixmap resource="HXQ.qrc">:/bmp/Resources/logo.bmp</pixmap>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -56,6 +56,7 @@
   </widget>
  </widget>
  <resources>
+  <include location="HXQ.qrc"/>
   <include location="hello.qrc"/>
  </resources>
  <connections/>

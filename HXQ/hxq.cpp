@@ -61,7 +61,11 @@ hxq::hxq(QWidget *parent)
 	/****/
 	Galil_Thread galil;
 	galil.GcLibVersion();
-	galil.Open(QString(GalilIp) + " -d");
+	galil.Open(QString(GalilIp) + "");
+	QString version;
+	galil.CmdT("\x12\x16", version);
+
+	galil.start();
 	
 	/****/
 

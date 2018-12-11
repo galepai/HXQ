@@ -347,7 +347,7 @@
     <property name="title">
      <string>权限</string>
     </property>
-    <addaction name="OnEnginer"/>
+    <addaction name="OnEngineer"/>
     <addaction name="OnOperator"/>
    </widget>
    <widget class="QMenu" name="menu_3">
@@ -445,7 +445,7 @@
   </action>
   <action name="About">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>关于……</string>
@@ -505,6 +505,9 @@
    </property>
   </action>
   <action name="OnStop">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="HXQ.qrc">
      <normaloff>:/icon/Resources/icon/07.ico</normaloff>
@@ -517,12 +520,24 @@
     <string>停止</string>
    </property>
   </action>
-  <action name="OnEnginer">
+  <action name="OnEngineer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>工程师</string>
    </property>
   </action>
   <action name="OnOperator">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>操作员</string>
    </property>

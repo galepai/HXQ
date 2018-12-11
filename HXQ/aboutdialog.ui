@@ -57,7 +57,7 @@
  </widget>
  <resources>
   <include location="HXQ.qrc"/>
-  <include location="hello.qrc"/>
+  <include location="HXQ.qrc"/>
  </resources>
  <connections/>
 </ui>

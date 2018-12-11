@@ -254,6 +254,7 @@
     <ClCompile Include="ComDialog.cpp" />
     <ClCompile Include="CommDialog.cpp" />
     <ClCompile Include="ConfigureDialog.cpp" />
+    <ClCompile Include="EngineerDialog.cpp" />
     <ClCompile Include="Func.cpp" />
     <ClCompile Include="DeltaThread.cpp" />
     <ClCompile Include="GalilThread.cpp" />
@@ -274,6 +275,7 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="EngineerDialog.ui" />
     <QtUic Include="hxq.ui">
     </QtUic>
   </ItemGroup>
@@ -297,6 +299,16 @@
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;$(PYLON_DEV_DIR)\include;$(HALCONROOT)\include;$(HALCONROOT)\include\halconcpp;.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets</IncludePath>
     </QtMoc>
+    <QtMoc Include="EngineerDialog.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UNICODE;WIN32;WIN64;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files (x86)\Galil\gclib\include;.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;$(PYLON_DEV_DIR)\include;$(HALCONROOT)\include;$(HALCONROOT)\include\halconcpp;.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UNICODE;WIN32;WIN64;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UNICODE;WIN32;WIN64;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;$(PYLON_DEV_DIR)\include;$(HALCONROOT)\include;$(HALCONROOT)\include\halconcpp;.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;WIN32;WIN64;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+    </QtMoc>
     <ClInclude Include="GeneratedFiles\ui_cameraWidget.h" />
     <ClInclude Include="GeneratedFiles\ui_ConfigureDialog.h" />
     <QtMoc Include="PicThreadLeft.h">
@@ -305,6 +317,7 @@
     </QtMoc>
     <QtMoc Include="PicThreadSecondRight.h">
     </QtMoc>
+    <ClInclude Include="GeneratedFiles\ui_EngineerDialog.h" />
     <ClInclude Include="GeneratedFiles\ui_hxq.h" />
     <ClInclude Include="GeneratedFiles\ui_modelWidget.h" />
     <ClInclude Include="GeneratedFiles\ui_serialWidget.h" />

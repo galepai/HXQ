@@ -5,6 +5,7 @@
 #include <QThread>
 #include "CHH.h"
 #include "aboutdialog.h"
+#include "EngineerDialog.h"
 #include "ComDialog.h"
 #include "DeltaThread.h"
 #include "ConstParam.h"
@@ -22,29 +23,30 @@ hxq::hxq(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	m_LeftWindowHandle = m_MiddleWindowHandle = m_RightWindowHandle = m_SecondRightWindowHandle = 0;
-	// 菜单栏对应功能
-	connect(ui.About, &QAction::triggered, this, &hxq::OnAbout);
-	connect(ui.OnLRC, &QAction::triggered, this, &hxq::OnLRC);
-	connect(ui.OnDeltaDebug, &QAction::triggered, this, &hxq::DebugDialog);
-	//工具栏对应功能
-	connect(ui.Open, &QAction::triggered, this, &hxq::OnOpen);
-	connect(ui.OnRun, &QAction::triggered, this, &hxq::OnOneHandle_AllPic);
-	connect(ui.OnLineRun, SIGNAL(triggered()), this, SLOT(OnStart()));
-	connect(ui.OnStop, SIGNAL(triggered()), this, SLOT(OnStop()));
-	connect(ui.Configure, SIGNAL(triggered()), this, SLOT(OnConfigure()));
-	connect(ui.ShutDown, SIGNAL(triggered()), this, SLOT(OnShutDown()));
-	connect(ui.Configure2, SIGNAL(triggered()), this, SLOT(OnTest()));
-	connect(ui.AreaCamera, SIGNAL(triggered()), this, SLOT(OnOpen()));
-	
-	
-	ui.OnStop->setEnabled(false);
-
-	WriteCurrenDateTime("config.ini", "Config", "OpenProgramTime");  //不支持中文写入配置文件
-	
 	//HIDDLE_DIALOG_BUTTON
 	FullScreenShow();	//全屏显示
 
+	//信号槽连接
+	menuConnect();
+	toolConnect();
+
+	//其他初始化
+	m_LeftWindowHandle = m_MiddleWindowHandle = m_RightWindowHandle = m_SecondRightWindowHandle = 0;
+
+	//初始工程师状态
+	ui.OnOperator->setChecked(false);
+	ui.OnEngineer->setChecked(true);
+	OnEngineerStatus();
+
+	//初始操作员状态
+	//ui.OnOperator->setChecked(true);
+	//ui.OnEngineer->setChecked(false);
+	//OnOperatorStatus();
+
+	//写入最后一次打开时间
+	WriteCurrenDateTime("config.ini", "Config", "OpenProgramTime");  //不支持中文写入配置文件
+
+	//相机线程
 	m_camera_thread_7_Clock = nullptr;
 	m_camera_thread_11_Clock = nullptr;
 	m_Pylon_camera_thread_2_Clock = nullptr;
@@ -56,30 +58,31 @@ hxq::hxq(QWidget *parent)
 	m_good = m_bad = m_total = 0;
 
 	m_peviousProductDectectEnd = true;
-	
-	ReadExposure();
-	
-
-	///****/
-	//if (!m_Galil)
-	//{
-	//	m_Galil = new Galil_Thread(this);
-	//}
-	//connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater())); 
-	////connect(m_Galil, SIGNAL(triggerSinal()), m_Galil, SLOT(OnWakeCamera()));
-	//m_Galil->GcLibVersion();
-	//if (m_Galil->Open(QString(GalilIp) + ""))
-	//{
-	//	m_Galil->start();
-	//}
-	//else
-	//{
-	//	delete m_Galil;
-	//	m_Galil = nullptr;
-	//}
-	///****/
 
 
+}
+
+// 菜单栏对应功能
+void hxq::menuConnect()
+{
+	connect(ui.OnEngineer, &QAction::triggered, this, &hxq::OnEngineer);
+	connect(ui.OnOperator, &QAction::triggered, this, &hxq::OnOperator);
+	connect(ui.About, &QAction::triggered, this, &hxq::OnAbout);
+	connect(ui.OnLRC, &QAction::triggered, this, &hxq::OnLRC);
+	connect(ui.OnDeltaDebug, &QAction::triggered, this, &hxq::DebugDialog);
+}
+
+//工具栏对应功能
+void hxq::toolConnect()
+{
+	connect(ui.Open, &QAction::triggered, this, &hxq::OnOpen);
+	connect(ui.OnRun, &QAction::triggered, this, &hxq::OnOneHandle_AllPic);
+	connect(ui.OnLineRun, SIGNAL(triggered()), this, SLOT(OnStart()));
+	connect(ui.OnStop, SIGNAL(triggered()), this, SLOT(OnStop()));
+	connect(ui.Configure, SIGNAL(triggered()), this, SLOT(OnConfigure()));
+	connect(ui.ShutDown, SIGNAL(triggered()), this, SLOT(OnShutDown()));
+	connect(ui.Configure2, SIGNAL(triggered()), this, SLOT(OnTest()));
+	connect(ui.AreaCamera, SIGNAL(triggered()), this, SLOT(OnOpen()));
 }
 
 //全屏显示
@@ -94,6 +97,41 @@ void hxq::FullScreenShow()
 hxq::~hxq()
 {
 
+}
+
+void hxq::OnEngineer()
+{
+	EngineerDialog Dlg(this);
+	Dlg.exec();
+	if (Dlg.correct())
+	{
+		ui.OnOperator->setChecked(false);
+		ui.OnEngineer->setChecked(true);
+		OnEngineerStatus();
+	}
+	else
+	{
+		ui.OnOperator->setChecked(true);
+		ui.OnEngineer->setChecked(false);
+		OnOperatorStatus();
+	}
+}
+
+void hxq::OnOperator()
+{
+	ui.OnOperator->setChecked(true);
+	ui.OnEngineer->setChecked(false);
+	OnOperatorStatus();
+}
+
+void hxq::OnEngineerStatus()
+{
+	ui.Configure->setEnabled(true);
+}
+
+void hxq::OnOperatorStatus()
+{
+	ui.Configure->setEnabled(false);
 }
 
 void hxq::OnAbout()
@@ -119,13 +157,13 @@ void hxq::OnOpen()
 		|| path.contains("camera4"))
 	{
 		int i = path.lastIndexOf('/');
-		QString ImageName = path.toStdString().substr(i, path.length() - 1).c_str(); 
+		QString ImageName = path.toStdString().substr(i, path.length() - 1).c_str();
 		QString tempPath = path.remove(ImageName);
 		i = tempPath.lastIndexOf('/');
 		QString upDir = tempPath.toStdString().substr(0, i + 1).c_str();
-		
+
 		i = ImageName.lastIndexOf('_');
-		ImageName = ImageName.toStdString().substr(i+1, ImageName.length() - 1).c_str();
+		ImageName = ImageName.toStdString().substr(i + 1, ImageName.length() - 1).c_str();
 
 
 		QString ImagePath = upDir + "camera1/Camera1_" + ImageName;
@@ -157,7 +195,7 @@ void hxq::OnOpen()
 		}
 	}
 
-	
+
 }
 
 void hxq::OnDisplayAreaCamera()
@@ -189,28 +227,28 @@ void hxq::OnOneHandle_AllPic()
 		DispPic(m_LeftImage, LeftView);
 		OnHandleImageThread(m_LeftImage, LeftView);
 	}
-		
+
 
 	if (m_MiddleImage.Key() != 0)
 	{
 		DispPic(m_MiddleImage, MiddleView);
 		OnHandleImageThread(m_MiddleImage, MiddleView);
 	}
-		
+
 
 	/*if (m_SecondRightImage.Key() != 0)
 	{
 		DispPic(m_SecondRightImage, SecondRightView);
 		OnHandleImageThread(m_SecondRightImage, SecondRightView);
 	}*/
-		
+
 
 	/*if (m_RightImage.Key() != 0)
 	{
 		DispPic(m_RightImage, RightView);
 		OnHandleImageThread(m_RightImage, RightView);
 	}*/
-		
+
 }
 
 void hxq::OnShutDown()
@@ -231,7 +269,7 @@ void hxq::OnShutDown()
 		reply = QMessageBox::information(this, G2U("提示"), G2U("请先停止系统,请点击左侧的'停止''按钮"));
 
 	}
-	
+
 }
 
 void hxq::OnClearCameraThread()
@@ -301,9 +339,9 @@ void hxq::OnLineRun()
 
 //对应串口的读取槽函数
 void hxq::receiveSerialData(QByteArray str)
-{	
+{
 	//qDebug() << "MainSlot Thread : " << QThread::currentThreadId();
-	statusBar()->showMessage(str,500);	
+	statusBar()->showMessage(str, 500);
 	static int num = 0;
 	if (!str.isEmpty())
 	{
@@ -314,26 +352,26 @@ void hxq::receiveSerialData(QByteArray str)
 			if (m_Y_States.size() == 8)
 			{
 				bool isStartGrab = m_Y_States[1];	//读取Y61的状态,On表示视觉到位
-				if (isStartGrab 
+				if (isStartGrab
 					&& m_peviousProductDectectEnd
 					//&& m_Pylon_camera_thread_10_Clock->ReadyWake()
 					&& m_Pylon_camera_thread_2_Clock->ReadyWake()
 					&& m_camera_thread_7_Clock->ReadyWake()
 					&& m_camera_thread_11_Clock->ReadyWake())
 				{
-					
-						Delta_Thread::AddOneQueueInfo(RESET_Y61);
-						Sleep(20);
-						m_peviousProductDectectEnd = false;
-						OnWakeCamera();
-						qDebug() << "receive Y61: " << ++num;
-					
-				}		
+
+					Delta_Thread::AddOneQueueInfo(RESET_Y61);
+					Sleep(20);
+					m_peviousProductDectectEnd = false;
+					OnWakeCamera();
+					qDebug() << "receive Y61: " << ++num;
+
+				}
 			}
 		}
-			
+
 	}
-	
+
 }
 
 
@@ -356,27 +394,27 @@ void hxq::DispPic(HImage& Image, LocationView location)
 	HTuple* pWindowHandle = nullptr;
 	switch (location)
 	{
-		case RightView:
-			pWindowHandle = &m_RightWindowHandle;;
-			break;
+	case RightView:
+		pWindowHandle = &m_RightWindowHandle;;
+		break;
 
-		case SecondRightView:
-			pWindowHandle = &m_SecondRightWindowHandle;;
-			break;
+	case SecondRightView:
+		pWindowHandle = &m_SecondRightWindowHandle;;
+		break;
 
-		case LeftView:
-			pWindowHandle = &m_LeftWindowHandle;
-			break;
+	case LeftView:
+		pWindowHandle = &m_LeftWindowHandle;
+		break;
 
-		case MiddleView:
-			pWindowHandle = &m_MiddleWindowHandle;
-			break;
+	case MiddleView:
+		pWindowHandle = &m_MiddleWindowHandle;
+		break;
 
 	}
-	
+
 	if (*pWindowHandle == 0)
 	{
-		
+
 		SetOpenWindowHandle(Image, pWindowHandle, location);
 		DispObj(Image, *pWindowHandle);
 		SetPicViewScroll(width, height, location);
@@ -399,13 +437,13 @@ void hxq::SetOpenWindowHandle(HImage& Image, HTuple* pWindowHandle, LocationView
 {
 	switch (location)
 	{
-	/*case RightView:
-		CHH::dev_open_window_fit_image(Image, 0, 0, 1024, 2000, (long)ui.RightPicView->winId(), pWindowHandle);
-		break;*/
+		/*case RightView:
+			CHH::dev_open_window_fit_image(Image, 0, 0, 1024, 2000, (long)ui.RightPicView->winId(), pWindowHandle);
+			break;*/
 
-	/*case SecondRightView:
-		CHH::dev_open_window_fit_image(Image, 0, 0, 1024, 2000, (long)ui.SecondRightPicView->winId(), pWindowHandle);
-		break;*/
+			/*case SecondRightView:
+				CHH::dev_open_window_fit_image(Image, 0, 0, 1024, 2000, (long)ui.SecondRightPicView->winId(), pWindowHandle);
+				break;*/
 
 	case LeftView:
 		CHH::dev_open_window_fit_image(Image, 0, 0, 1024, 2000, (long)ui.LeftPicView->winId(), pWindowHandle);
@@ -424,25 +462,25 @@ void hxq::SetPicViewScroll(int width, int height, LocationView location)
 	float scaleY = height / 2000.0;
 	switch (location)
 	{
-	/*case SecondRightView:
-		if (scaleY > scaleX)
-		{
-			HSCROLL_HEIGHT_SecondRightPic(2050);
-			VSCROLL_WIDTH_SecondRightPic(410);
-		}
-		break;*/
+		/*case SecondRightView:
+			if (scaleY > scaleX)
+			{
+				HSCROLL_HEIGHT_SecondRightPic(2050);
+				VSCROLL_WIDTH_SecondRightPic(410);
+			}
+			break;*/
 
-	/*case RightView:
-		if (scaleY > scaleX)
-		{
-			HSCROLL_HEIGHT_RightPic(2050);
-			VSCROLL_WIDTH_RightPic(410);
-		}
-		else
-		{
-			HSCROLL_HEIGHT_RightPic(500);
-		}
-		break;*/
+			/*case RightView:
+				if (scaleY > scaleX)
+				{
+					HSCROLL_HEIGHT_RightPic(2050);
+					VSCROLL_WIDTH_RightPic(410);
+				}
+				else
+				{
+					HSCROLL_HEIGHT_RightPic(500);
+				}
+				break;*/
 
 	case LeftView:
 		if (scaleY > scaleX)
@@ -502,8 +540,9 @@ void hxq::DebugDialog()
 //启动
 void hxq::OnStart()
 {
-	QVariant ModeValue;
-	ReadConfigure("config.ini", "Mode", "Connection", ModeValue);
+	QVariant ModeValue, Ip;
+	ReadConfigure("config.ini", "Mode", "Status", ModeValue);
+	ReadConfigure("config.ini", "MotionCard", "Ip", Ip);
 	if (ModeValue.toString() == "OnLine")
 	{
 		m_bIsOnLine = true;
@@ -516,17 +555,31 @@ void hxq::OnStart()
 
 	if (m_bIsOnLine)
 	{
-		if (OpenSerial())
+
+		///****/
+		if (!m_Galil)
 		{
-			OnOpenCameras();
+			m_Galil = new Galil_Thread(this);
+		}
+		connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater()));
+		//connect(m_Galil, SIGNAL(triggerSinal()), m_Galil, SLOT(OnWakeCamera()));
+		m_Galil->GcLibVersion();
+		if (m_Galil->Open(Ip.toString() + ""))
+		{
+			m_Galil->start();
+		}
+		else
+		{
+			delete m_Galil;
+			m_Galil = nullptr;
 		}
 	}
 	else
 	{
-		OnOpenCameras();
+		//OnOpenCameras();
 	}
 
-	readAllModelFromIni();
+	//readAllModelFromIni();
 
 }
 
@@ -611,8 +664,8 @@ void hxq::OnReadyOk(int num)
 		{
 			reply = QMessageBox::information(this, G2U("信息"), G2U("手动模式,请手动唤醒相机...\r\n		点击'OK'"));
 		}
-		
-		
+
+
 		total = 0;
 		/* Button State */
 		ui.OnStop->setEnabled(true);
@@ -630,8 +683,8 @@ void hxq::OnStop()
 	ui.OnStop->setEnabled(false);
 	ui.OnLineRun->setEnabled(true);
 
-	
-	
+
+
 }
 
 //检测完成信号
@@ -641,7 +694,7 @@ void hxq::OnDetectEnd()
 	{
 		Delta_Thread::AddOneQueueInfo(DETECT_END_ON);
 		Delta_Thread::AddOneQueueInfo(DETECT_END_OFF);
-	}		
+	}
 }
 
 
@@ -649,7 +702,7 @@ void hxq::OnDetectEnd()
 void hxq::receiveLeftImage(void* image)
 {
 	HImage ima = *(HImage*)image;
-	DispPic(ima, LeftView);	
+	DispPic(ima, LeftView);
 }
 
 void hxq::receiveMiddleImage(void* image)
@@ -662,7 +715,7 @@ void hxq::receiveSecondRightImage(void* image)
 {
 	HImage ima = *(HImage*)image;
 	DispPic(ima, SecondRightView);
-	
+
 }
 
 void hxq::receiveRightImage(void* image)
@@ -810,9 +863,9 @@ void hxq::OnTest()
 		{
 			qDebug() << "m_peviousProductDectectEnd = false.";
 		}
-		
+
 	}
-	
+
 }
 
 bool hxq::OpenSerial()
@@ -840,7 +893,7 @@ bool hxq::OpenSerial()
 		connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 		connect(thread, SIGNAL(sendSerialData(QByteArray)), this, SLOT(receiveSerialData(QByteArray)));
 		connect(thread, SIGNAL(error(QString)), this, SLOT(genErrorDialog(QString)));
-		connect(thread, &Delta_Thread::bool_error, [&](bool is){ isRet = is; });
+		connect(thread, &Delta_Thread::bool_error, [&](bool is) { isRet = is; });
 		thread->start();
 		Sleep(100);  //等待串口如果错误打开,返回isRet;
 	}
@@ -858,7 +911,7 @@ void hxq::handleResults(int singleResult)
 	//if (m_AllResult >= LeftGood + MiddleGood + SecondRightGood + RightGood)
 	if (m_AllResult >= LeftGood + MiddleGood + RightGood)
 	{
-		
+
 		qDebug() << "Image num:				" << m_total;
 
 		//if (m_AllResult == LeftGood + MiddleGood + SecondRightGood + RightGood)
@@ -868,12 +921,12 @@ void hxq::handleResults(int singleResult)
 			m_good++;
 			if (m_bIsOnLine)
 			{
-				
-				Delta_Thread::AddOneQueueInfo(RESULT_GODD);	
+
+				Delta_Thread::AddOneQueueInfo(RESULT_GODD);
 				OnDetectEnd();
 				m_Result_Queue.push(1);
 				m_Result_AllQueue.push(1);
-			}	
+			}
 
 			qDebug() << "Send Good!!!	";
 			ui.lcdNumber_good->display(m_good);
@@ -884,13 +937,13 @@ void hxq::handleResults(int singleResult)
 			m_bad++;
 			if (m_bIsOnLine)
 			{
-				
+
 				Delta_Thread::AddOneQueueInfo(RESULT_BAD);
 				OnDetectEnd();
 				m_Result_Queue.push(0);
 				m_Result_AllQueue.push(0);
 			}
-				
+
 
 			qDebug() << "Send Bad!!!	";
 			ui.lcdNumber_bad->display(m_bad);
@@ -925,20 +978,13 @@ void hxq::handleResults(int singleResult)
 	qDebug() << "Detect Result:	" << m_AllResult;
 }
 
-//
-void hxq::ReadExposure()
-{
-
-	
-
-}
 
 //实时设置曝光
 void hxq::OnSetExposure()
 {
 
 
-	
+
 }
 
 //read lastest model for picHandle.

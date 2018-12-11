@@ -26,7 +26,7 @@ TestDialog::TestDialog(QWidget *parent) :
 
 	m_pTimer = new QTimer(this);
 	connect(m_pTimer, SIGNAL(timeout()), this, SLOT(update()));
-	m_pTimer->start(50);
+	m_pTimer->start(100);
 
 	QVariant value;
 	ReadConfigure("config.ini", "MotionCard", "Ip", value);
@@ -75,7 +75,6 @@ TestDialog::~TestDialog()
     delete ui;
 	delete m_pTimer;
 	m_pTimer = nullptr;
-	delete m_Galil;
 	m_Galil = nullptr;
 }
 

@@ -119,6 +119,9 @@
     <ClCompile Include="GalilThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EngineerDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="aboutdialog.ui">
@@ -196,6 +199,9 @@
     <QtUic Include="hxq.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="EngineerDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CHH.h">
@@ -240,6 +246,9 @@
     <ClInclude Include="GeneratedFiles\ui_hxq.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_EngineerDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\qss\css.h">
@@ -258,6 +267,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="GalilThread.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="EngineerDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

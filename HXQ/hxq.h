@@ -22,24 +22,31 @@ public:
 	hxq(QWidget *parent = 0);
 	~hxq();
 
-	//bool getIsBadStatu(){ return m_AllResult; };
 	bool OpenSerial();
 
 	void OnWakeCamera();
-	void ReadExposure();
-	void setBottomModel(QString path){ m_BottomModel = path; }
-	const QString& bottomModel(){return m_BottomModel;}
-	void setGbModel(QString path){ m_GBModel = path; }
-	const QString& gbModel(){ return m_GBModel; }
+	void setBottomModel(QString path) { m_BottomModel = path; }
+	const QString& bottomModel() { return m_BottomModel; }
+	void setGbModel(QString path) { m_GBModel = path; }
+	const QString& gbModel() { return m_GBModel; }
 	void readAllModelFromIni();
 	void addResultQueue();
+
+
+	void OnEngineerStatus();
+	void OnOperatorStatus();
+
+	void menuConnect();
+	void toolConnect();
 
 	//*********图像处理线程**************/
 	void OnHandleImageThread(HImage& ima, LocationView view);
 
-public slots:
+	public slots:
 
 	/***********菜单栏功能************/
+	void OnEngineer();
+	void OnOperator();
 	void OnLRC();
 	void OnAbout();
 
@@ -77,6 +84,7 @@ public slots:
 	//
 	void OnSetExposure();
 
+
 private:
 	void OnClearCameraThread();	//清理相机线程
 	void FullScreenShow();	//全屏显示
@@ -107,12 +115,12 @@ signals:
 public:
 	Camera_Thread* m_camera_thread_7_Clock;
 	Camera_Thread* m_camera_thread_11_Clock;
-	
+
 	PylonCamera_Thread* m_Pylon_camera_thread_2_Clock;
 	PylonCamera_Thread* m_Pylon_camera_thread_10_Clock;
 
 
-	Galil_Thread* m_Galil;
+	Galil_Thread* m_Galil;	//运动控制卡线程
 
 };
 

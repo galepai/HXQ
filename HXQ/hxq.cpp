@@ -675,7 +675,10 @@ void hxq::OnReadyOk(int num)
 //停止
 void hxq::OnStop()
 {
-	Delta_Thread::StopRun(true);
+	if (m_Galil)
+	{
+		m_Galil->stop();
+	}
 
 	OnClearCameraThread();
 
@@ -868,39 +871,6 @@ void hxq::OnTest()
 
 }
 
-bool hxq::OpenSerial()
-{
-	bool isRet = true;
-
-	QVariant value;
-	ReadConfigure("config.ini", "Port", "Port", value);
-	QString PortName = value.toString();
-	ReadConfigure("config.ini", "Port", "Baud", value);
-	int Baud = value.toInt();
-	ReadConfigure("config.ini", "Port", "DataBits", value);
-	int DataBits = value.toInt();
-
-	Delta_Thread::setQueryMode(Delta_Thread::QueryMode::DefalutQuene);
-	Delta_Thread::AddDefaultQueueInfo(READ_Y61_OUTPUT);	//读Y60-Y67
-
-	//设置单次查询模式
-	//Delta_Thread::setQueryMode(Delta_Thread::QueryMode::OneQuery);
-
-	if (!Delta_Thread::GetSerialPort())
-	{
-		Delta_Thread* thread = new Delta_Thread;
-		thread->InitSerialPortInfo(PortName.toStdString().c_str(), Baud, QSerialPort::Parity::EvenParity, QSerialPort::DataBits(DataBits));
-		connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-		connect(thread, SIGNAL(sendSerialData(QByteArray)), this, SLOT(receiveSerialData(QByteArray)));
-		connect(thread, SIGNAL(error(QString)), this, SLOT(genErrorDialog(QString)));
-		connect(thread, &Delta_Thread::bool_error, [&](bool is) { isRet = is; });
-		thread->start();
-		Sleep(100);  //等待串口如果错误打开,返回isRet;
-	}
-
-	return isRet;
-
-}
 
 //得到线程的信号,并判断检测结果,发送给PLC
 void hxq::handleResults(int singleResult)

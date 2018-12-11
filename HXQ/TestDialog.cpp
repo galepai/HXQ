@@ -65,7 +65,7 @@ void TestDialog::ChangeStyle()
 
 void TestDialog::CloseWindow()
 {
-	m_Galil->stop(true);
+	m_Galil->stop();
 	close();
 }
 

@@ -52,7 +52,7 @@ public:
 	QString ip() const { return m_ip; }
 	void setIp(QString ip) { m_ip = ip; }
 
-	void stop(bool enable) { m_StopThread = enable; }
+	void stop() { m_StopThread = true; }
 
 	//QString ip;
 protected:

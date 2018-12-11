@@ -5,7 +5,7 @@
 #include "ConstParam.h"
 
 
-std::atomic<bool> Galil_Thread::m_bIsStop = false;
+//std::atomic<bool> Galil_Thread::m_bIsStop = false;
 
 
 Galil_Thread::Galil_Thread(QObject *parent)
@@ -13,9 +13,9 @@ Galil_Thread::Galil_Thread(QObject *parent)
 {
 	qDebug() << "Galil_Thread construct func(),  Thread : " << QThread::currentThreadId();
 
-	g = 0;
-
-	front = new char[G_SMALL_BUFFER];
+	m_g = 0;
+	m_StopThread = false;
+	//m_front = new char[G_SMALL_BUFFER];
 
 }
 
@@ -23,8 +23,8 @@ bool Galil_Thread::GcLibVersion()
 {
 	try
 	{
-		check(GVersion(buf, sizeof(buf))); //library version
-		qDebug() << "Library Version: " << buf << "\n";
+		check(GVersion(m_buf, sizeof(m_buf))); //library version
+		qDebug() << "Library Version: " << m_buf << "\n";
 		return true;
 	}
 	catch (GReturn gr) //for x_e() function
@@ -41,7 +41,7 @@ bool Galil_Thread::Open(QString address)
 	try
 	{
 		//check(GOpen("192.168.2.7", &g));
-		check(GOpen(address.toStdString().c_str(), &g));
+		check(GOpen(address.toStdString().c_str(), &m_g));
 
 		qDebug() << "Connection Galil sucess.";
 		QString Revision;
@@ -64,7 +64,7 @@ bool Galil_Thread::Cmd(QString command)
 {
 	try
 	{
-		check(GCmd(g, command.toStdString().c_str()));
+		check(GCmd(m_g, command.toStdString().c_str()));
 		return true;
 
 	}
@@ -81,8 +81,7 @@ bool Galil_Thread::CmdI(QString command, int* value)
 {
 	try
 	{
-		check(GCmdI(g, command.toStdString().c_str(), value));
-
+		check(GCmdI(m_g, command.toStdString().c_str(), value));
 		return true;
 
 	}
@@ -99,10 +98,7 @@ bool Galil_Thread::CmdD(QString command, double* value)
 {
 	try
 	{
-		check(GCmdD(g, command.toStdString().c_str(), value));
-		int input;
-		GCmdI(g, "TI", &input);
-
+		check(GCmdD(m_g, command.toStdString().c_str(), value));
 		return true;
 
 	}
@@ -119,9 +115,9 @@ bool Galil_Thread::CmdT(QString command, QString& value)
 {
 	try
 	{
-		ZeroMemory(buf, sizeof(buf));
-		check(GCmdT(g, command.toStdString().c_str(), buf, sizeof(buf), &front));
-		value = buf;
+		ZeroMemory(m_buf, sizeof(m_buf));
+		check(GCmdT(m_g, command.toStdString().c_str(), m_buf, sizeof(m_buf), nullptr));
+		value = m_buf;
 
 		return true;
 
@@ -138,19 +134,19 @@ bool Galil_Thread::CmdT(QString command, QString& value)
 void Galil_Thread::ExceptionInformation(GReturn gr)
 {
 	qDebug() << "Function returned " << gr << '\n';
-	GError(gr, buf, sizeof(buf));
-	qDebug() << buf << '\n';
-	GSize size = sizeof(buf);
+	GError(gr, m_buf, sizeof(m_buf));
+	qDebug() << m_buf << '\n';
+	GSize size = sizeof(m_buf);
 
-	if (g)
+	if (m_g)
 	{
-		GUtility(g, G_UTIL_ERROR_CONTEXT, buf, &size);
-		qDebug() << buf << '\n'; //further context
+		GUtility(m_g, G_UTIL_ERROR_CONTEXT, m_buf, &size);
+		qDebug() << m_buf << '\n'; //further context
 
-		GClose(g); //close g
+		GClose(m_g); //close g
 	}
 
-	g = 0;
+	m_g = 0;
 
 }
 
@@ -159,7 +155,7 @@ void Galil_Thread::run()
 	qDebug() << "Galil_Thread Run Thread : " << QThread::currentThreadId();
 	int value = 0;
 
-	while (!m_bIsStop)
+	while (!m_StopThread)
 	{
 		value = 0;
 		CmdI("TI", &value);
@@ -184,11 +180,9 @@ Galil_Thread::~Galil_Thread()
 	if (isRunning())
 		wait();
 
-	delete front;
-
-	if (g)
+	if (m_g)
 	{
-		GClose(g); //close g
+		GClose(m_g); //close g
 	}
 	qDebug() << "~Galil_Thread";
 }

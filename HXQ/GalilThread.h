@@ -52,23 +52,25 @@ public:
 	QString ip() const { return m_ip; }
 	void setIp(QString ip) { m_ip = ip; }
 
+	void stop(bool enable) { m_StopThread = enable; }
+
 	//QString ip;
 protected:
 	virtual void run() Q_DECL_OVERRIDE;
 	void ExceptionInformation(GReturn gr);
 	
 
-	static std::atomic<bool> m_bIsStop;
+	
 	std::vector<bool> m_input;
 
 
 private:
-	GCon g; //var used to refer to a unique connection. A valid connection is nonzero.
-	int buf_size = G_SMALL_BUFFER;
-	char buf[G_SMALL_BUFFER]; //traffic buffer
-	char *front;
+	GCon m_g; //var used to refer to a unique connection. A valid connection is nonzero.
+	int m_buf_size = G_SMALL_BUFFER;
+	char m_buf[G_SMALL_BUFFER]; //traffic buffer
+	//char* m_front;
 	QString m_ip;
-
+	bool m_StopThread;
 
 signals:
 	void sendInputValue(int value);

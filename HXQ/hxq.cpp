@@ -60,31 +60,24 @@ hxq::hxq(QWidget *parent)
 	ReadExposure();
 	
 
-
-	std::vector<bool> num = Parse_Galil_Input(7);
-
-
-	/****/
-	if (!m_Galil)
-	{
-		m_Galil = new Galil_Thread(this);
-	}
-	connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater())); 
-	connect(m_Galil, SIGNAL(triggerSinal()), m_Galil, SLOT(OnWakeCamera()));
-	m_Galil->GcLibVersion();
-	if (m_Galil->Open(QString(GalilIp) + ""))
-	{
-		m_Galil->start();
-		if (m_Galil->Cmd("SB0"))
-		{
-			qDebug() << "SB0 Sucess!";
-		}
-	}
-	else
-	{
-		delete m_Galil;
-	}
-	/****/
+	///****/
+	//if (!m_Galil)
+	//{
+	//	m_Galil = new Galil_Thread(this);
+	//}
+	//connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater())); 
+	////connect(m_Galil, SIGNAL(triggerSinal()), m_Galil, SLOT(OnWakeCamera()));
+	//m_Galil->GcLibVersion();
+	//if (m_Galil->Open(QString(GalilIp) + ""))
+	//{
+	//	m_Galil->start();
+	//}
+	//else
+	//{
+	//	delete m_Galil;
+	//	m_Galil = nullptr;
+	//}
+	///****/
 
 
 }

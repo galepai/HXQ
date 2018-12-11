@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QLineEdit>
 #include <vector>
+#include "GalilThread.h"
 
 namespace Ui {
 class TestDialog;
@@ -22,9 +23,11 @@ private:
 	Ui::TestDialog *ui;
 	QTimer* m_pTimer;
 	std::vector<bool> m_Y_States;
-	std::vector<bool> m_X_States; 
+	std::vector<bool> m_X_States, m_Input; 
 	std::vector<bool> m_origin_States;
 	std::vector<ushort> m_D_Register;
+
+	Galil_Thread* m_Galil;
 
 	virtual void paintEvent(QPaintEvent *event);
 
@@ -38,7 +41,7 @@ private:
 	void updateButtonStatu(QPushButton* PushButton, bool status);
 
 public slots:
-	void readyDataSlot(QByteArray str);
+	void receiveInputValue(int value);
 	void ChangeStyle();
 	void CloseWindow();
 	void OnZhuaShouLeft();	//×¥ÊÖ×ó

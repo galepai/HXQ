@@ -22,6 +22,7 @@
 class Galil_Thread : public QThread
 {
 	Q_OBJECT
+	Q_PROPERTY(QString ip READ ip WRITE setIp);
 
 public:
 	enum QueryMode
@@ -48,14 +49,17 @@ public:
 	bool CmdD(QString command, double* value);
 	bool CmdT(QString command, QString& value);
 
+	QString ip() const { return m_ip; }
+	void setIp(QString ip) { m_ip = ip; }
 
+	//QString ip;
 protected:
 	virtual void run() Q_DECL_OVERRIDE;
 	void ExceptionInformation(GReturn gr);
 	
 
 	static std::atomic<bool> m_bIsStop;
-	
+	std::vector<bool> m_input;
 
 
 private:
@@ -63,11 +67,11 @@ private:
 	int buf_size = G_SMALL_BUFFER;
 	char buf[G_SMALL_BUFFER]; //traffic buffer
 	char *front;
-	std::vector<bool> m_input;
+	QString m_ip;
 
 
 signals:
-	void sendSerialData(QByteArray receiveData);
+	void sendInputValue(int value);
 	void triggerSinal();
 
 };

@@ -167,6 +167,7 @@ void Galil_Thread::run()
 
 		m_input.clear();
 		m_input = Parse_Galil_Input(value);
+		emit sendInputValue(value);
 		if (m_input[IOPoint - 1])  //发射触发相机信号
 		{
 			emit triggerSinal();

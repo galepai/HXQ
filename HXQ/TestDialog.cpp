@@ -7,11 +7,12 @@
 #include <QLineEdit>
 #include <QPainter>
 
+
 //#define ADD_DefaultQueueInfo Delta_Thread::AddDefaultQueueInfo(READ_Y_OUTPUT);	//读Y00-Y67
 
 TestDialog::TestDialog(QWidget *parent) :
     QDialog(parent),
-	ui(new Ui::TestDialog)
+	ui(new Ui::TestDialog),m_Galil(new Galil_Thread(this))
 {
     ui->setupUi(this);
 	connect(ui->btn_return, SIGNAL(clicked()), this, SLOT(CloseWindow()));
@@ -70,33 +71,27 @@ TestDialog::TestDialog(QWidget *parent) :
 	m_pTimer->start(50);
 
 	QVariant value;
-	ReadConfigure("config.ini", "Port", "Port", value);
-	QString PortName = value.toString();
-	ReadConfigure("config.ini", "Port", "Baud", value);
-	int Baud = value.toInt();
-	ReadConfigure("config.ini", "Port", "DataBits", value);
-	int DataBits = value.toInt();
+	ReadConfigure("config.ini", "MotionCard", "Ip", value);
+	QString ip = value.toString();
 
-	//设置默认查询队列模式
-	Delta_Thread::setQueryMode(Delta_Thread::QueryMode::DefalutQuene);
-	Delta_Thread::AddDefaultQueueInfo(READ_X_INPUT);	//读X00-X87
-	Delta_Thread::AddDefaultQueueInfo(READ_Y_OUTPUT);	//读Y00-Y67
-
-	//设置单次查询模式
-	//Delta_Thread::setQueryMode(Delta_Thread::QueryMode::OneQuery);
-
-
-
-	if (!Delta_Thread::GetSerialPort())
+	/****/
+	if (!m_Galil)
 	{
-		Delta_Thread* thread = new Delta_Thread;
-		thread->InitSerialPortInfo(PortName.toStdString().c_str(), Baud, QSerialPort::Parity::EvenParity, QSerialPort::DataBits(DataBits));
-		connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-		connect(thread, SIGNAL(sendSerialData(QByteArray)), this, SLOT(readyDataSlot(QByteArray)));
-		thread->start();
+		m_Galil = new Galil_Thread(this);
 	}
-		
-	Delta_Thread::AddOneQueueInfo(READ_TIME_AND_DISTANCE);	//读D200-D205 000310C80006
+	
+	connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater()));
+	connect(m_Galil, SIGNAL(sendInputValue(int)), m_Galil, SLOT(receiveInputValue(int)));
+	m_Galil->GcLibVersion();
+	if (m_Galil->Open(ip + ""))
+	{
+		m_Galil->start();
+	}
+	else
+	{
+		delete m_Galil;
+	}
+	/****/
 
 	ui->lcd_distance->setStyleSheet("color: white;");
 	ui->lcd_distance_2->setStyleSheet("color: white;");
@@ -455,13 +450,13 @@ void TestDialog::paintEvent(QPaintEvent *event)
 	int radius = 5;
 	int distance = 15;
 	QPointF x_origin(75, 550);
-	if (m_X_States.size() != 0 && m_X_States.size() % 8 == 0)
+	if (m_Input.size() != 0 && m_Input.size() % 8 == 0)
 	{
-		for (int row = 0; row < m_X_States.size()/8; row++)
+		for (int row = 0; row < m_Input.size()/8; row++)
 		{
 			for (int column = 0; column < 8; column++)
 			{
-				if (m_X_States[row * 8 + column])
+				if (m_Input[row * 8 + column])
 					PaintCirle(painter, QPointF(x_origin.x() + column*(radius + distance),
 					x_origin.y() + row*(radius + distance)),
 					radius, QPen(QColor(0, 255, 90), 2), QColor(35, 255, 125));
@@ -528,84 +523,11 @@ void TestDialog::PaintCirle(QPainter& painter, const QPointF& center_circle, int
 }
 
 
-void TestDialog::readyDataSlot(QByteArray str)
+void TestDialog::receiveInputValue(int value)
 {
-	if (!str.isEmpty())
-	{
-		std::string function_code = str.toStdString().substr(3, 2);
-		if (function_code == "01")
-			m_Y_States = Parse_Delta_Ascii(str.toStdString());
 
-		if (function_code == "02")
-		{
-			
-			m_X_States = Parse_Delta_Ascii(str.toStdString());
+	m_Input = Parse_Galil_Input(value);
 
-			//原点状态
-			m_origin_States.clear();
-			if (m_X_States.size() > 70)
-			{
-				bool flag = true;
-				m_origin_States.push_back(m_X_States[8]);
-				m_origin_States.push_back(m_X_States[9]);
-				m_origin_States.push_back(m_X_States[29]);
-				m_origin_States.push_back(m_X_States[62]);
-				m_origin_States.push_back(m_X_States[31]);
-				m_origin_States.push_back(m_X_States[33]);
-				m_origin_States.push_back(m_X_States[40]);
-				m_origin_States.push_back(m_X_States[41]);
-				m_origin_States.push_back(m_X_States[57]);
-				m_origin_States.push_back(m_X_States[58]);
-				m_origin_States.push_back(m_X_States[61]);
-
-				m_origin_States.push_back(m_X_States[12]);
-				m_origin_States.push_back(m_X_States[13]);
-				m_origin_States.push_back(m_X_States[19]);
-				m_origin_States.push_back(m_X_States[21]);
-				m_origin_States.push_back(m_X_States[23]);
-				m_origin_States.push_back(m_X_States[25]);
-
-				for (int index = m_origin_States.size() - 6; index < m_origin_States.size() - 1; index++)
-				{
-					if (!m_origin_States[index])
-					{
-						flag = false;
-						break;
-					}
-					
-				}
-				for (int index = 0; index < 6; index++)
-				{
-					m_origin_States.pop_back();
-				}
-
-				m_origin_States.push_back(flag);
-
-			}
-		
-		}
-			
-		if (function_code == "03")
-		{
-			m_D_Register = Parse_Delta_Ascii_03(str.toStdString());	
-			if (!m_D_Register.empty() && m_D_Register.size() == 9)
-			{
-				ui->lcd_distance->display(m_D_Register[0] / 10.0);
-				ui->lcd_time->display(m_D_Register[4] / 10.0);
-				ui->lcd_distance_2->display(m_D_Register[8] / 10.0);
-				ui->doubleSpinBox_distance->setValue(m_D_Register[0] / 10.0);
-				ui->doubleSpinBox_time->setValue(m_D_Register[4] / 10.0);
-				ui->doubleSpinBox_distance_2->setValue(m_D_Register[8] / 10.0);
-			}	
-		}
-			
-	}
-	else
-	{
-		m_Y_States.clear();
-		m_X_States.clear();
-		m_D_Register.clear();
-	}
 }
 
 

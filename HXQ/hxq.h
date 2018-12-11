@@ -101,7 +101,7 @@ private:
 	QString m_Title;
 	HImage m_Image, m_LeftImage, m_MiddleImage, m_SecondRightImage, m_RightImage;
 	int m_AllResult;
-	int m_good, m_bad, m_total;
+	int m_good, m_bad, m_gou, m_cao, m_liantong, m_total;
 	bool m_peviousProductDectectEnd;
 	bool m_bIsOnLine; //打开相机时,选择是否与PLC联机
 	QString m_BottomModel;
@@ -114,7 +114,7 @@ signals:
 
 public:
 	Camera_Thread* m_camera_thread_7_Clock;
-	Camera_Thread* m_camera_thread_11_Clock;
+	Camera_Thread* m_camera_thread_top;
 
 	PylonCamera_Thread* m_Pylon_camera_thread_2_Clock;
 	PylonCamera_Thread* m_Pylon_camera_thread_10_Clock;

@@ -32,18 +32,31 @@ public:
 	void setSaveDatePath(const QString& path);
 	void setSaveImageNum(int MaxNum = 50){ m_MaxNum = MaxNum; };
 	void setSaveImageDirName(const QString& path);
-	void SetExposureTime(float exposureTime)
+	void setAcquisitionMode(QString acquisitionMode)
+	{
+		m_AcquisitionMode = acquisitionMode;
+	}
+
+	void setTriggerMode(QString triggerMode)
+	{
+		m_TriggerMode = triggerMode;
+	}
+
+	void setExposureTime(float exposureTime)
 	{
 		m_exposureTime = exposureTime;
 	}
-	void SetAcquisitionLineRate(float acquisitionLineRate)
+
+	void setAcquisitionLineRate(float acquisitionLineRate)
 	{
 		m_acquisitionLineRate = acquisitionLineRate;
 	}
-	void SetHeight(int height)
+
+	void setHeight(int height)
 	{
 		m_height = height;
 	}
+
 	bool ReadyWake()
 	{
 		return m_WaitWake;
@@ -84,6 +97,8 @@ private:
 	float m_acquisitionLineRate;
 	int m_height;
 	bool m_WaitWake;
+	QString m_AcquisitionMode;
+	QString m_TriggerMode;
 };
 
 #endif

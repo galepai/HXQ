@@ -48,14 +48,14 @@ hxq::hxq(QWidget *parent)
 
 	//相机线程
 	m_camera_thread_7_Clock = nullptr;
-	m_camera_thread_11_Clock = nullptr;
+	m_camera_thread_top = nullptr;
 	m_Pylon_camera_thread_2_Clock = nullptr;
 	m_Pylon_camera_thread_10_Clock = nullptr;
 
 	m_Galil = nullptr;
 
 	m_AllResult = 0;
-	m_good = m_bad = m_total = 0;
+	m_good = m_bad = m_gou = m_cao = m_liantong = m_total = 0;
 
 	m_peviousProductDectectEnd = true;
 
@@ -82,7 +82,7 @@ void hxq::toolConnect()
 	connect(ui.Configure, SIGNAL(triggered()), this, SLOT(OnConfigure()));
 	connect(ui.ShutDown, SIGNAL(triggered()), this, SLOT(OnShutDown()));
 	connect(ui.Configure2, SIGNAL(triggered()), this, SLOT(OnTest()));
-	connect(ui.AreaCamera, SIGNAL(triggered()), this, SLOT(OnOpen()));
+	connect(ui.AreaCamera, SIGNAL(triggered()), this, SLOT(OnDisplayAreaCamera()));
 }
 
 //全屏显示
@@ -202,19 +202,23 @@ void hxq::OnDisplayAreaCamera()
 {
 	QVariant ExposureValue;
 	/**	海康面阵相机	*/
-	m_camera_thread_11_Clock = new Camera_Thread(Camera_Thread::ConnectionType::GigEVision2, LineCameraId_Dalsa_11_Clock, this);
-	m_camera_thread_11_Clock->setSaveImageDirName("Camera1");
-	m_camera_thread_11_Clock->setSaveImageNum(999);
-	ReadConfigure("config.ini", "Camera_11_Clock", "Exposure", ExposureValue);
-	m_camera_thread_11_Clock->SetExposureTime(ExposureValue.toFloat());
-	//m_camera_thread_11_Clock->SetAcquisitionLineRate(10000.0);
-	//m_camera_thread_11_Clock->SetHeight(10000);
-	connect(m_camera_thread_11_Clock, SIGNAL(signal_error(QString)), this, SLOT(genErrorDialog(QString)));
-	connect(m_camera_thread_11_Clock, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
-	connect(m_camera_thread_11_Clock, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	connect(m_camera_thread_11_Clock, SIGNAL(signal_image(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
-	connect(m_camera_thread_11_Clock, SIGNAL(finished()), m_camera_thread_11_Clock, SLOT(deleteLater()));
-	m_camera_thread_11_Clock->start();
+	m_camera_thread_top = new Camera_Thread(Camera_Thread::ConnectionType::GigEVision2, TopAreaCamera, this);
+	m_camera_thread_top->setSaveImageDirName("Area");
+	m_camera_thread_top->setSaveImageNum(50);
+	ReadConfigure("config.ini", "TopCamera", "Exposure", ExposureValue);
+	m_camera_thread_top->setExposureTime(ExposureValue.toFloat());
+	m_camera_thread_top->setAcquisitionMode("Continuous");
+	m_camera_thread_top->setTriggerMode("Off");
+	connect(m_camera_thread_top, SIGNAL(signal_error(QString)), this, SLOT(genErrorDialog(QString)));
+	connect(m_camera_thread_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
+	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
+	connect(m_camera_thread_top, SIGNAL(signal_image(void*)), this, SLOT(receiveLeftImageAndHandle(void*)));	//左视图显示
+	connect(m_camera_thread_top, SIGNAL(finished()), m_camera_thread_top, SLOT(deleteLater()));
+	m_camera_thread_top->start();
+
+
+	ui.OnStop->setEnabled(true);
+	ui.OnLineRun->setEnabled(false);
 }
 
 //OffLine处理图像
@@ -277,8 +281,8 @@ void hxq::OnClearCameraThread()
 	if (m_camera_thread_7_Clock)
 		m_camera_thread_7_Clock->stop();
 
-	if (m_camera_thread_11_Clock)
-		m_camera_thread_11_Clock->stop();
+	if (m_camera_thread_top)
+		m_camera_thread_top->stop();
 
 	if (m_Pylon_camera_thread_2_Clock)
 		m_Pylon_camera_thread_2_Clock->stop();
@@ -300,10 +304,10 @@ void hxq::OnClearCameraThread()
 
 	if (Camera_Thread::IsExistCameraId(LineCameraId_Dalsa_11_Clock))
 	{
-		if (m_camera_thread_11_Clock->isRunning())
+		if (m_camera_thread_top->isRunning())
 		{
-			m_camera_thread_11_Clock->stop();
-			m_camera_thread_11_Clock->wait();
+			m_camera_thread_top->stop();
+			m_camera_thread_top->wait();
 		}
 	}
 
@@ -357,7 +361,7 @@ void hxq::receiveSerialData(QByteArray str)
 					//&& m_Pylon_camera_thread_10_Clock->ReadyWake()
 					&& m_Pylon_camera_thread_2_Clock->ReadyWake()
 					&& m_camera_thread_7_Clock->ReadyWake()
-					&& m_camera_thread_11_Clock->ReadyWake())
+					&& m_camera_thread_top->ReadyWake())
 				{
 
 					Delta_Thread::AddOneQueueInfo(RESET_Y61);
@@ -580,6 +584,8 @@ void hxq::OnStart()
 	}
 
 	//readAllModelFromIni();
+	ui.OnLineRun->setEnabled(false);
+	ui.OnStop->setEnabled(true);
 
 }
 
@@ -588,19 +594,19 @@ void hxq::OnOpenCameras()
 	QVariant ExposureValue;
 	/*-----Halcon Version------------*/
 	/**	海康面阵相机	*/
-	m_camera_thread_11_Clock = new Camera_Thread(Camera_Thread::ConnectionType::GigEVision2, LineCameraId_Dalsa_11_Clock, this);
-	m_camera_thread_11_Clock->setSaveImageDirName("Camera1");
-	m_camera_thread_11_Clock->setSaveImageNum(999);
+	m_camera_thread_top = new Camera_Thread(Camera_Thread::ConnectionType::GigEVision2, LineCameraId_Dalsa_11_Clock, this);
+	m_camera_thread_top->setSaveImageDirName("Camera1");
+	m_camera_thread_top->setSaveImageNum(999);
 	ReadConfigure("config.ini", "Camera_11_Clock", "Exposure", ExposureValue);
-	m_camera_thread_11_Clock->SetExposureTime(ExposureValue.toFloat());
-	//m_camera_thread_11_Clock->SetAcquisitionLineRate(10000.0);
-	//m_camera_thread_11_Clock->SetHeight(10000);
-	connect(m_camera_thread_11_Clock, SIGNAL(signal_error(QString)), this, SLOT(genErrorDialog(QString)));
-	connect(m_camera_thread_11_Clock, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
-	connect(m_camera_thread_11_Clock, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	connect(m_camera_thread_11_Clock, SIGNAL(signal_image(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
-	connect(m_camera_thread_11_Clock, SIGNAL(finished()), m_camera_thread_11_Clock, SLOT(deleteLater()));
-	m_camera_thread_11_Clock->start();
+	m_camera_thread_top->setExposureTime(ExposureValue.toFloat());
+	//m_camera_thread_top->SetAcquisitionLineRate(10000.0);
+	//m_camera_thread_top->SetHeight(10000);
+	connect(m_camera_thread_top, SIGNAL(signal_error(QString)), this, SLOT(genErrorDialog(QString)));
+	connect(m_camera_thread_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
+	connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
+	connect(m_camera_thread_top, SIGNAL(signal_image(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
+	connect(m_camera_thread_top, SIGNAL(finished()), m_camera_thread_top, SLOT(deleteLater()));
+	m_camera_thread_top->start();
 
 	/**	7点方向DALSA线扫	*/
 	//m_camera_thread_7_Clock = new Camera_Thread(Camera_Thread::ConnectionType::GigEVision2, LineCameraId_Dalsa_7_Clock, this);
@@ -646,6 +652,7 @@ void hxq::OnOpenCameras()
 	//m_Pylon_camera_thread_2_Clock->start();
 
 	ui.OnLineRun->setEnabled(false);
+
 }
 
 //准备工作完成,可以启动电气设备等待PLC的触发信号或者手动触发
@@ -872,80 +879,74 @@ void hxq::OnTest()
 }
 
 
-//得到线程的信号,并判断检测结果,发送给PLC
+//得到线程的信号,并判断检测结果,发送给控制卡
 void hxq::handleResults(int singleResult)
 {
+	static int sum = 0;
+	sum++;
+	m_Result_AllQueue.push(singleResult);
 
-	m_AllResult += singleResult;
+	qDebug() << "receive singleResult";
 
-	//if (m_AllResult >= LeftGood + MiddleGood + SecondRightGood + RightGood)
-	if (m_AllResult >= LeftGood + MiddleGood + RightGood)
+	int first = 0;
+	int second = 0;
+	if (sum == 2)
 	{
+		qDebug() << "enter sum == 2";
+		first = m_Result_AllQueue.front();
+		m_Result_AllQueue.pop();
+		second = m_Result_AllQueue.front();
+		m_Result_AllQueue.pop();
 
-		qDebug() << "Image num:				" << m_total;
+		sum = 0;
 
-		//if (m_AllResult == LeftGood + MiddleGood + SecondRightGood + RightGood)
-		if (m_AllResult == LeftGood + MiddleGood + RightGood)
+		qDebug() << "Image num:	" << ++m_total;
+
+		if (!(first + second))
 		{
-			Sleep(30);
+
+
 			m_good++;
 			if (m_bIsOnLine)
 			{
+				if (m_Galil)
+					m_Galil->Cmd("SB0");
 
-				Delta_Thread::AddOneQueueInfo(RESULT_GODD);
-				OnDetectEnd();
-				m_Result_Queue.push(1);
-				m_Result_AllQueue.push(1);
 			}
-
 			qDebug() << "Send Good!!!	";
 			ui.lcdNumber_good->display(m_good);
+
 		}
 		else
 		{
-			Sleep(30);
-			m_bad++;
+			//Sleep(30);
 			if (m_bIsOnLine)
 			{
-
-				Delta_Thread::AddOneQueueInfo(RESULT_BAD);
-				OnDetectEnd();
-				m_Result_Queue.push(0);
-				m_Result_AllQueue.push(0);
+				if (m_Galil)
+					m_Galil->Cmd("SB1");
 			}
-
 
 			qDebug() << "Send Bad!!!	";
-			ui.lcdNumber_bad->display(m_bad);
+			if (first == Gou && second == Gou)
+			{
+				ui.lcdNumber_cao->display(++m_gou);
+			}
+			else if (first == Cao && second == Cao)
+			{
+				ui.lcdNumber_cao->display(++m_cao);
+			}
+			else if (first == Liantong && second == Liantong)
+			{
+				ui.lcdNumber_liantong->display(++m_liantong);
+			}
+
 		}
 
-		qDebug() << "All Detect Result:	" << m_AllResult;
-		if (m_Result_Queue.size() >= 3)
-		{
-			int result = m_Result_Queue.front();
-			if (result)
-			{
-				Delta_Thread::AddOneQueueInfo(FENGLIAO_GOOD);
-				m_Result_Queue.pop();
-				//qDebug() << "POP GOOD ";
-				//qDebug() << "m_Result_Queue:  "<<m_Result_Queue.size();
-			}
-			else
-			{
-				Delta_Thread::AddOneQueueInfo(FENGLIAO_BAD);
-				m_Result_Queue.pop();
-				//qDebug() << "POP BAD ";
-				//qDebug() << "m_Result_Queue:  " << m_Result_Queue.size();
-			}
-		}
-		m_AllResult = 0;
 		m_peviousProductDectectEnd = true;
 
 		return;
 	}
 
-	qDebug() << "Detect is_bad:	" << singleResult;
-	qDebug() << "Detect Result:	" << m_AllResult;
 }
 
 

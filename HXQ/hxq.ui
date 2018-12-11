@@ -145,7 +145,7 @@
         <property name="title">
          <string>统计</string>
         </property>
-        <widget class="QLCDNumber" name="lcdNumber_good">
+        <widget class="QLCDNumber" name="lcdNumber_cao">
          <property name="geometry">
           <rect>
            <x>60</x>
@@ -161,7 +161,7 @@
           <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
-        <widget class="QLCDNumber" name="lcdNumber_bad">
+        <widget class="QLCDNumber" name="lcdNumber_gou">
          <property name="geometry">
           <rect>
            <x>210</x>
@@ -250,7 +250,7 @@
           <string>总数：</string>
          </property>
         </widget>
-        <widget class="QLCDNumber" name="lcdNumber_total_2">
+        <widget class="QLCDNumber" name="lcdNumber_liantong">
          <property name="geometry">
           <rect>
            <x>350</x>
@@ -286,7 +286,7 @@
           <string>粘铜：</string>
          </property>
         </widget>
-        <widget class="QLCDNumber" name="lcdNumber_total_3">
+        <widget class="QLCDNumber" name="lcdNumber_good">
          <property name="geometry">
           <rect>
            <x>560</x>

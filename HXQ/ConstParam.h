@@ -14,7 +14,7 @@ static const char* AreaCameraId2 = "[0] USB3_CMOS_1.3M_M(2)";
 static const char* LineCameraId_Basler_10_Clock= "0030531d42b0_Basler_raL204848gm";	//192.168.2.7
 static const char* LineCameraId_Basler_2_Clock = "003053255252_Basler_raL204848gm";	//192.168.3.7
 static const char* LineCameraId_Dalsa_7_Clock = "00010dc2ad7a_TeledyneDALSA_LineaM20487um";	//192.168.4.7
-static const char* LineCameraId_Dalsa_11_Clock = "00010dc2ae11_TeledyneDALSA_LineaM20487um";	//192.168.5.7
+static const char* LineCameraId_Dalsa_11_Clock = "00010dc2ae11_TeledyneDALSA_LineaM20487um";	//192.168.5.7  ui.OnStop->setEnabled(true);
 
 
 static const char* LineCameraId_Pylon_Basler_10_Clock = "Basler raL2048-48gm#0030531D42B0#192.168.2.7:3956";	//192.168.2.7
@@ -23,6 +23,7 @@ static const char* LineCameraId_Pylon_Basler_2_Clock = "Basler raL2048-48gm#0030
 //"Basler raL2048-48gm#0030531D42B0#192.168.2.7:3956"
 //"Basler raL2048-48gm#003053255252#192.168.3.7:3956"
 
+static const char* TopAreaCamera = "c42f90f0ff29_Hikvision_MVCE10031GM";	//
 
 static const char* GalilIp = "192.168.2.7";	//Galil控制卡的网口通信地址
 static const int IOPoint = 4;  //Galil控制卡的触发相机的input点
@@ -31,10 +32,14 @@ static const int IOPoint = 4;  //Galil控制卡的触发相机的input点
 
 
 /****************************************************/
-static const int LeftGood			= 0x10;
-static const int LeftBad			= 0x11;
-static const int MiddleGood			= 0x20;
-static const int MiddleBad			= 0x21;
+static const int Good				= 0x00;
+static const int Bad				= 0x01;
+static const int Gou				= 0x02;
+static const int Cao				= 0x03;
+static const int Liantong			= 0x04;
+
+static const int MiddleGood			= 0x00;
+static const int MiddleBad			= 0x01;
 static const int SecondRightGood	= 0x30;
 static const int SecondRightBad		= 0x31;
 static const int RightGood			= 0x40;

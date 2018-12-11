@@ -22,6 +22,8 @@ Camera_Thread::Camera_Thread(ConnectionType connection_type,QString CameraId, QO
 	m_CameraIdlist.append(CameraId);
 	m_pGrabber = nullptr;
 	m_WaitWake = false;
+	m_AcquisitionMode = "SingleFrame";
+	m_TriggerMode = "Off";
 }
 
 void Camera_Thread::run()
@@ -45,22 +47,22 @@ void Camera_Thread::run()
 			//time.start();
 			qDebug() << m_CameraId << " ready cap.... ";
 
-			mutex_Camera.lock();
+	/*		mutex_Camera.lock();
 			if (first){
 				emit ReadyOk(1);
 				first = false;
-			}	
+			}	*/
 			
-			Sleep(10);
+		/*	Sleep(10);
 			m_WaitWake = true;
 			condition_Camera.wait(&mutex_Camera);
 			mutex_Camera.unlock();
 			m_WaitWake = false;
 		
 			if (m_bIsStop)
-				break;
+				break;*/
 
-			m_pGrabber->SetFramegrabberParam("ExposureTime", m_exposureTime);
+		//	m_pGrabber->SetFramegrabberParam("ExposureTime", m_exposureTime);
 
 			Image = m_pGrabber->GrabImage();
 			
@@ -160,9 +162,9 @@ bool Camera_Thread::OpenCamera()
 			if (m_CameraId.contains("Basler"))
 			{
 				m_pGrabber->SetFramegrabberParam("PixelFormat", "Mono8");
-				m_pGrabber->SetFramegrabberParam("Height", 10000);
+				m_pGrabber->SetFramegrabberParam("Height", m_height);
 				m_pGrabber->SetFramegrabberParam("TriggerSelector", "FrameStart");
-				m_pGrabber->SetFramegrabberParam("TriggerMode", "Off");
+				m_pGrabber->SetFramegrabberParam("TriggerMode", m_TriggerMode.toStdString().c_str());
 				m_pGrabber->SetFramegrabberParam("TriggerSource", "Line1");
 				m_pGrabber->SetFramegrabberParam("ExposureTimeRaw", 700);
 				m_pGrabber->SetFramegrabberParam("AcquisitionLineRateAbs", 10000);
@@ -199,9 +201,19 @@ bool Camera_Thread::OpenCamera()
 				m_pGrabber->SetFramegrabberParam("AcquisitionLineRate", m_acquisitionLineRate);
 				m_pGrabber->SetFramegrabberParam("ExposureTime", m_exposureTime);
 				m_pGrabber->SetFramegrabberParam("TriggerSelector", "FrameStart");
-				m_pGrabber->SetFramegrabberParam("TriggerMode", "Off");
+				m_pGrabber->SetFramegrabberParam("TriggerMode", m_TriggerMode.toStdString().c_str());
 				m_pGrabber->SetFramegrabberParam("Height", m_height);
 				m_pGrabber->SetFramegrabberParam("grab_timeout", 5000);
+			}
+			else if (m_CameraId.contains("Hikvision"))
+			{
+		
+				m_pGrabber->SetFramegrabberParam("AcquisitionMode", m_AcquisitionMode.toStdString().c_str());
+				m_pGrabber->SetFramegrabberParam("TriggerSelector", "FrameBurstStart");
+				m_pGrabber->SetFramegrabberParam("TriggerMode", m_TriggerMode.toStdString().c_str());
+				m_pGrabber->SetFramegrabberParam("ExposureTime", m_exposureTime);
+				m_pGrabber->SetFramegrabberParam("grab_timeout", 5000);
+
 			}
 
 			//m_pGrabber->GrabImageStart(-1);
@@ -251,14 +263,14 @@ void Camera_Thread::QueueSaveImage(const HObject& Image,int maxnum)
 	
 	if (m_image_index <= maxnum)
 	{
-		QString saveImagePath = QString("images/" + m_SaveImageDirName + "/" + m_SaveImageDirName + "_%1").arg(m_image_index, 4, 10, QChar('0'));
+		QString saveImagePath = QString("Images/" + m_SaveImageDirName + "/Good/" + m_SaveImageDirName + "_%1").arg(m_image_index, 4, 10, QChar('0'));
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
 		m_image_index++;
 	}
 	else
 	{
 		m_image_index = 1;
-		QString saveImagePath = QString("images/" + m_SaveImageDirName + "/" + m_SaveImageDirName + "_%1").arg(m_image_index, 4, 10, QChar('0'));
+		QString saveImagePath = QString("Images/" + m_SaveImageDirName + "/Good/" + m_SaveImageDirName + "_%1").arg(m_image_index, 4, 10, QChar('0'));
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
 		m_image_index++;
 	}

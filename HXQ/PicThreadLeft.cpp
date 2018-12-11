@@ -9,36 +9,46 @@ int PicThreadLeft::num = 0;
 void PicThreadLeft::run()
 {
 	//qDebug() << "Worker Run Thread : " << QThread::currentThreadId();
-	
+
 	if (m_Image.Key() != 0)
 	{
 		try
 		{
-			HTuple hv_DownRow, hv_IsBad,hv_ModelHandle;
+			HTuple hv_DownRow, hv_IsBad, hv_ModelHandle;
 			HObject TileImage, ImageEmphasize;
-			CHH::PingJie(m_Image, &m_Image, 500, 40, 3, 40, &hv_DownRow);
+			//CHH::PingJie(m_Image, &m_Image, 500, 40, 3, 40, &hv_DownRow);
 			DispObj(m_Image, m_WindowHandle);
 			Emphasize(m_Image, &ImageEmphasize, 3, 102, 1);
 
 			//OnHandle(m_WindowHandle);
-			ReadClassMlp(getModel().toStdString().c_str(), &hv_ModelHandle);
-			CHH2::GB_Camera1(ImageEmphasize, m_Image, hv_ModelHandle, m_WindowHandle, &hv_IsBad);
-			
+			//ReadClassMlp(getModel().toStdString().c_str(), &hv_ModelHandle);
+			//CHH2::GB_Camera1(ImageEmphasize, m_Image, hv_ModelHandle, m_WindowHandle, &hv_IsBad);
+
 			num++;
 			CHH::disp_message(m_WindowHandle, HTuple("number: ") + num, "image", 12, 12, "black", "true");
 			ClearClassMlp(hv_ModelHandle);
 
 			qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-			//if (num % 3)
-			if (hv_IsBad.I()==0)
+			//if (hv_IsBad.I()==0)
+			if (num % 3)
 			{
-				emit resultReady(LeftGood);
-				CHH::disp_message(m_WindowHandle, HTuple("Good "), "image", 120, 12, "black", "true");
+				emit resultReady(Good);
+				CHH::disp_message(m_WindowHandle, HTuple("Á¼Æ· "), "image", 120, 12, "black", "true");
 			}
-			else
+			else if (num % 5)
 			{
-				emit resultReady(LeftBad);
-				CHH::disp_message(m_WindowHandle, HTuple("Bad "), "image", 120, 12, "red", "true");
+				emit resultReady(Gou);
+				CHH::disp_message(m_WindowHandle, HTuple("¹³²»Á¼ "), "image", 120, 12, "red", "true");
+			}
+			else if (num % 7)
+			{
+				emit resultReady(Cao);
+				CHH::disp_message(m_WindowHandle, HTuple("²Û²»Á¼ "), "image", 120, 12, "red", "true");
+			}
+			else if (num % 11)
+			{
+				emit resultReady(Liantong);
+				CHH::disp_message(m_WindowHandle, HTuple("²ÛÄÚÕ³Í­ "), "image", 120, 12, "red", "true");
 			}
 		}
 		catch (HException& e)
@@ -48,7 +58,7 @@ void PicThreadLeft::run()
 			qDebug() << "ThreadLeft error:  " << error;
 		}
 	}
-		
+
 }
 
 void PicThreadLeft::OnHandle(HTuple WindowHandle)
@@ -58,7 +68,7 @@ void PicThreadLeft::OnHandle(HTuple WindowHandle)
 
 	HObject circle;
 	int row = 100 + 50 * step;
-	if (row<2000)
+	if (row < 2000)
 		GenCircle(&circle, 100 + 50 * step, 300, 100);
 	else
 	{

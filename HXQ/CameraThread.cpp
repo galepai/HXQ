@@ -2,7 +2,7 @@
 #include <QMessageBox>
 #include <QTime>
 #include "Func.h"
-#include <pylon/PylonIncludes.h>
+//#include <pylon/PylonIncludes.h>
 #include "DeltaThread.h"
 #include "ConstParam.h"
 
@@ -235,10 +235,10 @@ bool Camera_Thread::OpenCamera()
 		m_mutex.unlock();
 		return false;
 	}
-	catch (GenICam::AccessException& e)
+	/*catch (GenICam::AccessException& e)
 	{
 		QString error = e.GetDescription();
-	}
+	}*/
 
 }
 

@@ -9,7 +9,6 @@
 
 #include <QThread>
 #include <QDebug>
-#include <QtSerialPort/QtSerialPort>
 #include <atomic>
 #include <queue>
 #include <vector>

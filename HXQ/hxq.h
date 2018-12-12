@@ -22,16 +22,11 @@ public:
 	hxq(QWidget *parent = 0);
 	~hxq();
 
-	bool OpenSerial();
-
 	void OnWakeCamera();
-	void setBottomModel(QString path) { m_BottomModel = path; }
-	const QString& bottomModel() { return m_BottomModel; }
-	void setGbModel(QString path) { m_GBModel = path; }
-	const QString& gbModel() { return m_GBModel; }
-	void readAllModelFromIni();
-	void addResultQueue();
-
+	//void setBottomModel(QString path) { m_BottomModel = path; }
+	//const QString& bottomModel() { return m_BottomModel; }
+	//void setGbModel(QString path) { m_GBModel = path; }
+	//const QString& gbModel() { return m_GBModel; }
 
 	void OnEngineerStatus();
 	void OnOperatorStatus();

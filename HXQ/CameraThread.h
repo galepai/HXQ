@@ -73,7 +73,6 @@ protected:
 	virtual void run() Q_DECL_OVERRIDE;
 
 	bool OpenCamera();
-	void setConnection_Type(ConnectionType connection_type);
 	static QMutex m_mutex;
 	static QMutex m_mutex_WriteData;
 	static QWaitCondition m_waitWriteData;

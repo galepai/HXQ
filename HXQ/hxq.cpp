@@ -224,7 +224,7 @@ void hxq::OnDisplayAreaCamera()
 //OffLine´¦ÀíÍ¼Ïñ
 void hxq::OnOneHandle_AllPic()
 {
-	readAllModelFromIni();
+	//readAllModelFromIni();
 
 	if (m_LeftImage.Key() != 0)
 	{
@@ -777,7 +777,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		PicThreadLeft* pPicThread = new PicThreadLeft(this);
 		pPicThread->m_Image = ima;
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
-		pPicThread->setModel(gbModel());
+		//pPicThread->setModel(gbModel());
 		connect(pPicThread, SIGNAL(resultReady(int)), this, SLOT(handleResults(int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
@@ -955,17 +955,5 @@ void hxq::OnSetExposure()
 {
 
 
-
-}
-
-//read lastest model for picHandle.
-void hxq::readAllModelFromIni()
-{
-	QVariant value;
-	ReadConfigure("config.ini", "Model", "BottomModel", value);
-	setBottomModel(value.toString());
-
-	ReadConfigure("config.ini", "Model", "GouModel", value);
-	setGbModel(value.toString());
 
 }

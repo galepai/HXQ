@@ -3,16 +3,18 @@
 #include <vector>
 #include "../HXQ/Func.h"
 #include "../HXQ/CameraThread.h"
+#include "../HXQ/CHH.h"
+#include "../HXQ/CHH2.h"
 #include <assert.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest1
-{		
+{
 	TEST_CLASS(UnitTest1)
 	{
 	public:
-		
+
 		TEST_METHOD(Func)
 		{
 			// TODO: 在此输入测试代码
@@ -29,6 +31,20 @@ namespace UnitTest1
 			//cam->start();
 			//Sleep(500);
 			Assert::IsTrue(cam);
+
+		}
+
+		TEST_METHOD(CHH)
+		{
+			// TODO: 在此输入测试代码
+			HObject ho_Image, ho_TileImage;
+			HTuple hv_MearsureColCenter, hv_EdgeOffset, hv_Offset, hv_HorProjectionGrayVal, hv_DownRow;
+			bool test = false;
+			HalconCpp::ReadImage(&ho_Image, "e:/0816/line/0002.bmp");
+			int i = ((HImage)ho_Image).Width();
+			test = CHH::PingJie(ho_Image, &ho_TileImage, 700, 30, 3, 80, &hv_DownRow);
+			Assert::AreEqual(2047,i);
+			Assert::IsTrue(!test);
 
 		}
 

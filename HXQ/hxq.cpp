@@ -59,7 +59,6 @@ hxq::hxq(QWidget *parent)
 
 	m_peviousProductDectectEnd = true;
 
-
 }
 
 // 菜单栏对应功能

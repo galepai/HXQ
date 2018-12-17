@@ -251,8 +251,6 @@
     <ClCompile Include="CameraThread.cpp" />
     <ClCompile Include="CHH.cpp" />
     <ClCompile Include="CHH2.cpp" />
-    <ClCompile Include="ComDialog.cpp" />
-    <ClCompile Include="CommDialog.cpp" />
     <ClCompile Include="ConfigureDialog.cpp" />
     <ClCompile Include="EngineerDialog.cpp" />
     <ClCompile Include="Func.cpp" />
@@ -335,25 +333,11 @@
     <QtMoc Include="aboutdialog.h">
     </QtMoc>
     <ClInclude Include="CHH.h" />
-    <QtMoc Include="ComDialog.h">
-    </QtMoc>
-    <QtMoc Include="CommDialog.h">
-    </QtMoc>
     <ClInclude Include="Func.h" />
     <ClInclude Include="GeneratedFiles\ui_aboutdialog.h" />
-    <ClInclude Include="GeneratedFiles\ui_ComDialog.h" />
-    <ClInclude Include="GeneratedFiles\ui_CommDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="aboutdialog.ui">
-    </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="ComDialog.ui">
-    </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="CommDialog.ui">
     </QtUic>
   </ItemGroup>
   <ItemGroup>

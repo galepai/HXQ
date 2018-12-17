@@ -223,7 +223,7 @@ bool Camera_Thread::OpenCamera()
 		default:
 			break;
 		}
-
+		emit signal_bool(true);
 		return true;
 	}
 	catch (HException& e)
@@ -232,6 +232,7 @@ bool Camera_Thread::OpenCamera()
 
 		QString eror = e.ErrorMessage().Text();
 		emit signal_error(G2U("不能获取相机，请检测相机ID是否正确"));
+		emit signal_bool(false);
 		m_mutex.unlock();
 		return false;
 	}

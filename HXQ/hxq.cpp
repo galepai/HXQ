@@ -6,7 +6,6 @@
 #include "CHH.h"
 #include "aboutdialog.h"
 #include "EngineerDialog.h"
-#include "ComDialog.h"
 #include "DeltaThread.h"
 #include "ConstParam.h"
 #include "ConfigureDialog.h"
@@ -59,6 +58,8 @@ hxq::hxq(QWidget *parent)
 
 	m_peviousProductDectectEnd = true;
 
+	process = new QProcess(this);
+
 }
 
 // 菜单栏对应功能
@@ -67,8 +68,6 @@ void hxq::menuConnect()
 	connect(ui.OnEngineer, &QAction::triggered, this, &hxq::OnEngineer);
 	connect(ui.OnOperator, &QAction::triggered, this, &hxq::OnOperator);
 	connect(ui.About, &QAction::triggered, this, &hxq::OnAbout);
-	connect(ui.OnLRC, &QAction::triggered, this, &hxq::OnLRC);
-	connect(ui.OnDeltaDebug, &QAction::triggered, this, &hxq::DebugDialog);
 }
 
 //工具栏对应功能
@@ -100,20 +99,22 @@ hxq::~hxq()
 
 void hxq::OnEngineer()
 {
-	EngineerDialog Dlg(this);
-	Dlg.exec();
-	if (Dlg.correct())
-	{
-		ui.OnOperator->setChecked(false);
-		ui.OnEngineer->setChecked(true);
-		OnEngineerStatus();
-	}
-	else
-	{
-		ui.OnOperator->setChecked(true);
-		ui.OnEngineer->setChecked(false);
-		OnOperatorStatus();
-	}
+	//EngineerDialog Dlg(this);
+	//Dlg.exec();
+	//if (Dlg.correct())
+	//{
+	//	ui.OnOperator->setChecked(false);
+	//	ui.OnEngineer->setChecked(true);
+	//	OnEngineerStatus();
+	//}
+	//else
+	//{
+	//	ui.OnOperator->setChecked(true);
+	//	ui.OnEngineer->setChecked(false);
+	//	OnOperatorStatus();
+	//}
+
+	
 }
 
 void hxq::OnOperator()
@@ -121,6 +122,12 @@ void hxq::OnOperator()
 	ui.OnOperator->setChecked(true);
 	ui.OnEngineer->setChecked(false);
 	OnOperatorStatus();
+
+
+	//process->start("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
+	//process->startDetached("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
+	
+	QProcess::execute("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
 }
 
 void hxq::OnEngineerStatus()
@@ -136,12 +143,6 @@ void hxq::OnOperatorStatus()
 void hxq::OnAbout()
 {
 	AboutDialog Dlg(this);
-	Dlg.exec();
-}
-
-void hxq::OnLRC()
-{
-	ComDialog Dlg(this);
 	Dlg.exec();
 }
 
@@ -209,15 +210,22 @@ void hxq::OnDisplayAreaCamera()
 	m_camera_thread_top->setAcquisitionMode("Continuous");
 	m_camera_thread_top->setTriggerMode("Off");
 	connect(m_camera_thread_top, SIGNAL(signal_error(QString)), this, SLOT(genErrorDialog(QString)));
+	connect(m_camera_thread_top, SIGNAL(signal_bool(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
 	connect(m_camera_thread_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
 	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
 	connect(m_camera_thread_top, SIGNAL(signal_image(void*)), this, SLOT(receiveLeftImageAndHandle(void*)));	//左视图显示
 	connect(m_camera_thread_top, SIGNAL(finished()), m_camera_thread_top, SLOT(deleteLater()));
 	m_camera_thread_top->start();
+	
+}
 
-
-	ui.OnStop->setEnabled(true);
-	ui.OnLineRun->setEnabled(false);
+void hxq::OnOpenCameraIsCorrect(bool enable)
+{
+	if (enable)
+	{
+		ui.OnStop->setEnabled(true);
+		ui.AreaCamera->setEnabled(false);
+	}
 }
 
 //OffLine处理图像
@@ -341,7 +349,7 @@ void hxq::OnLineRun()
 }
 
 //对应串口的读取槽函数
-void hxq::receiveSerialData(QByteArray str)
+void hxq::receiveTriggerSinal(QByteArray str)
 {
 	//qDebug() << "MainSlot Thread : " << QThread::currentThreadId();
 	statusBar()->showMessage(str, 500);
@@ -532,14 +540,6 @@ const HalconCpp::HTuple hxq::GetViewWindowHandle(LocationView location)
 	}
 }
 
-/***********右端调试功能************/
-//打开调试界面
-void hxq::DebugDialog()
-{
-	TestDialog dlg(this);
-	dlg.exec();
-}
-
 //启动
 void hxq::OnStart()
 {
@@ -573,8 +573,10 @@ void hxq::OnStart()
 		}
 		else
 		{
+			genErrorDialog(G2U("控制卡连接错误！"));
 			delete m_Galil;
 			m_Galil = nullptr;
+			return;
 		}
 	}
 	else

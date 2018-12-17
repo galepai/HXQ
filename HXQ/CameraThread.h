@@ -83,6 +83,7 @@ signals:
 	void ReadyOk(int num);
 	void signal_image(void* pimage);
 	void signal_error(QString error);
+	void signal_bool(bool error);
 	void grab_correct_image(int num);
 
 private:

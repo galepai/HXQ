@@ -11,6 +11,7 @@
 #include "PylonCameraThread.h"
 #include <queue>
 #include "GalilThread.h"
+#include <qprocess.h>
 
 using namespace HalconCpp;
 
@@ -42,7 +43,6 @@ public:
 	/***********菜单栏功能************/
 	void OnEngineer();
 	void OnOperator();
-	void OnLRC();
 	void OnAbout();
 
 	/***********工具栏功能************/
@@ -55,14 +55,13 @@ public:
 	void OnDisplayAreaCamera();
 
 	/***********右端电气功能************/
-	void DebugDialog();
 	void OnStart();
 	void OnStop();
 	void OnDetectEnd();
 
 	//
 	void handleResults(int is_bad);
-	void receiveSerialData(QByteArray str);
+	void receiveTriggerSinal(QByteArray str);
 	void receiveLeftImage(void* image);
 	void receiveMiddleImage(void* image);
 	void receiveSecondRightImage(void* image);
@@ -79,6 +78,8 @@ public:
 	//
 	void OnSetExposure();
 
+	//
+	void OnOpenCameraIsCorrect(bool enable);
 
 private:
 	void OnClearCameraThread();	//清理相机线程
@@ -92,6 +93,7 @@ private:
 
 private:
 	Ui::hxqClass ui;
+	QProcess* process;
 	HalconCpp::HTuple m_LeftWindowHandle, m_MiddleWindowHandle, m_SecondRightWindowHandle, m_RightWindowHandle;	//左、中、右二、右视图的窗口Handle（Halcon显示图片用）
 	QString m_Title;
 	HImage m_Image, m_LeftImage, m_MiddleImage, m_SecondRightImage, m_RightImage;

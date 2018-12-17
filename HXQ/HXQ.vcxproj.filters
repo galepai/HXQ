@@ -71,12 +71,6 @@
     <ClCompile Include="DeltaThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ComDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CommDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TestDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -131,18 +125,6 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="DeltaThread.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtUic Include="ComDialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtMoc Include="ComDialog.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtUic Include="CommDialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtMoc Include="CommDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtUic Include="TestDialog.ui">
@@ -212,12 +194,6 @@
     </ClInclude>
     <ClInclude Include="Func.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_ComDialog.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_CommDialog.h">
-      <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_TestDialog.h">
       <Filter>Generated Files</Filter>

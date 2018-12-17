@@ -350,16 +350,8 @@
     <addaction name="OnEngineer"/>
     <addaction name="OnOperator"/>
    </widget>
-   <widget class="QMenu" name="menu_3">
-    <property name="title">
-     <string>功能</string>
-    </property>
-    <addaction name="OnLRC"/>
-    <addaction name="OnDeltaDebug"/>
-   </widget>
    <addaction name="menu_2"/>
    <addaction name="menu"/>
-   <addaction name="menu_3"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="sizePolicy">
@@ -540,16 +532,6 @@
    </property>
    <property name="text">
     <string>操作员</string>
-   </property>
-  </action>
-  <action name="OnLRC">
-   <property name="text">
-    <string>LRC</string>
-   </property>
-  </action>
-  <action name="OnDeltaDebug">
-   <property name="text">
-    <string>调试</string>
    </property>
   </action>
   <action name="AreaCamera">

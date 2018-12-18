@@ -20,6 +20,7 @@ public:
 
 	void OnHandle(HTuple WindowHandle);
 	void setModel(QString path){ m_ModelPath = path; }
+	void setCameraId(int id) { m_CameraId = id; }
 
 	static int num;
 	HImage m_Image;
@@ -29,8 +30,11 @@ protected:
 	virtual void run() Q_DECL_OVERRIDE;
 	QString m_ModelPath;
 
+private:
+	int m_CameraId;
+
 signals:
-	void resultReady(int bIsBad);
+	void resultReady(int Result, int CameraItem);
 
 
 

@@ -13,7 +13,7 @@ class PicThreadLeft : public QThread
 
 public:
 	explicit PicThreadLeft(QObject *parent = 0)
-		: QThread(parent)
+		: QThread(parent), m_CameraId(0)
 	{
 		//qDebug() << "Worker Thread : " << QThread::currentThreadId();
 		
@@ -24,19 +24,17 @@ public:
 	HTuple m_WindowHandle;
 
 	void OnHandle(HTuple WindowHandle);
-	//set filePath of mlp_model. 
-	void setModel(QString path){ m_ModelPath = path; } 
-	//get filePath of mlp_model. 
-	const QString& getModel(){ return m_ModelPath; }
+
+	void setCameraId(int id) { m_CameraId = id; }
 
 protected:
 	virtual void run() Q_DECL_OVERRIDE;
 
 private:
-	QString m_ModelPath;
+	int m_CameraId;
 
 signals:
-	void resultReady(int bIsBad);
+	void resultReady(int Result,int CameraItem);
 
 
 

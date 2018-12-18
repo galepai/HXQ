@@ -40,12 +40,12 @@ void PicThreadRight::run()
 			//if (num % 3)
 			if (hv_IsBad.I()==0)
 			{
-				emit resultReady(RightGood);
+				emit resultReady(RightGood, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("Good "), "image", 120, 12, "black", "true");
 			}
 			else
 			{
-				emit resultReady(RightBad);
+				emit resultReady(RightBad, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("Bad "), "image", 120, 12, "red", "true");
 				//QString saveImagePath = QString(QString("images/badImage/camera4/Camera4_") + "%1").arg(num, 4, 10, QChar('0'));
 				//WriteImage(m_Image, "tiff", 0, saveImagePath.toStdString().c_str());

@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QGroupBox>
 #include <QMessageBox>
-#include "Widgets\serialWidget.h"
+#include "Widgets\motionCardWidget.h"
 #include "Widgets\cameraWidget.h"
 #include "Widgets\modelWidget.h"
 
@@ -42,7 +42,7 @@ ConfigureDialog::ConfigureDialog(QWidget *parent) :
 	configButton3->setTextAlignment(Qt::AlignHCenter);
 	configButton3->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-	ui->stackedWidget->addWidget(new serialWidget);
+	ui->stackedWidget->addWidget(new motionCardWidget);
 	ui->stackedWidget->addWidget(new cameraWidget);
 	ui->stackedWidget->addWidget(new modelWidget);
 

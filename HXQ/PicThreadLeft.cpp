@@ -32,22 +32,22 @@ void PicThreadLeft::run()
 			//if (hv_IsBad.I()==0)
 			if (num % 3)
 			{
-				emit resultReady(Good);
+				emit resultReady(Good,m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("Á¼Æ· "), "image", 120, 12, "black", "true");
 			}
 			else if (num % 5)
 			{
-				emit resultReady(Gou);
+				emit resultReady(Gou,m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("¹³²»Á¼ "), "image", 120, 12, "red", "true");
 			}
 			else if (num % 7)
 			{
-				emit resultReady(Cao);
+				emit resultReady(Cao, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("²Û²»Á¼ "), "image", 120, 12, "red", "true");
 			}
 			else if (num % 11)
 			{
-				emit resultReady(Liantong);
+				emit resultReady(Liantong, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("²ÛÄÚÕ³Í­ "), "image", 120, 12, "red", "true");
 			}
 		}

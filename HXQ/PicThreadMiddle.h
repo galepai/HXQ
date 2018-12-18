@@ -20,6 +20,8 @@ public:
 
 	void OnHandle(HTuple WindowHandle);
 
+	void setCameraId(int id) { m_CameraId = id; }
+
 	static int num;
 	HImage m_Image;
 	HTuple m_WindowHandle;
@@ -27,8 +29,12 @@ public:
 protected:
 	virtual void run() Q_DECL_OVERRIDE;
 
+private:
+	int m_CameraId;
+
 signals:
-	void resultReady(int bIsBad);
+	void resultReady(int Result, int CameraItem);
+
 
 
 

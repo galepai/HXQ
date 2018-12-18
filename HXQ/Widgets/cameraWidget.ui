@@ -29,7 +29,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="label_top">
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -37,12 +37,12 @@
            </size>
           </property>
           <property name="text">
-           <string>Camera_02_Clock(Basler):</string>
+           <string>Top_Camera(Hikion):</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spinBox_02">
+         <widget class="QSpinBox" name="spinBox_top">
           <property name="font">
            <font>
             <family>Arial Black</family>
@@ -54,10 +54,10 @@
            <set>Qt::AlignCenter</set>
           </property>
           <property name="maximum">
-           <number>900</number>
+           <number>1000000</number>
           </property>
           <property name="value">
-           <number>760</number>
+           <number>50</number>
           </property>
          </widget>
         </item>
@@ -66,7 +66,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="label_side">
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -74,12 +74,12 @@
            </size>
           </property>
           <property name="text">
-           <string>Camera_07_Clock(Dalsa):</string>
+           <string>Side_Camera(Dalsa):</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spinBox_07">
+         <widget class="QSpinBox" name="spinBox_side">
           <property name="font">
            <font>
             <family>Arial Black</family>
@@ -91,87 +91,10 @@
            <set>Qt::AlignCenter</set>
           </property>
           <property name="maximum">
-           <number>90</number>
+           <number>700</number>
           </property>
           <property name="value">
-           <number>70</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QLabel" name="label_4">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Camera_10_Clock(Basler):</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spinBox_10">
-          <property name="font">
-           <font>
-            <family>Arial Black</family>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="maximum">
-           <number>900</number>
-          </property>
-          <property name="value">
-           <number>760</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QLabel" name="label_5">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Camera_11_Clock(Dalsa):</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spinBox_11">
-          <property name="font">
-           <font>
-            <family>Arial Black</family>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="maximum">
-           <number>90</number>
-          </property>
-          <property name="value">
-           <number>70</number>
-          </property>
-          <property name="displayIntegerBase">
-           <number>10</number>
+           <number>350</number>
           </property>
          </widget>
         </item>

@@ -10,6 +10,7 @@
 #include "CameraThread.h"
 #include "PylonCameraThread.h"
 #include <queue>
+#include <set>
 #include "GalilThread.h"
 #include <qprocess.h>
 
@@ -38,7 +39,7 @@ public:
 	//*********图像处理线程**************/
 	void OnHandleImageThread(HImage& ima, LocationView view);
 
-	public slots:
+public slots:
 
 	/***********菜单栏功能************/
 	void OnEngineer();
@@ -60,7 +61,7 @@ public:
 	void OnDetectEnd();
 
 	//
-	void handleResults(int is_bad);
+	void handleResults(int singleResult,int cameraId);
 	void receiveTriggerSinal(QByteArray str);
 	void receiveLeftImage(void* image);
 	void receiveMiddleImage(void* image);
@@ -103,8 +104,9 @@ private:
 	bool m_bIsOnLine; //打开相机时,选择是否与PLC联机
 	QString m_BottomModel;
 	QString m_GBModel;
-	std::queue<int> m_Result_Queue;
+	std::set<int> m_Pic_Set;
 	std::queue<int> m_Result_AllQueue;
+	DetectResultInfo m_detectResult;
 
 signals:
 	void ReadyLoop();

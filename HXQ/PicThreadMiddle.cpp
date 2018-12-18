@@ -33,12 +33,12 @@ void PicThreadMiddle::run()
 			//if (num % 3)
 			if (!hv_IsBad.I())
 			{
-				emit resultReady(MiddleGood);
+				emit resultReady(MiddleGood, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("Good "), "image", 120, 12, "black", "true");
 			}
 			else
 			{
-				emit resultReady(MiddleBad);
+				emit resultReady(MiddleBad, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("Bad "), "image", 120, 12, "red", "true");
 			}
 		}

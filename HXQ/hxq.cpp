@@ -99,20 +99,20 @@ hxq::~hxq()
 
 void hxq::OnEngineer()
 {
-	//EngineerDialog Dlg(this);
-	//Dlg.exec();
-	//if (Dlg.correct())
-	//{
-	//	ui.OnOperator->setChecked(false);
-	//	ui.OnEngineer->setChecked(true);
-	//	OnEngineerStatus();
-	//}
-	//else
-	//{
-	//	ui.OnOperator->setChecked(true);
-	//	ui.OnEngineer->setChecked(false);
-	//	OnOperatorStatus();
-	//}
+	EngineerDialog Dlg(this);
+	Dlg.exec();
+	if (Dlg.correct())
+	{
+		ui.OnOperator->setChecked(false);
+		ui.OnEngineer->setChecked(true);
+		OnEngineerStatus();
+	}
+	else
+	{
+		ui.OnOperator->setChecked(true);
+		ui.OnEngineer->setChecked(false);
+		OnOperatorStatus();
+	}
 
 	
 }
@@ -123,11 +123,10 @@ void hxq::OnOperator()
 	ui.OnEngineer->setChecked(false);
 	OnOperatorStatus();
 
-
 	//process->start("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
 	//process->startDetached("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
 	
-	QProcess::execute("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
+	//QProcess::execute("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
 }
 
 void hxq::OnEngineerStatus()
@@ -187,7 +186,7 @@ void hxq::OnOpen()
 	else
 	{
 		if (path.length() != 0 &&
-			(path.contains(".jpg") || path.contains(".tif")))
+			(path.contains(".jpg") || path.contains(".tiff")))
 		{
 			ReadImage(&m_Image, path.toLocal8Bit().constData());
 			DispPic(m_Image, LeftView);
@@ -200,9 +199,10 @@ void hxq::OnOpen()
 
 void hxq::OnDisplayAreaCamera()
 {
-	QVariant ExposureValue;
+	QVariant ExposureValue,AreaCameraId;
 	/**	海康面阵相机	*/
-	m_camera_thread_top = new Camera_Thread(Camera_Thread::ConnectionType::GigEVision2, TopAreaCamera, this);
+	ReadConfigure("config.ini", "TopCamera", "Id", AreaCameraId);
+	m_camera_thread_top = new Camera_Thread(Camera_Thread::ConnectionType::GigEVision2, AreaCameraId.toString(), this);
 	m_camera_thread_top->setSaveImageDirName("Area");
 	m_camera_thread_top->setSaveImageNum(50);
 	ReadConfigure("config.ini", "TopCamera", "Exposure", ExposureValue);
@@ -779,7 +779,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		pPicThread->m_Image = ima;
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
 		//pPicThread->setModel(gbModel());
-		connect(pPicThread, SIGNAL(resultReady(int)), this, SLOT(handleResults(int)));
+		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(handleResults(int,int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 	}
@@ -791,7 +791,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		PicThreadMiddle* pPicThread = new PicThreadMiddle(this);
 		pPicThread->m_Image = ima;
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
-		connect(pPicThread, SIGNAL(resultReady(int)), this, SLOT(handleResults(int)));
+		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(handleResults(int,int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 	}
@@ -802,7 +802,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 	//	PicThreadSecondRight* pPicThread = new PicThreadSecondRight(this);
 	//	pPicThread->m_Image = ima;
 	//	pPicThread->m_WindowHandle = GetViewWindowHandle(view);
-	//	connect(pPicThread, SIGNAL(resultReady(int)), this, SLOT(handleResults(int)));
+	//	connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(handleResults(int,int)));
 	//	connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 	//	pPicThread->start();
 	//}
@@ -814,7 +814,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		pPicThread->m_Image = ima;
 		//pPicThread->setModel(bottomModel());
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
-		connect(pPicThread, SIGNAL(resultReady(int)), this, SLOT(handleResults(int)));
+		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(handleResults(int,int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 	}
@@ -881,29 +881,34 @@ void hxq::OnTest()
 
 
 //得到线程的信号,并判断检测结果,发送给控制卡
-void hxq::handleResults(int singleResult)
+void hxq::handleResults(int singleResult, int cameraId)
 {
 	static int sum = 0;
 	sum++;
-	m_Result_AllQueue.push(singleResult);
 
+	m_Pic_Set.insert(cameraId);
 	qDebug() << "receive singleResult";
 
-	int first = 0;
-	int second = 0;
-	if (sum == 2)
+	if (cameraId == TopCamera)
 	{
-		qDebug() << "enter sum == 2";
-		first = m_Result_AllQueue.front();
-		m_Result_AllQueue.pop();
-		second = m_Result_AllQueue.front();
-		m_Result_AllQueue.pop();
+		m_detectResult.current_area = m_detectResult.next_area;
+		m_detectResult.next_area = singleResult;
+	}
+	else if (cameraId == SideCamera)
+	{
+		m_detectResult.current_line = singleResult;
+	}
 
-		sum = 0;
+
+	if ((m_Pic_Set.count(TopCamera)) 
+		&& (m_Pic_Set.count(SideCamera)))
+	{
+		qDebug() << "acquice 2 pic....";
+		m_Pic_Set.clear();
 
 		qDebug() << "Image num:	" << ++m_total;
 
-		if (!(first + second))
+		if (!(m_detectResult.current_area + m_detectResult.current_line))
 		{
 
 
@@ -928,15 +933,15 @@ void hxq::handleResults(int singleResult)
 			}
 
 			qDebug() << "Send Bad!!!	";
-			if (first == Gou && second == Gou)
+			if (m_detectResult.current_area == Gou || m_detectResult.current_line == Gou)
 			{
 				ui.lcdNumber_cao->display(++m_gou);
 			}
-			else if (first == Cao && second == Cao)
+			else if (m_detectResult.current_area == Cao || m_detectResult.current_line == Cao)
 			{
 				ui.lcdNumber_cao->display(++m_cao);
 			}
-			else if (first == Liantong && second == Liantong)
+			else if (m_detectResult.current_area == Liantong || m_detectResult.current_area == Liantong)
 			{
 				ui.lcdNumber_liantong->display(++m_liantong);
 			}

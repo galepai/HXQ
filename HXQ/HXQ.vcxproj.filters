@@ -98,9 +98,6 @@
     <ClCompile Include="Widgets\cameraWidget.cpp">
       <Filter>Source Files\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="Widgets\serialWidget.cpp">
-      <Filter>Source Files\Widgets</Filter>
-    </ClCompile>
     <ClCompile Include="CHH2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -115,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="EngineerDialog.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Widgets\motionCardWidget.cpp">
+      <Filter>Source Files\Widgets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,12 +163,6 @@
     <QtMoc Include="Widgets\cameraWidget.h">
       <Filter>Header Files\Widgets</Filter>
     </QtMoc>
-    <QtUic Include="Widgets\serialWidget.ui">
-      <Filter>Form Files\Widgets</Filter>
-    </QtUic>
-    <QtMoc Include="Widgets\serialWidget.h">
-      <Filter>Header Files\Widgets</Filter>
-    </QtMoc>
     <QtUic Include="Widgets\modelWidget.ui">
       <Filter>Form Files\Widgets</Filter>
     </QtUic>
@@ -183,6 +177,9 @@
     </QtUic>
     <QtUic Include="EngineerDialog.ui">
       <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Widgets\motionCardWidget.ui">
+      <Filter>Form Files\Widgets</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
@@ -210,9 +207,6 @@
     <ClInclude Include="GeneratedFiles\ui_cameraWidget.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_serialWidget.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="CHH2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -223,6 +217,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_EngineerDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_motionCardWidget.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -247,6 +244,9 @@
     </QtMoc>
     <QtMoc Include="EngineerDialog.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Widgets\motionCardWidget.h">
+      <Filter>Header Files\Widgets</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

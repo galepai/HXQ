@@ -103,6 +103,14 @@ struct Detect_Result
 };
 
 
+struct DetectResultInfo
+{
+	int current_line;
+	int current_area;
+	int next_area;
+};
+
+
 extern QMutex mutex_Camera;
 extern QWaitCondition condition_Camera;
 

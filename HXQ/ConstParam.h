@@ -32,6 +32,10 @@ static const int IOPoint = 4;  //Galil控制卡的触发相机的input点
 
 
 /****************************************************/
+static const int TopCamera = 0x00;
+static const int SideCamera = 0x01;
+
+
 static const int Good				= 0x00;
 static const int Bad				= 0x01;
 static const int Gou				= 0x02;

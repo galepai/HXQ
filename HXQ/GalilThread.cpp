@@ -44,9 +44,9 @@ bool Galil_Thread::Open(QString address)
 		check(GOpen(address.toStdString().c_str(), &m_g));
 
 		qDebug() << "Connection Galil sucess.";
-		QString Revision;
-		CmdT("\x12\x16", Revision);
-		qDebug() << "Galil Revision : " << Revision;
+		//QString Revision;
+		//CmdT("\x12\x16", Revision);
+		//qDebug() << "Galil Revision : " << Revision;
 
 		return true;
 

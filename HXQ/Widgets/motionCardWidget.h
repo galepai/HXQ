@@ -19,6 +19,7 @@ public:
 
 public slots:
 	void SaveMotionCardToIni();
+	void OnTest();
 
 private:
 	Ui::motionCardWidget *ui;

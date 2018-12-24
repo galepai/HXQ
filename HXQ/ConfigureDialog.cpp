@@ -26,7 +26,7 @@ ConfigureDialog::ConfigureDialog(QWidget *parent) :
 
 	QListWidgetItem *configButton = new QListWidgetItem(ui->listWidget);
 	configButton->setIcon(QIcon(":/icon/Resources/icon/01.ico"));
-	configButton->setText(G2U("串口设置"));
+	configButton->setText(G2U("运动控制"));
 	configButton->setTextAlignment(Qt::AlignHCenter);
 	configButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 

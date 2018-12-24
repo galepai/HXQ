@@ -58,6 +58,8 @@ hxq::hxq(QWidget *parent)
 
 	m_peviousProductDectectEnd = true;
 
+	ZeroMemory(&m_detectResult, sizeof(m_detectResult));
+	
 	process = new QProcess(this);
 
 }
@@ -777,9 +779,10 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 	{
 		PicThreadLeft* pPicThread = new PicThreadLeft(this);
 		pPicThread->m_Image = ima;
+		pPicThread->setCameraId(TopCamera);
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
 		//pPicThread->setModel(gbModel());
-		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(handleResults(int,int)));
+		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 	}
@@ -790,8 +793,9 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 	{
 		PicThreadMiddle* pPicThread = new PicThreadMiddle(this);
 		pPicThread->m_Image = ima;
+		pPicThread->setCameraId(SideCamera);
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
-		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(handleResults(int,int)));
+		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 	}
@@ -802,23 +806,23 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 	//	PicThreadSecondRight* pPicThread = new PicThreadSecondRight(this);
 	//	pPicThread->m_Image = ima;
 	//	pPicThread->m_WindowHandle = GetViewWindowHandle(view);
-	//	connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(handleResults(int,int)));
+	//	connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
 	//	connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 	//	pPicThread->start();
 	//}
 	//break;
 
-	case RightView:
-	{
-		PicThreadRight* pPicThread = new PicThreadRight(this);
-		pPicThread->m_Image = ima;
-		//pPicThread->setModel(bottomModel());
-		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
-		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(handleResults(int,int)));
-		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
-		pPicThread->start();
-	}
-	break;
+	//case RightView:
+	//{
+	//	PicThreadRight* pPicThread = new PicThreadRight(this);
+	//	pPicThread->m_Image = ima;
+	//	//pPicThread->setModel(bottomModel());
+	//	pPicThread->m_WindowHandle = GetViewWindowHandle(view);
+	//	connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
+	//	connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
+	//	pPicThread->start();
+	//}
+	//break;
 
 	/*default:
 	break;*/
@@ -877,11 +881,15 @@ void hxq::OnTest()
 
 	}
 
+
+	TestDialog dlg;
+	dlg.exec();
+
 }
 
 
 //得到线程的信号,并判断检测结果,发送给控制卡
-void hxq::handleResults(int singleResult, int cameraId)
+void hxq::OnHandleResults(int singleResult, int cameraId)
 {
 	static int sum = 0;
 	sum++;
@@ -963,3 +971,6 @@ void hxq::OnSetExposure()
 
 
 }
+
+
+

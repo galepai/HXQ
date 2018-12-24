@@ -51,6 +51,9 @@ TestDialog::TestDialog(QWidget *parent) :
 	}
 	
 	HIDDLE_DIALOG_BUTTON
+
+	ui->webEngineView->load(QUrl("https://www.163.com/"));
+	connect(ui->webEngineView, SIGNAL(urlChanged(QUrl)),this, SLOT(onUrlChanged(QUrl)));
 }
 
 void TestDialog::ChangeStyle()
@@ -173,4 +176,19 @@ void TestDialog::receiveInputValue(int value)
 
 	m_Input = Parse_Galil_Input(value);
 
+}
+
+
+void TestDialog::onUrlChanged(const QUrl &url)
+{
+
+	//地址栏的旧网址
+	QUrl old = ui->webEngineView->url();
+	//链接有变化才更新，用户点击网页里的新链接会触发
+	if (url != old)
+	{
+		ui->webEngineView->load(url);
+	}
+
+	qDebug() << url;
 }

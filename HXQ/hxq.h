@@ -61,7 +61,7 @@ public slots:
 	void OnDetectEnd();
 
 	//
-	void handleResults(int singleResult,int cameraId);
+	void OnHandleResults(int singleResult,int cameraId);
 	void receiveTriggerSinal(QByteArray str);
 	void receiveLeftImage(void* image);
 	void receiveMiddleImage(void* image);

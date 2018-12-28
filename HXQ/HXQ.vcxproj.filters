@@ -116,6 +116,12 @@
     <ClCompile Include="Widgets\motionCardWidget.cpp">
       <Filter>Source Files\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="HikVisionCameraThread.cpp">
+      <Filter>Source Files\CameraThread</Filter>
+    </ClCompile>
+    <ClCompile Include="HalconCameraThread.cpp">
+      <Filter>Source Files\CameraThread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="aboutdialog.ui">
@@ -150,9 +156,6 @@
     </QtMoc>
     <QtMoc Include="PicThreadSecondRight.h">
       <Filter>Header Files\ProcessImageThread</Filter>
-    </QtMoc>
-    <QtMoc Include="CameraThread.h">
-      <Filter>Header Files\CameraThread</Filter>
     </QtMoc>
     <QtMoc Include="PylonCameraThread.h">
       <Filter>Header Files\CameraThread</Filter>
@@ -247,6 +250,15 @@
     </QtMoc>
     <QtMoc Include="Widgets\motionCardWidget.h">
       <Filter>Header Files\Widgets</Filter>
+    </QtMoc>
+    <QtMoc Include="CameraThread.h">
+      <Filter>Header Files\CameraThread</Filter>
+    </QtMoc>
+    <QtMoc Include="HalconCameraThread.h">
+      <Filter>Header Files\CameraThread</Filter>
+    </QtMoc>
+    <QtMoc Include="HikVisionCameraThread.h">
+      <Filter>Header Files\CameraThread</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

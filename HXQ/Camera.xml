@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--Camera Param-->
+<fivision>
+    <HikVision_Top>
+        <id type="string">c42f90f0ff29_Hikvision_MVCE10031GM</id>
+        <AcquisitionMode type="string">Continuous</AcquisitionMode>
+        <TriggerSelector type="string">FrameBurstStart</TriggerSelector>
+        <TriggerMode type="string">Off</TriggerMode>
+        <ExposureTime type="float">98874</ExposureTime>
+        <grab_timeout type="int">5000</grab_timeout>
+    </HikVision_Top>
+    <Dalsa_Side>
+        <id type="string">c42f90f0ff29_Hikvision_MVCE10031GM</id>
+        <AcquisitionMode type="string">Continuous</AcquisitionMode>
+        <TriggerSelector type="string">FrameBurstStart</TriggerSelector>
+        <TriggerMode type="string">Off</TriggerMode>
+        <ExposureTime type="float">688</ExposureTime>
+        <grab_timeout type="int">5000</grab_timeout>
+    </Dalsa_Side>
+</fivision>

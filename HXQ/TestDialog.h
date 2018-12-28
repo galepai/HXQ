@@ -44,7 +44,6 @@ public slots:
 	void receiveInputValue(int value);
 	void ChangeStyle();
 	void CloseWindow();
-	void onUrlChanged(const QUrl &url);
 	
 
 };

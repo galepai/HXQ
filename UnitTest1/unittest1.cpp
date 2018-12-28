@@ -24,6 +24,20 @@ namespace UnitTest1
 			Assert::IsFalse(num[3]);
 		}
 
+		TEST_METHOD(updateXml)
+		{
+			// TODO: 在此输入测试代码
+			//updateXml(QString("e:/test.xml"), QString("Dalsa_Side"), QString("ExposureTime"), QString("279884.0"));
+			for (int i = 0; i < 1000; i++)
+			{
+				//int ret1 = UpdateXml(QString("e:/test.xml"), QString("Dalsa_Side"), QString("ExposureTime"), QString("2784.0"));
+				int ret1 = UpdateXml(QString("e:/test.xml"), QString("Dalsa_Side"), QString("grab_timeout"), QString("%1").arg(i));
+				Assert::AreEqual(0, ret1);
+				
+			}
+			
+		}
+
 		TEST_METHOD(CameraThread)
 		{
 			// TODO: 在此输入测试代码

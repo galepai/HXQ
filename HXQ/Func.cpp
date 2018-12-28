@@ -6,6 +6,7 @@
 #include <vector>
 #include <bitset>
 #include <qdebug.h>
+#include <QtXml\QDomElement>
 
 QMutex mutex_Camera;
 QWaitCondition condition_Camera;
@@ -396,4 +397,206 @@ bool isCorrectImage(HalconCpp::HImage& image, double threshold_gray)
 	qDebug() << "mean gray:		" << mean_gray.D();
 	//WriteImage(image, "bmp", 0, "c:/lastest.bmp");
 	return mean_gray > threshold_gray;
+}
+
+
+bool ParserXmlNode(QString& path, QString& childNodeName, std::vector <std::pair<std::pair<QString, QString>, QString>>& xmlContent)
+{
+	QDomDocument doc;
+	QFile file(path);
+	if (!file.open(QIODevice::ReadOnly))
+		return false;
+
+	if (!doc.setContent(&file))
+	{
+		file.close();
+		return false;
+	}
+	file.close();
+
+	QDomElement root = doc.documentElement();
+	
+	QDomElement childElement = root.firstChildElement(childNodeName);
+
+	if (!childElement.isNull())
+	{
+		QDomNodeList list = childElement.childNodes();
+		for (int index = 0; index < list.count(); index++)
+		{
+			QString name = childElement.childNodes().at(index).toElement().nodeName();
+			QString type = childElement.childNodes().at(index).toElement().attribute("type");
+			QString value = childElement.childNodes().at(index).toElement().text();
+			//xmlContent.push_back(std::pair<QString, QString>(name, value));
+			xmlContent.push_back(std::pair<std::pair<QString, QString>, QString>(std::pair<QString, QString>(name, type), value));
+		}
+	}
+	else
+	{
+		return false;
+	}
+
+	//QDomNode child = root.firstChild();  //fivision
+	//while (!child.isNull())
+	//{
+	//	if (child.toElement().nodeName() == childNodeName)
+	//	{	
+	//		QDomNodeList list = child.toElement().childNodes();
+	//		int num = list.count();
+	//		for (int index = 0; index < list.count(); index++)
+	//		{
+	//			QString name = child.toElement().childNodes().at(index).toElement().nodeName();
+	//			QString type = child.toElement().childNodes().at(index).toElement().attribute("type");
+	//			QString value = child.toElement().childNodes().at(index).toElement().text();			
+	//			//xmlContent.push_back(std::pair<QString, QString>(name, value));
+	//			xmlContent.push_back(std::pair<std::pair<QString, QString>,QString>(std::pair<QString, QString>(name, type), value));
+	//		}
+	//	}
+	//	child = child.nextSibling();
+	//}
+
+	return true;
+}
+
+int UpdateXmlNodeText(QString& path, QString& childNodeName, QString& childrenNodeName, QString& changeValue)
+{
+	int retValue;
+	QDomDocument doc;
+	QFile file(path);
+
+	if (!file.open(QFile::ReadOnly))
+		return ChhXml::UpdateFail;
+
+	if (!doc.setContent(&file))
+	{
+		file.close();
+		return ChhXml::UpdateFail;
+	}
+	file.close();
+	
+	QDomElement rootElement = doc.documentElement();
+
+	QDomElement childElement = rootElement.firstChildElement(childNodeName);
+	if (!childElement.isNull())
+	{
+			QDomElement childrenElement = childElement.firstChildElement(childrenNodeName);
+			if (!childrenElement.isNull())
+			{
+				QString oldText = childrenElement.text();
+				childrenElement.firstChild().setNodeValue(changeValue);
+				
+				QFile file1(path);
+				if (!file1.open(QFile::WriteOnly | QFile::Truncate))
+				{
+					file1.close();
+					return ChhXml::UpdateFail;
+				}
+
+				QTextStream outStrem(&file1);
+				doc.save(outStrem, 4);
+				file1.close();
+
+				return ChhXml::UpdateOK;;
+			}
+			else
+			{
+				return ChhXml::UpdateFail;
+			}
+	}
+
+	return ChhXml::UpdateFail;
+
+	//while (!child.isNull())
+	//{
+	//	if (child.nodeName() == childNodeName)
+	//	{
+	//		QDomElement childrenElement = child.firstChildElement(childrenNodeName);
+	//		if (!childrenElement.isNull())
+	//		{
+	//			childrenElement.firstChild().setNodeValue(changeValue);
+	//			retValue = ChhXml::UpdateOK;
+	//			break;
+	//		}
+	//		
+	//		/*QDomNodeList list = child.childNodes();
+	//		for (int index = 0; index < list.count(); index++)
+	//		{
+	//			QString name = child.childNodes().at(index).toElement().nodeName();
+	//			QString value = child.childNodes().at(index).toElement().text();
+	//			if (name == childrenNodeName)
+	//			{
+	//				QString pre = value.left(value.indexOf("_")+1);
+	//				child.childNodes().at(index).firstChild().setNodeValue(pre + changeValue);
+	//				retValue = ChhXml::UpdateOK;
+	//				break;
+	//			}
+	//		}*/
+	//	}
+	//	child = child.nextSibling();
+	//}
+	
+}
+
+bool ReadXmlElementText(QString& path, QString& childNodeName, QString& childrenNodeName,QString& OutType, QString& OutValue)
+{
+	int retValue;
+	QDomDocument doc;
+	QFile file(path);
+
+	if (!file.open(QFile::ReadOnly))
+		return false;
+
+	if (!doc.setContent(&file))
+	{
+		file.close();
+		return false;
+	}
+	file.close();
+
+	QDomElement rootElement = doc.documentElement();
+
+	QDomElement childElement = rootElement.firstChildElement(childNodeName);
+	if (!childElement.isNull())
+	{
+		QDomElement childrenElement = childElement.firstChildElement(childrenNodeName);
+		if (!childrenElement.isNull())
+		{
+			OutType = childrenElement.attribute("type");
+			OutValue = childrenElement.text();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	return false;
+
+
+}
+
+
+void ParserCamParamAndSetFramerabber(HalconCpp::HFramegrabber* pGrabber, std::vector <std::pair<std::pair<QString, QString>, QString>>& CamParam)
+{
+	for (int index = 1; index < CamParam.size(); index++)
+	{
+		QString name = CamParam[index].first.first;
+		QString type = CamParam[index].first.second;
+		QString value = CamParam[index].second;
+
+		if (type.contains("float"))
+		{
+			pGrabber->SetFramegrabberParam(name.toStdString().c_str(), value.toFloat());
+		}
+		else if(value.contains("int"))
+		{
+			pGrabber->SetFramegrabberParam(name.toStdString().c_str(), value.toInt());
+		}
+		else
+		{
+			pGrabber->SetFramegrabberParam(name.toStdString().c_str(), value.toStdString().c_str());
+		}
+
+
+	}
 }

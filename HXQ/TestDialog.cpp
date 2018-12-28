@@ -43,17 +43,18 @@ TestDialog::TestDialog(QWidget *parent) :
 	m_Galil->GcLibVersion();
 	if (m_Galil->Open(ip + ""))
 	{
+		ui->label_status->setText(G2U("已连接！"));
+		ui->label_status->setStyleSheet(QStringLiteral("color: rgb(0, 255, 0);"));
 		m_Galil->start();
 	}
 	else
 	{
+		ui->label_status->setText(G2U("未连接！"));
+		ui->label_status->setStyleSheet(QStringLiteral("color: rgb(255, 0, 0);"));
 		delete m_Galil;
 	}
 	
 	HIDDLE_DIALOG_BUTTON
-
-	ui->webEngineView->load(QUrl("https://www.163.com/"));
-	connect(ui->webEngineView, SIGNAL(urlChanged(QUrl)),this, SLOT(onUrlChanged(QUrl)));
 }
 
 void TestDialog::ChangeStyle()
@@ -176,19 +177,4 @@ void TestDialog::receiveInputValue(int value)
 
 	m_Input = Parse_Galil_Input(value);
 
-}
-
-
-void TestDialog::onUrlChanged(const QUrl &url)
-{
-
-	//地址栏的旧网址
-	QUrl old = ui->webEngineView->url();
-	//链接有变化才更新，用户点击网页里的新链接会触发
-	if (url != old)
-	{
-		ui->webEngineView->load(url);
-	}
-
-	qDebug() << url;
 }

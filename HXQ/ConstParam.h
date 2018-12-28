@@ -28,6 +28,22 @@ static const char* TopAreaCamera = "c42f90f0ff29_Hikvision_MVCE10031GM";	//
 static const char* GalilIp = "192.168.2.7";	//Galil控制卡的网口通信地址
 static const int IOPoint = 4;  //Galil控制卡的触发相机的input点
 
+/*******************    CameraParam    **************************/
+static const char* CameraXML		= "camera.xml";		//"camera.xml"
+static const char* Node_TopCamera	= "HikVision_Top";	//"HikVision_Top"
+static const char* Node_SideCamera	= "Dalsa_Side";	//"Dalsa_Side"
+
+static const char* HikVision_AcquisitionMode	= "AcquisitionMode";	// "AcquisitionMode"
+static const char* HikVision_TriggerSelector	= "TriggerSelector";	// "ExposureTime"
+static const char* HikVision_TriggerMode		= "ExposureTime";			// "ExposureTime"
+static const char* HikVision_ExposureTime		= "ExposureTime";			// "ExposureTime"
+static const char* HikVision_grab_timeout		= "grab_timeout";		// "grab_timeout"
+
+static const char* Dalsa_AcquisitionMode	= "AcquisitionMode";	// "AcquisitionMode"
+static const char* Dalsa_TriggerSelector	= "TriggerSelector";	// "ExposureTime"
+static const char* Dalsa_TriggerMode		= "ExposureTime";			// "ExposureTime"
+static const char* Dalsa_ExposureTime		= "ExposureTime";			// "ExposureTime"
+static const char* Dalsa_grab_timeout		= "grab_timeout";		// "grab_timeout"
 
 
 

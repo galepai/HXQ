@@ -9,6 +9,8 @@
 #include "TestDialog.h"
 #include "CameraThread.h"
 #include "PylonCameraThread.h"
+#include "HalconCameraThread.h"
+#include <vector>
 #include <queue>
 #include <set>
 #include "GalilThread.h"
@@ -35,6 +37,9 @@ public:
 
 	void menuConnect();
 	void toolConnect();
+
+	//bool ParserXml(QString& path, QString& childeNodeName, std::vector<std::pair<QString, QString>>& xmlContent);
+	//void ParserCamParam(HFramegrabber* pGrabber, std::vector<std::pair<QString, QString>>& CamParam);
 
 	//*********图像处理线程**************/
 	void OnHandleImageThread(HImage& ima, LocationView view);
@@ -82,6 +87,10 @@ public slots:
 	//
 	void OnOpenCameraIsCorrect(bool enable);
 
+	//
+	void OpenTopCamera(void**, bool*);
+	void OpenSideCamera(void**, bool*);
+
 private:
 	void OnClearCameraThread();	//清理相机线程
 	void FullScreenShow();	//全屏显示
@@ -117,6 +126,8 @@ public:
 
 	PylonCamera_Thread* m_Pylon_camera_thread_2_Clock;
 	PylonCamera_Thread* m_Pylon_camera_thread_10_Clock;
+
+	Halcon_Camera_Thread* m_HikVisionCameraThread;
 
 
 	Galil_Thread* m_Galil;	//运动控制卡线程

@@ -392,7 +392,7 @@
 位</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_25">
+  <widget class="QLabel" name="label_status">
    <property name="geometry">
     <rect>
      <x>770</x>
@@ -409,33 +409,14 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 0, 0);</string>
+   </property>
    <property name="text">
     <string>连接状态</string>
    </property>
   </widget>
-  <widget class="QWebEngineView" name="webEngineView">
-   <property name="geometry">
-    <rect>
-     <x>560</x>
-     <y>120</y>
-     <width>300</width>
-     <height>200</height>
-    </rect>
-   </property>
-   <property name="url">
-    <url>
-     <string>https://www.163.com/</string>
-    </url>
-   </property>
-  </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QWebEngineView</class>
-   <extends>QWidget</extends>
-   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="HXQ.qrc"/>
  </resources>

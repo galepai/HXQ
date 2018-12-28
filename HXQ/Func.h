@@ -67,8 +67,20 @@ std::vector<ushort> Parse_Delta_Ascii_03(const std::string& data);	//Delta接收信
 
 std::vector<bool> Parse_Galil_Input(int value); //解析Galil的Input信息
 
-bool CreateImagetDir();
+//解析Xml
+bool ReadXmlElementText(QString& path, QString& childNodeName, QString& childrenNodeName, QString& OutType, QString& OutValue);
+bool ParserXmlNode(QString& path, QString& childNodeName, std::vector <std::pair<std::pair<QString, QString>, QString>>& xmlContent);
+void ParserCamParamAndSetFramerabber(HalconCpp::HFramegrabber* pGrabber, std::vector <std::pair<std::pair<QString, QString>, QString>>& CamParam);
+int UpdateXmlNodeText(QString& path, QString& childNodeName, QString& childrenNodeName, QString& changeValue);
 
+enum ChhXml
+{
+	UpdateOK,
+	UpdateFail,
+};
+
+
+bool CreateImagetDir();
 bool isCorrectImage(HalconCpp::HImage& image, double threshold_gray);
 
 

@@ -62,7 +62,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(ProjectDir)..\HXQ\x64\Debug;$(HALCONROOT)\lib\x64-win64;$(QT_VS15_X64)\lib;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>CHH.obj;CHH2.obj;Func.obj;CameraThread.obj;moc_CameraThread.obj;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5SerialPortd.lib;Qt5SerialBusd.lib;halconcpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>CHH.obj;CHH2.obj;Func.obj;CameraThread.obj;moc_CameraThread.obj;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5SerialPortd.lib;Qt5SerialBusd.lib;Qt5Xmld.lib;Qt5XmlPatternsd.lib;halconcpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

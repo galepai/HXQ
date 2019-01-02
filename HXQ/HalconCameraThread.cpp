@@ -14,7 +14,7 @@ QStringList Halcon_Camera_Thread::m_CameraIdlist;
 Halcon_Camera_Thread::Halcon_Camera_Thread(QString CameraId, QObject *parent)
 	: m_CameraId(CameraId),QThread(parent)
 {
-	m_image_index = 1;
+	m_image_index = 50;
 	m_exposureTime = 30.0;
 	m_acquisitionLineRate = 10000.0;
 	m_height = 10000;
@@ -27,7 +27,7 @@ Halcon_Camera_Thread::Halcon_Camera_Thread(QString CameraId, QObject *parent)
 
 void Halcon_Camera_Thread::run()
 {
-	bool isCorretOpen = true;
+	int isCorretOpen = Code::Good;
 
 	//if (!OpenCamera(m_pGrabber))
 	//	return;
@@ -36,14 +36,26 @@ void Halcon_Camera_Thread::run()
 
 	emit OpenCameraSinal((void**)&m_pGrabber, &isCorretOpen);
 
-	if (!isCorretOpen)
+	switch (isCorretOpen)
 	{
-		m_pGrabber;
+	case Code::Good:
+		emit CameraErrorInformation(true);
+		
+		break;
+
+	case Code::XmlError:
+		emit CameraErrorInformation(G2U("无法连接相机:\r\n相机ID：") + CameraId() + G2U("\r\n\r\n原因：\r\n1.读取配置文件错误"));
+		emit CameraErrorInformation(false);
+		return;
+		break;
+
+	case Code::ParamError:
 		emit CameraErrorInformation(G2U("无法连接相机:\r\n相机ID：") + CameraId() + G2U("\r\n\r\n原因：\r\n1.相机线缆未正确连接。\r\n2.相机ID错误。"));
 		emit CameraErrorInformation(false);
 		return;
+		break;
 	}
-		
+	
 
 	m_bIsStop = false;
 	HImage Image;

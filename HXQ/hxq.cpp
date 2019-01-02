@@ -48,6 +48,8 @@ hxq::hxq(QWidget *parent)
 	//写入最后一次打开时间
 	WriteCurrenDateTime("config.ini", "Config", "OpenProgramTime");  //不支持中文写入配置文件
 
+	m_bIsDisOneImage = false;
+
 	//相机线程
 	m_camera_thread_7_Clock = nullptr;
 	m_camera_thread_top = nullptr;
@@ -88,6 +90,7 @@ void hxq::toolConnect()
 	connect(ui.ShutDown, SIGNAL(triggered()), this, SLOT(OnShutDown()));
 	connect(ui.Configure2, SIGNAL(triggered()), this, SLOT(OnTest()));
 	connect(ui.AreaCamera, SIGNAL(triggered()), this, SLOT(OnDisplayAreaCamera()));
+
 }
 
 //全屏显示
@@ -193,9 +196,10 @@ void hxq::OnOpen()
 	else
 	{
 		if (path.length() != 0 &&
-			(path.contains(".jpg") || path.contains(".tiff")))
+			(path.contains(".jpg") || path.contains(".tiff") || path.contains(".bmp")))
 		{
 			ReadImage(&m_Image, path.toLocal8Bit().constData());
+			m_bIsDisOneImage = true;
 			DispPic(m_Image, LeftView);
 			statusBar()->showMessage(path);
 		}
@@ -225,20 +229,62 @@ void hxq::OnDisplayAreaCamera()
 	//m_camera_thread_top->start();
 	
 	ReadConfigure("config.ini", "TopCamera", "Id", AreaCameraId);
-	m_HikVisionCameraThread = new Halcon_Camera_Thread(AreaCameraId.toString(), this);
+	//m_HikVisionCameraThread = new Halcon_Camera_Thread(AreaCameraId.toString(), this);
+	m_HikVisionCameraThread = new Halcon_Camera_Thread("[0] USB3_CMOS_8.8M(1)", this);
 	m_HikVisionCameraThread->setSaveImageDirName("Images/Top/Good/");
+	m_HikVisionCameraThread->setSaveImageNum(10);
+	m_HikVisionCameraThread->setSaveImage(false);
 	m_HikVisionCameraThread->setMutexTrigger(false);
 	//emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
-	connect(m_HikVisionCameraThread, SIGNAL(OpenCameraSinal(void**,bool*)), this, SLOT(OpenTopCamera(void**, bool*)),Qt::DirectConnection);
+	connect(m_HikVisionCameraThread, SIGNAL(OpenCameraSinal(void**,int*)), this, SLOT(OpenTestCamera(void**, int*)),Qt::DirectConnection);
 	connect(m_HikVisionCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
 	connect(m_HikVisionCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
 	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
 	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	connect(m_HikVisionCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImageAndHandle(void*)));	//左视图显示
+	connect(m_HikVisionCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
 	connect(m_HikVisionCameraThread, SIGNAL(finished()), m_HikVisionCameraThread, SLOT(deleteLater()));
 	m_HikVisionCameraThread->start();
 
 
+
+}
+
+void hxq::OpenCamera(void** pGrabber, int* isCorrectOpen,QString& xmlPath,QString& nodeName)
+{
+
+	HFramegrabber* Grabber = new HFramegrabber;
+
+	try {
+
+		std::vector <std::pair<std::pair<QString, QString>, QString>> Param;
+		if (!ParserXmlNode(xmlPath, nodeName, Param))
+		{
+			*isCorrectOpen = Halcon_Camera_Thread::Code::XmlError;
+			*pGrabber = Grabber;
+			return;
+		}
+
+		Grabber->OpenFramegrabber(Param[1].second.toStdString().c_str(), 1, 1, 0, 0, 0, 0, "default", 8, \
+			Param[2].second.toStdString().c_str(), -1, "false", "default", \
+			Param[0].second.toStdString().c_str(), 0, -1);
+
+		ParserCamParamAndSetFramerabber(Grabber, Param);
+
+		*isCorrectOpen = Halcon_Camera_Thread::Code::Good;
+		*pGrabber = Grabber;
+	}
+	catch (HException& e)
+	{
+		*isCorrectOpen = Halcon_Camera_Thread::Code::ParamError;
+		*pGrabber = Grabber;
+	}
+
+}
+
+//顶部相机设置
+void hxq::OpenTestCamera(void** pGrabber, int* isCorrectOpen)
+{
+	OpenCamera(pGrabber, isCorrectOpen, QString(CameraXML), QString("DoThink"));
 
 }
 
@@ -258,7 +304,7 @@ void hxq::OpenTopCamera(void** pGrabber, bool* isCorrectOpen)
 		}
 	
 		Grabber->OpenFramegrabber("DirectShow", 1, 1, 0, 0, 0, 0, "default", 8, "rgb", -1, "false", "default", \
-			Param[0].first.first.toStdString().c_str(), 0, -1);
+			Param[0].second.toStdString().c_str(), 0, -1);
 
 		ParserCamParamAndSetFramerabber(Grabber, Param);
 
@@ -297,7 +343,7 @@ void hxq::OpenSideCamera(void** pGrabber, bool* isCorrectOpen)
 
 		}
 		Grabber->OpenFramegrabber("GigEVision2", 1, 1, 0, 0, 0, 0, "default", 8, "gray", -1, "false", "default", \
-			Param[0].first.first.toStdString().c_str(), 0, -1);
+			Param[0].second.toStdString().c_str(), 0, -1);
 		
 		/*Grabber->SetFramegrabberParam("AcquisitionLineRate", 8000);
 		Grabber->SetFramegrabberParam("ExposureTime", 350);
@@ -535,18 +581,26 @@ void hxq::DispPic(HImage& Image, LocationView location)
 
 	if (*pWindowHandle == 0)
 	{
+		m_leftPicViewgeometry = ui.LeftPicView->geometry();
 
 		SetOpenWindowHandle(Image, pWindowHandle, location);
 		DispObj(Image, *pWindowHandle);
-		SetPicViewScroll(width, height, location);
+		SetPicViewScroll(width, height, location);	
 
 	}
 	else
 	{
-		//ClearWindow(*pWindowHandle);
-		//CloseWindow(*pWindowHandle);
+		if (m_bIsDisOneImage)
+		{
+			HSCROLL_HEIGHT_LeftPic(500);
+			ui.LeftPicView->setGeometry(m_leftPicViewgeometry);
+			ClearWindow(*pWindowHandle);
+			CloseWindow(*pWindowHandle);
+			SetOpenWindowHandle(Image, pWindowHandle, location);
+			m_bIsDisOneImage = false;
+		}
+		
 
-		//SetOpenWindowHandle(Image, pWindowHandle, location);
 		DispObj(Image, *pWindowHandle);
 		SetPicViewScroll(width, height, location);
 	}
@@ -567,7 +621,43 @@ void hxq::SetOpenWindowHandle(HImage& Image, HTuple* pWindowHandle, LocationView
 				break;*/
 
 	case LeftView:
-		CHH::dev_open_window_fit_image(Image, 0, 0, 1024, 2000, (long)ui.LeftPicView->winId(), pWindowHandle);
+	{
+		int pic_width = Image.Width().I();
+		int pic_height = Image.Height().I();
+		int width = ui.LeftPicView->geometry().width();
+		int height = ui.LeftPicView->geometry().height();
+
+		float width_scale = (float)width / (float)pic_width;
+		float height_scale = (float)height / (float)pic_height;
+
+		if(width_scale<1 && height_scale<1)
+		{ 
+			if (width_scale < height_scale)
+			{
+				int dis_pic_height = width_scale*pic_height;
+				int offsetHeight = (height - dis_pic_height) / 2;
+				//CHH::dev_open_window_fit_image(Image, 0, 0, 1024, 2000, (long)ui.LeftPicView->winId(), pWindowHandle);
+				CHH::dev_open_window_fit_image(Image, offsetHeight, 0, width, 2000, (long)ui.LeftPicView->winId(), pWindowHandle);
+			}
+			else
+			{
+				int dis_pic_width = height_scale*pic_width;
+				int offsetWidth = (height - dis_pic_width) / 2;
+				//CHH::dev_open_window_fit_image(Image, 0, 0, 1024, 2000, (long)ui.LeftPicView->winId(), pWindowHandle);
+				CHH::dev_open_window_fit_image(Image, 0, offsetWidth, 500, height, (long)ui.LeftPicView->winId(), pWindowHandle);
+			}
+		}
+		else
+		{
+			
+			int offsetWidth = (width - pic_width) / 2;
+			int offsetHeight = (height - pic_height) / 2;
+				//CHH::dev_open_window_fit_image(Image, 0, 0, 1024, 2000, (long)ui.LeftPicView->winId(), pWindowHandle);
+				CHH::dev_open_window_fit_image(Image, offsetHeight, offsetWidth, width, height, (long)ui.LeftPicView->winId(), pWindowHandle);		
+		}
+		
+	}
+		
 		break;
 
 	case MiddleView:
@@ -803,7 +893,7 @@ void hxq::OnStop()
 	m_Result_AllQueue;
 	ui.OnStop->setEnabled(false);
 	ui.OnLineRun->setEnabled(true);
-
+	ui.AreaCamera->setEnabled(true);
 
 
 }
@@ -972,27 +1062,24 @@ void hxq::receiveCorrectImage(int value)
 
 void hxq::OnTest()
 {
-	if (m_bIsOnLine)
-	{
-		OnDetectEnd();
-	}
-	else
-	{
-		if (m_peviousProductDectectEnd)
-		{
-			OnWakeCamera();
-		}
-		else
-		{
-			qDebug() << "m_peviousProductDectectEnd = false.";
-		}
+	//if (m_bIsOnLine)
+	//{
+	//	OnDetectEnd();
+	//}
+	//else
+	//{
+	//	if (m_peviousProductDectectEnd)
+	//	{
+	//		OnWakeCamera();
+	//	}
+	//	else
+	//	{
+	//		qDebug() << "m_peviousProductDectectEnd = false.";
+	//	}
 
-	}
+	//}
 
-
-	TestDialog dlg;
-	dlg.exec();
-
+	OnWakeCamera();
 }
 
 
@@ -1003,8 +1090,8 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 	sum++;
 
 	m_Pic_Set.insert(cameraId);
-	qDebug() << "receive singleResult";
-
+	qDebug() << "receive singleResult:   " << singleResult;
+/*
 	if (cameraId == TopCamera)
 	{
 		m_detectResult.current_area = m_detectResult.next_area;
@@ -1063,12 +1150,12 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 			}
 
 		}
-
+		
 		m_peviousProductDectectEnd = true;
 
 		return;
 	}
-
+	*/
 }
 
 

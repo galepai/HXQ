@@ -3,6 +3,8 @@
 <fivision>
     <HikVision_Top>
         <id type="string">c42f90f0ff29_Hikvision_MVCE10031GM</id>
+        <interface type="string">GigEVision2</interface>
+        <color type="string">gray</color>
         <AcquisitionMode type="string">Continuous</AcquisitionMode>
         <TriggerSelector type="string">FrameBurstStart</TriggerSelector>
         <TriggerMode type="string">Off</TriggerMode>
@@ -11,10 +13,18 @@
     </HikVision_Top>
     <Dalsa_Side>
         <id type="string">c42f90f0ff29_Hikvision_MVCE10031GM</id>
+        <interface type="string">GigEVision2</interface>
+        <color type="string">gray</color>
         <AcquisitionMode type="string">Continuous</AcquisitionMode>
         <TriggerSelector type="string">FrameBurstStart</TriggerSelector>
         <TriggerMode type="string">Off</TriggerMode>
         <ExposureTime type="float">688</ExposureTime>
         <grab_timeout type="int">5000</grab_timeout>
     </Dalsa_Side>
+    <DoThink>
+        <id type="string">[0] USB3_CMOS_8.8M(1)</id>
+        <interface type="string">DirectShow</interface>
+        <color type="string">gray</color>
+        <grab_timeout type="int">5000</grab_timeout>
+    </DoThink>
 </fivision>

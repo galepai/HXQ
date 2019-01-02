@@ -578,7 +578,7 @@ bool ReadXmlElementText(QString& path, QString& childNodeName, QString& children
 
 void ParserCamParamAndSetFramerabber(HalconCpp::HFramegrabber* pGrabber, std::vector <std::pair<std::pair<QString, QString>, QString>>& CamParam)
 {
-	for (int index = 1; index < CamParam.size(); index++)
+	for (int index = 3; index < CamParam.size(); index++)
 	{
 		QString name = CamParam[index].first.first;
 		QString type = CamParam[index].first.second;
@@ -588,7 +588,7 @@ void ParserCamParamAndSetFramerabber(HalconCpp::HFramegrabber* pGrabber, std::ve
 		{
 			pGrabber->SetFramegrabberParam(name.toStdString().c_str(), value.toFloat());
 		}
-		else if(value.contains("int"))
+		else if(type.contains("int"))
 		{
 			pGrabber->SetFramegrabberParam(name.toStdString().c_str(), value.toInt());
 		}

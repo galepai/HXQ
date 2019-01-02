@@ -26,6 +26,13 @@ public:
 		USB3Vision		//
 	};
 
+	enum Code
+	{
+		XmlError,		
+		ParamError,	
+		Good
+	};
+
 	explicit Halcon_Camera_Thread(QString CameraId, QObject *parent = 0);
 	~Halcon_Camera_Thread();
 	
@@ -81,7 +88,7 @@ signals:
 	void CameraErrorInformation(QString error);
 	void CameraErrorInformation(bool error);
 	void grab_correct_image(int num);
-	void OpenCameraSinal(void** pGrabber,bool* status);
+	void OpenCameraSinal(void** pGrabber,int* returnCode);
 
 private:
 	QString m_CameraId;

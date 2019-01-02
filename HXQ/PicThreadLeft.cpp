@@ -18,7 +18,7 @@ void PicThreadLeft::run()
 			HObject TileImage, ImageEmphasize;
 			//CHH::PingJie(m_Image, &m_Image, 500, 40, 3, 40, &hv_DownRow);
 			DispObj(m_Image, m_WindowHandle);
-			Emphasize(m_Image, &ImageEmphasize, 3, 102, 1);
+			//Emphasize(m_Image, &ImageEmphasize, 3, 102, 1);
 
 			//OnHandle(m_WindowHandle);
 			//ReadClassMlp(getModel().toStdString().c_str(), &hv_ModelHandle);
@@ -26,7 +26,7 @@ void PicThreadLeft::run()
 
 			num++;
 			CHH::disp_message(m_WindowHandle, HTuple("number: ") + num, "image", 12, 12, "black", "true");
-			ClearClassMlp(hv_ModelHandle);
+			
 
 			qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
 			//if (hv_IsBad.I()==0)

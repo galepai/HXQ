@@ -43,6 +43,7 @@ public:
 
 	//*********图像处理线程**************/
 	void OnHandleImageThread(HImage& ima, LocationView view);
+	void OpenCamera(void** pGrabber, int* isCorrectOpen, QString& xmlPath, QString& nodeName);
 
 public slots:
 
@@ -90,6 +91,7 @@ public slots:
 	//
 	void OpenTopCamera(void**, bool*);
 	void OpenSideCamera(void**, bool*);
+	void OpenTestCamera(void** pGrabber, int* isCorrectOpen);
 
 private:
 	void OnClearCameraThread();	//清理相机线程
@@ -103,6 +105,9 @@ private:
 
 private:
 	Ui::hxqClass ui;
+	bool m_bIsDisOneImage;
+	QRect m_leftPicViewgeometry;
+
 	QProcess* process;
 	HalconCpp::HTuple m_LeftWindowHandle, m_MiddleWindowHandle, m_SecondRightWindowHandle, m_RightWindowHandle;	//左、中、右二、右视图的窗口Handle（Halcon显示图片用）
 	QString m_Title;

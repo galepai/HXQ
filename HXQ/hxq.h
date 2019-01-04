@@ -89,8 +89,8 @@ public slots:
 	void OnOpenCameraIsCorrect(bool enable);
 
 	//
-	void OpenTopCamera(void**, bool*);
-	void OpenSideCamera(void**, bool*);
+	void OpenTopCamera(void**, int*);
+	void OpenSideCamera(void**, int*);
 	void OpenTestCamera(void** pGrabber, int* isCorrectOpen);
 
 private:
@@ -132,7 +132,7 @@ public:
 	PylonCamera_Thread* m_Pylon_camera_thread_2_Clock;
 	PylonCamera_Thread* m_Pylon_camera_thread_10_Clock;
 
-	Halcon_Camera_Thread* m_HikVisionCameraThread;
+	Halcon_Camera_Thread* m_TopCameraThread;
 
 
 	Galil_Thread* m_Galil;	//运动控制卡线程

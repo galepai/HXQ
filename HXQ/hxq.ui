@@ -17,6 +17,12 @@
    <iconset resource="HXQ.qrc">
     <normaloff>:/logo/Resources/fivision.ico</normaloff>:/logo/Resources/fivision.ico</iconset>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <property name="toolButtonStyle">
    <enum>Qt::ToolButtonIconOnly</enum>
   </property>
@@ -142,8 +148,17 @@
           <height>70</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <property name="title">
          <string>统计</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
         </property>
         <widget class="QLCDNumber" name="lcdNumber_cao">
          <property name="geometry">
@@ -387,13 +402,13 @@
    <addaction name="Open"/>
    <addaction name="OnRun"/>
    <addaction name="separator"/>
+   <addaction name="AreaCamera"/>
+   <addaction name="Configure2"/>
    <addaction name="Configure"/>
+   <addaction name="separator"/>
    <addaction name="OnLineRun"/>
    <addaction name="OnStop"/>
    <addaction name="separator"/>
-   <addaction name="AreaCamera"/>
-   <addaction name="separator"/>
-   <addaction name="Configure2"/>
    <addaction name="ShutDown"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
@@ -404,8 +419,8 @@
   <action name="Configure">
    <property name="icon">
     <iconset>
-     <normalon>:/icon/Resources/icon/01.ico</normalon>
-     <activeon>:/icon/Resources/icon/02.ico</activeon>
+     <normalon>:/icon03/Resources/icon03/setting_on.png</normalon>
+     <activeon>:/icon03/Resources/icon03/setting_off.png</activeon>
     </iconset>
    </property>
    <property name="text">
@@ -415,10 +430,11 @@
   <action name="OnRun">
    <property name="icon">
     <iconset resource="HXQ.qrc">
-     <normaloff>:/icon/Resources/icon/15.ico</normaloff>
-     <normalon>:/icon/Resources/icon/15.ico</normalon>
-     <activeoff>:/icon/Resources/icon/16.ico</activeoff>
-     <activeon>:/icon/Resources/icon/16.ico</activeon>:/icon/Resources/icon/15.ico</iconset>
+     <normaloff>:/icon03/Resources/icon03/one_on.png</normaloff>
+     <normalon>:/icon03/Resources/icon03/one_on.png</normalon>
+     <activeoff>:/icon03/Resources/icon03/one_off.png</activeoff>
+     <activeon>:/icon03/Resources/icon03/one_off.png</activeon>
+     <selectedoff>:/icon03/Resources/icon03/one_on.png</selectedoff>:/icon03/Resources/icon03/one_on.png</iconset>
    </property>
    <property name="text">
     <string>单次</string>
@@ -427,8 +443,8 @@
   <action name="Open">
    <property name="icon">
     <iconset>
-     <normalon>:/icon/Resources/icon/13.ico</normalon>
-     <activeon>:/icon/Resources/icon/14.ico</activeon>
+     <normalon>:/icon03/Resources/icon03/folder_on.png</normalon>
+     <activeon>:/icon03/Resources/icon03/folder_off.png</activeon>
     </iconset>
    </property>
    <property name="text">
@@ -449,7 +465,10 @@
   <action name="Configure2">
    <property name="icon">
     <iconset resource="HXQ.qrc">
-     <normaloff>:/icon/Resources/icon/01.ico</normaloff>:/icon/Resources/icon/01.ico</iconset>
+     <normaloff>:/icon03/Resources/icon03/motion_on.png</normaloff>
+     <normalon>:/icon03/Resources/icon03/motion_on.png</normalon>
+     <activeoff>:/icon03/Resources/icon03/motion_off.png</activeoff>
+     <activeon>:/icon03/Resources/icon03/motion_off.png</activeon>:/icon03/Resources/icon03/motion_on.png</iconset>
    </property>
    <property name="text">
     <string>配置2</string>
@@ -461,7 +480,10 @@
   <action name="ShutDown">
    <property name="icon">
     <iconset resource="HXQ.qrc">
-     <normaloff>:/icon/Resources/icon/09.ico</normaloff>:/icon/Resources/icon/09.ico</iconset>
+     <normaloff>:/icon03/Resources/icon03/close_on.png</normaloff>
+     <normalon>:/icon03/Resources/icon03/close_on.png</normalon>
+     <activeoff>:/icon03/Resources/icon03/close_off.png</activeoff>
+     <activeon>:/icon03/Resources/icon03/close_off.png</activeon>:/icon03/Resources/icon03/close_on.png</iconset>
    </property>
    <property name="text">
     <string>关闭系统</string>
@@ -473,8 +495,8 @@
   <action name="OnLineRun">
    <property name="icon">
     <iconset resource="HXQ.qrc">
-     <normaloff>:/icon/Resources/icon/03.ico</normaloff>
-     <activeoff>:/icon/Resources/icon/04.ico</activeoff>:/icon/Resources/icon/03.ico</iconset>
+     <normaloff>:/icon03/Resources/icon03/start_on.png</normaloff>
+     <activeoff>:/icon03/Resources/icon03/start_off.png</activeoff>:/icon03/Resources/icon03/start_on.png</iconset>
    </property>
    <property name="text">
     <string>在线检测</string>
@@ -502,8 +524,8 @@
    </property>
    <property name="icon">
     <iconset resource="HXQ.qrc">
-     <normaloff>:/icon/Resources/icon/07.ico</normaloff>
-     <activeoff>:/icon/Resources/icon/08.ico</activeoff>:/icon/Resources/icon/07.ico</iconset>
+     <normaloff>:/icon03/Resources/icon03/stop_on.png</normaloff>
+     <activeoff>:/icon03/Resources/icon03/stop_off.png</activeoff>:/icon03/Resources/icon03/stop_on.png</iconset>
    </property>
    <property name="text">
     <string>停止</string>
@@ -537,9 +559,12 @@
   <action name="AreaCamera">
    <property name="icon">
     <iconset resource="HXQ.qrc">
-     <normaloff>:/icon/Resources/icon/11.ico</normaloff>
-     <disabledoff>:/icon/Resources/icon/12.ico</disabledoff>
-     <activeoff>:/icon/Resources/icon/12.ico</activeoff>:/icon/Resources/icon/11.ico</iconset>
+     <normaloff>:/icon03/Resources/icon03/camera_on.png</normaloff>
+     <normalon>:/icon03/Resources/icon03/camera_on.png</normalon>
+     <disabledoff>:/icon03/Resources/icon03/camera_off.png</disabledoff>
+     <activeoff>:/icon03/Resources/icon03/camera_off.png</activeoff>
+     <activeon>:/icon03/Resources/icon03/camera_off.png</activeon>
+     <selectedon>:/icon03/Resources/icon03/camera_on.png</selectedon>:/icon03/Resources/icon03/camera_on.png</iconset>
    </property>
    <property name="text">
     <string>实时面阵</string>

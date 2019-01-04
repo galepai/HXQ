@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--MotionCard Param-->
+<fivision>
+    <MotionCard>
+        <ip type="string">192.168.2.7</ip>
+    </MotionCard>
+</fivision>

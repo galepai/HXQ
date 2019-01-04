@@ -2,6 +2,24 @@
   <qresource prefix="/logo">
     <file>Resources/fivision.ico</file>
   </qresource>
+  <qresource prefix="/icon03">
+    <file>Resources/icon03/motion_off.png</file>
+    <file>Resources/icon03/motion_on.png</file>
+    <file>Resources/icon03/close_off.png</file>
+    <file>Resources/icon03/close_on.png</file>
+    <file>Resources/icon03/stop_off.png</file>
+    <file>Resources/icon03/stop_on.png</file>
+    <file>Resources/icon03/start_off.png</file>
+    <file>Resources/icon03/start_on.png</file>
+    <file>Resources/icon03/folder_off.png</file>
+    <file>Resources/icon03/folder_on.png</file>
+    <file>Resources/icon03/setting_off.png</file>
+    <file>Resources/icon03/setting_on.png</file>
+    <file>Resources/icon03/one_off.png</file>
+    <file>Resources/icon03/one_on.png</file>
+    <file>Resources/icon03/camera_off.png</file>
+    <file>Resources/icon03/camera_on.png</file>
+  </qresource>
   <qresource prefix="/icon">
     <file>Resources/icon/01.ico</file>
     <file>Resources/icon/02.ico</file>

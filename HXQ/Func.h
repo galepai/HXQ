@@ -34,6 +34,9 @@
 //#define HIDDLE_DIALOG_BUTTON setWindowFlags(Qt::ToolTip);	//隐藏标题栏，比如最小化，最大化、关闭按钮
 #define HIDDLE_DIALOG_BUTTON setWindowFlags(Qt::SplashScreen);	//隐藏标题栏，比如最小化，最大化、关闭按钮
 
+
+#define READ_XML_ElEMENT(path,element,nodename,out_type,out_value) ReadXmlElementText(QString(path), QString(element), QString(nodename), out_type, out_value);
+
 void WriteCurrenDateTime(const QString& file, const QString& beginGroup, const QString& SetValueName);	//配置文件中写入当前时间 Use QSetting,slower than QFile 
 void WriteConfigure(const QString& file, const QString& beginGroup, const QString& SetValueName, const QString& Param);	//配置文件中写入设置信息
 void ReadConfigure(const QString& file, const QString& beginGroup, const QString& GetValueName, QVariant& Value);	//配置文件中读取信息

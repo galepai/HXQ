@@ -2,30 +2,7 @@
 #define CONFIGUREDIALOG_H
 
 #include <QDialog>
-#include <QWidget>
-#include <QComboBox>
 
-class ConfigSerial : public QWidget
-{
-	Q_OBJECT
-
-public:
-	explicit ConfigSerial(QWidget *parent = 0);
-
-	void CreateUi();
-
-	void ReadIni();
-
-private slots:
-	void SavePortToIni();
-
-
-private:
-	QComboBox* PortComboBox;
-	QComboBox* BaudComboBox;
-	QComboBox* DataBitsComboBox;
-
-};
 
 namespace Ui {
 class ConfigureDialog;
@@ -41,7 +18,6 @@ public:
 
 private:
     Ui::ConfigureDialog *ui;
-	ConfigSerial configSerial;
 
 private slots:
 	void currentRowChanged(int currentRow);

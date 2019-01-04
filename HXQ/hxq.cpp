@@ -55,7 +55,7 @@ hxq::hxq(QWidget *parent)
 	m_camera_thread_top = nullptr;
 	m_Pylon_camera_thread_2_Clock = nullptr;
 	m_Pylon_camera_thread_10_Clock = nullptr;
-	m_HikVisionCameraThread = nullptr;
+	m_TopCameraThread = nullptr;
 
 	m_Galil = nullptr;
 
@@ -160,26 +160,23 @@ void hxq::OnOpen()
 
 	QString path = QFileDialog::getOpenFileName(this, tr("Open Image"), "", tr("Image Files(*.jpg *.tif *.bmp)"));
 
-	if (path.contains("camera1")
-		|| path.contains("camera2")
+	if (path.contains("Top")
+		//|| path.contains("Side")
 		//|| path.contains("camera3")
-		|| path.contains("camera4"))
+		|| path.contains("Side"))
 	{
 		int i = path.lastIndexOf('/');
 		QString ImageName = path.toStdString().substr(i, path.length() - 1).c_str();
 		QString tempPath = path.remove(ImageName);
-		i = tempPath.lastIndexOf('/');
-		QString upDir = tempPath.toStdString().substr(0, i + 1).c_str();
 
-		i = ImageName.lastIndexOf('_');
-		ImageName = ImageName.toStdString().substr(i + 1, ImageName.length() - 1).c_str();
+		i = tempPath.lastIndexOf("Images");
+		QString upDir = tempPath.toStdString().substr(0, i).c_str();
 
-
-		QString ImagePath = upDir + "camera1/Camera1_" + ImageName;
+		QString ImagePath = upDir + "Images/Top/Good/" + ImageName;
 		ReadImage(&m_LeftImage, ImagePath.toLocal8Bit().constData());
 		DispPic(m_LeftImage, LeftView);
 
-		ImagePath = upDir + "camera2/Camera2_" + ImageName;
+		ImagePath = upDir + "Images/Side/Good/" + ImageName;
 		ReadImage(&m_MiddleImage, ImagePath.toLocal8Bit().constData());
 		DispPic(m_MiddleImage, MiddleView);
 
@@ -210,40 +207,24 @@ void hxq::OnOpen()
 
 void hxq::OnDisplayAreaCamera()
 {
-	QVariant ExposureValue,AreaCameraId;
-	/**	海康面阵相机	*/
-	//ReadConfigure("config.ini", "TopCamera", "Id", AreaCameraId);
-	//m_camera_thread_top = new Camera_Thread(Camera_Thread::ConnectionType::GigEVision2, AreaCameraId.toString(), this);
-	//m_camera_thread_top->setSaveImageDirName("Area");
-	//m_camera_thread_top->setSaveImageNum(50);
-	//ReadConfigure("config.ini", "TopCamera", "Exposure", ExposureValue);
-	//m_camera_thread_top->setExposureTime(ExposureValue.toFloat());
-	//m_camera_thread_top->setAcquisitionMode("Continuous");
-	//m_camera_thread_top->setTriggerMode("Off");
-	//connect(m_camera_thread_top, SIGNAL(signal_error(QString)), this, SLOT(genErrorDialog(QString)));
-	//connect(m_camera_thread_top, SIGNAL(signal_bool(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
-	//connect(m_camera_thread_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
-	////connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	//connect(m_camera_thread_top, SIGNAL(signal_image(void*)), this, SLOT(receiveLeftImageAndHandle(void*)));	//左视图显示
-	//connect(m_camera_thread_top, SIGNAL(finished()), m_camera_thread_top, SLOT(deleteLater()));
-	//m_camera_thread_top->start();
-	
-	ReadConfigure("config.ini", "TopCamera", "Id", AreaCameraId);
+	QString type, id;
+	//ReadXmlElementText(QString(XML_Camera), QString(Node_TopCamera), QString("id"), type, value);
+	READ_XML_ElEMENT(XML_Camera, "DoThink", "id", type, id);
 	//m_HikVisionCameraThread = new Halcon_Camera_Thread(AreaCameraId.toString(), this);
-	m_HikVisionCameraThread = new Halcon_Camera_Thread("[0] USB3_CMOS_8.8M(1)", this);
-	m_HikVisionCameraThread->setSaveImageDirName("Images/Top/Good/");
-	m_HikVisionCameraThread->setSaveImageNum(10);
-	m_HikVisionCameraThread->setSaveImage(false);
-	m_HikVisionCameraThread->setMutexTrigger(false);
+	m_TopCameraThread = new Halcon_Camera_Thread(id, this);
+	m_TopCameraThread->setSaveImageDirName("Images/Top/Good/");
+	m_TopCameraThread->setSaveImageNum(10);
+	m_TopCameraThread->setSaveImage(false);
+	m_TopCameraThread->setMutexTrigger(false);
 	//emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
-	connect(m_HikVisionCameraThread, SIGNAL(OpenCameraSinal(void**,int*)), this, SLOT(OpenTestCamera(void**, int*)),Qt::DirectConnection);
-	connect(m_HikVisionCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
-	connect(m_HikVisionCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
+	connect(m_TopCameraThread, SIGNAL(OpenCameraSinal(void**,int*)), this, SLOT(OpenTestCamera(void**, int*)),Qt::DirectConnection);
+	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
+	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
 	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
 	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	connect(m_HikVisionCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
-	connect(m_HikVisionCameraThread, SIGNAL(finished()), m_HikVisionCameraThread, SLOT(deleteLater()));
-	m_HikVisionCameraThread->start();
+	connect(m_TopCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
+	connect(m_TopCameraThread, SIGNAL(finished()), m_TopCameraThread, SLOT(deleteLater()));
+	m_TopCameraThread->start();
 
 
 
@@ -284,82 +265,86 @@ void hxq::OpenCamera(void** pGrabber, int* isCorrectOpen,QString& xmlPath,QStrin
 //顶部相机设置
 void hxq::OpenTestCamera(void** pGrabber, int* isCorrectOpen)
 {
-	OpenCamera(pGrabber, isCorrectOpen, QString(CameraXML), QString("DoThink"));
+	OpenCamera(pGrabber, isCorrectOpen, QString(XML_Camera), QString("DoThink"));
 
 }
 
 //顶部相机设置
-void hxq::OpenTopCamera(void** pGrabber, bool* isCorrectOpen)
+void hxq::OpenTopCamera(void** pGrabber, int* isCorrectOpen)
 {
 	
-	HFramegrabber* Grabber = new HFramegrabber;
-	try {
+	//HFramegrabber* Grabber = new HFramegrabber;
+	//try {
 
-		std::vector <std::pair<std::pair<QString, QString>, QString>> Param;
-		if (!ParserXmlNode(QString(CameraXML), QString(Node_TopCamera), Param))
-		{
-			*isCorrectOpen = false;
-			*pGrabber = Grabber;
-			return;
-		}
-	
-		Grabber->OpenFramegrabber("DirectShow", 1, 1, 0, 0, 0, 0, "default", 8, "rgb", -1, "false", "default", \
-			Param[0].second.toStdString().c_str(), 0, -1);
+	//	std::vector <std::pair<std::pair<QString, QString>, QString>> Param;
+	//	if (!ParserXmlNode(QString(XML_Camera), QString(Node_TopCamera), Param))
+	//	{
+	//		*isCorrectOpen = false;
+	//		*pGrabber = Grabber;
+	//		return;
+	//	}
+	//
+	//	Grabber->OpenFramegrabber("DirectShow", 1, 1, 0, 0, 0, 0, "default", 8, "rgb", -1, "false", "default", \
+	//		Param[0].second.toStdString().c_str(), 0, -1);
 
-		ParserCamParamAndSetFramerabber(Grabber, Param);
+	//	ParserCamParamAndSetFramerabber(Grabber, Param);
 
-	/*	Grabber->OpenFramegrabber("DirectShow", 1, 1, 0, 0, 0, 0, "default", 8, "rgb", -1, "false", "default", \
-			HikVision[0].first.toStdString().c_str(), 0, -1);
-		Grabber->SetFramegrabberParam("AcquisitionMode", "Continuous");
-		Grabber->SetFramegrabberParam("TriggerSelector", "FrameBurstStart");
-		Grabber->SetFramegrabberParam("TriggerMode", "Off");
-		Grabber->SetFramegrabberParam("ExposureTime", 400000.0);
-		Grabber->SetFramegrabberParam("grab_timeout", 5000);*/
+	///*	Grabber->OpenFramegrabber("DirectShow", 1, 1, 0, 0, 0, 0, "default", 8, "rgb", -1, "false", "default", \
+	//		HikVision[0].first.toStdString().c_str(), 0, -1);
+	//	Grabber->SetFramegrabberParam("AcquisitionMode", "Continuous");
+	//	Grabber->SetFramegrabberParam("TriggerSelector", "FrameBurstStart");
+	//	Grabber->SetFramegrabberParam("TriggerMode", "Off");
+	//	Grabber->SetFramegrabberParam("ExposureTime", 400000.0);
+	//	Grabber->SetFramegrabberParam("grab_timeout", 5000);*/
 
-		*isCorrectOpen = true;
-		*pGrabber = Grabber;
-	}
-	catch (HException& e)
-	{
-		*isCorrectOpen = false;
-		*pGrabber = Grabber;
-	}
+	//	*isCorrectOpen = true;
+	//	*pGrabber = Grabber;
+	//}
+	//catch (HException& e)
+	//{
+	//	*isCorrectOpen = false;
+	//	*pGrabber = Grabber;
+	//}
 
+
+	OpenCamera(pGrabber, isCorrectOpen, QString(XML_Camera), QString(Node_TopCamera));
 }
 
 //侧部相机设置
-void hxq::OpenSideCamera(void** pGrabber, bool* isCorrectOpen)
+void hxq::OpenSideCamera(void** pGrabber, int* isCorrectOpen)
 {
 
-	HFramegrabber* Grabber = new HFramegrabber;
-	try {
+	//HFramegrabber* Grabber = new HFramegrabber;
+	//try {
 
-		std::vector <std::pair<std::pair<QString, QString>, QString>> Param;
-		if (!ParserXmlNode(QString(CameraXML), QString(Node_SideCamera), Param))
-		{
-			*isCorrectOpen = false;
-			*pGrabber = Grabber;
-			return;
+	//	std::vector <std::pair<std::pair<QString, QString>, QString>> Param;
+	//	if (!ParserXmlNode(QString(XML_Camera), QString(Node_SideCamera), Param))
+	//	{
+	//		*isCorrectOpen = false;
+	//		*pGrabber = Grabber;
+	//		return;
 
-		}
-		Grabber->OpenFramegrabber("GigEVision2", 1, 1, 0, 0, 0, 0, "default", 8, "gray", -1, "false", "default", \
-			Param[0].second.toStdString().c_str(), 0, -1);
-		
-		/*Grabber->SetFramegrabberParam("AcquisitionLineRate", 8000);
-		Grabber->SetFramegrabberParam("ExposureTime", 350);
-		Grabber->SetFramegrabberParam("TriggerSelector", "FrameStart");
-		Grabber->SetFramegrabberParam("TriggerMode", "Off");
-		Grabber->SetFramegrabberParam("Height", 8000);
-		Grabber->SetFramegrabberParam("grab_timeout", 5000);*/
+	//	}
+	//	Grabber->OpenFramegrabber("GigEVision2", 1, 1, 0, 0, 0, 0, "default", 8, "gray", -1, "false", "default", \
+	//		Param[0].second.toStdString().c_str(), 0, -1);
+	//	
+	//	/*Grabber->SetFramegrabberParam("AcquisitionLineRate", 8000);
+	//	Grabber->SetFramegrabberParam("ExposureTime", 350);
+	//	Grabber->SetFramegrabberParam("TriggerSelector", "FrameStart");
+	//	Grabber->SetFramegrabberParam("TriggerMode", "Off");
+	//	Grabber->SetFramegrabberParam("Height", 8000);
+	//	Grabber->SetFramegrabberParam("grab_timeout", 5000);*/
 
-		*isCorrectOpen = true;
-		*pGrabber = Grabber;
-	}
-	catch (HException& e)
-	{
-		*isCorrectOpen = false;
-		*pGrabber = Grabber;
-	}
+	//	*isCorrectOpen = true;
+	//	*pGrabber = Grabber;
+	//}
+	//catch (HException& e)
+	//{
+	//	*isCorrectOpen = false;
+	//	*pGrabber = Grabber;
+	//}
+
+	OpenCamera(pGrabber, isCorrectOpen, QString(XML_Camera), QString(Node_SideCamera));
 
 }
 
@@ -429,30 +414,22 @@ void hxq::OnShutDown()
 
 void hxq::OnClearCameraThread()
 {
-	//if (m_camera_thread_7_Clock)
-	//	m_camera_thread_7_Clock->stop();
+	QString topCameraId, sideCameraId, type;
+	ReadXmlElementText(QString(XML_Camera), QString(Node_TopCamera), QString("id"), type, topCameraId);
+	ReadXmlElementText(QString(XML_Camera), QString(Node_SideCamera), QString("id"), type, sideCameraId);
 
-	//if (m_camera_thread_top)
-	//	m_camera_thread_top->stop();
-
-	//if (m_Pylon_camera_thread_2_Clock)
-	//	m_Pylon_camera_thread_2_Clock->stop();
-
-	//if (m_Pylon_camera_thread_10_Clock)
-	//	m_Pylon_camera_thread_10_Clock->stop();
-
-	if (m_HikVisionCameraThread)
-		m_HikVisionCameraThread->setStopStatus(true);
+	if (m_TopCameraThread)
+		m_TopCameraThread->setStopStatus(true);
 
 	Sleep(20);
 	condition_Camera.wakeAll();
 
-	if (Halcon_Camera_Thread::IsExistCameraId(TopAreaCamera))
+	if (Halcon_Camera_Thread::IsExistCameraId(topCameraId))
 	{
-		if (m_HikVisionCameraThread->isRunning())
+		if (m_TopCameraThread->isRunning())
 		{
-			m_HikVisionCameraThread->setStopStatus(true);
-			m_HikVisionCameraThread->wait();
+			m_TopCameraThread->setStopStatus(true);
+			m_TopCameraThread->wait();
 		}
 	}
 
@@ -527,7 +504,7 @@ void hxq::receiveTriggerSinal(QByteArray str)
 					&& m_camera_thread_top->ReadyWake())
 				{
 
-					Delta_Thread::AddOneQueueInfo(RESET_Y61);
+					//Delta_Thread::AddOneQueueInfo(RESET_Y61);
 					Sleep(20);
 					m_peviousProductDectectEnd = false;
 					OnWakeCamera();
@@ -743,17 +720,18 @@ const HalconCpp::HTuple hxq::GetViewWindowHandle(LocationView location)
 //启动
 void hxq::OnStart()
 {
-	QVariant ModeValue, Ip;
-	ReadConfigure("config.ini", "Mode", "Status", ModeValue);
-	ReadConfigure("config.ini", "MotionCard", "Ip", Ip);
-	if (ModeValue.toString() == "OnLine")
+	QString type,Ip;
+
+	ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString(MotionCard_ip), type,Ip);
+
+	/*if (ModeValue.toString() == "OnLine")
 	{
 		m_bIsOnLine = true;
 	}
 	else
 	{
 		m_bIsOnLine = false;
-	}
+	}*/
 
 
 	if (m_bIsOnLine)
@@ -767,7 +745,7 @@ void hxq::OnStart()
 		connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater()));
 		//connect(m_Galil, SIGNAL(triggerSinal()), m_Galil, SLOT(OnWakeCamera()));
 		m_Galil->GcLibVersion();
-		if (m_Galil->Open(Ip.toString() + ""))
+		if (m_Galil->Open(Ip + ""))
 		{
 			m_Galil->start();
 		}
@@ -809,22 +787,6 @@ void hxq::OnOpenCameras()
 	connect(m_camera_thread_top, SIGNAL(finished()), m_camera_thread_top, SLOT(deleteLater()));
 	m_camera_thread_top->start();
 
-	/**	7点方向DALSA线扫	*/
-	//m_camera_thread_7_Clock = new Camera_Thread(Camera_Thread::ConnectionType::GigEVision2, LineCameraId_Dalsa_7_Clock, this);
-	//m_camera_thread_7_Clock->setSaveImageDirName("Camera2");
-	//m_camera_thread_7_Clock->setSaveImageNum(999);
-	//ReadConfigure("config.ini", "Camera_07_Clock", "Exposure", ExposureValue);
-	//m_camera_thread_7_Clock->SetExposureTime(ExposureValue.toFloat());
-	//m_camera_thread_7_Clock->SetAcquisitionLineRate(10000.0);
-	//m_camera_thread_7_Clock->SetHeight(10000);
-	//connect(m_camera_thread_7_Clock, SIGNAL(signal_error(QString)), this, SLOT(genErrorDialog(QString)));
-	//connect(m_camera_thread_7_Clock, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
-	//connect(m_camera_thread_7_Clock, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	//connect(m_camera_thread_7_Clock, SIGNAL(signal_image(void*)), this, SLOT(receiveMiddleImage(void*)));	//中视图显示
-	//connect(m_camera_thread_7_Clock, SIGNAL(finished()), m_camera_thread_7_Clock, SLOT(deleteLater()));
-	//m_camera_thread_7_Clock->start();
-
-
 	///*-----Pylon Version------------*/
 	/**	Basler线扫	*/
 	m_Pylon_camera_thread_10_Clock = new PylonCamera_Thread(PylonCamera_Thread::ConnectionType::GigEVision, LineCameraId_Pylon_Basler_10_Clock, this);
@@ -839,20 +801,27 @@ void hxq::OnOpenCameras()
 	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(finished()), m_Pylon_camera_thread_10_Clock, SLOT(deleteLater()));
 	m_Pylon_camera_thread_10_Clock->start();
 
-	/**	2点方向Basler线扫	*/
-	//m_Pylon_camera_thread_2_Clock = new PylonCamera_Thread(PylonCamera_Thread::ConnectionType::GigEVision, LineCameraId_Pylon_Basler_2_Clock, this);
-	//m_Pylon_camera_thread_2_Clock->setSaveImageDirName("Camera4");
-	//m_Pylon_camera_thread_2_Clock->setSaveImageNum(999);
-	//ReadConfigure("config.ini", "Camera_02_Clock", "Exposure", ExposureValue);
-	//m_Pylon_camera_thread_2_Clock->SetExposureTime(ExposureValue.toInt());
-	//connect(m_Pylon_camera_thread_2_Clock, SIGNAL(signal_error(QString)), this, SLOT(genErrorDialog(QString)));
-	//connect(m_Pylon_camera_thread_2_Clock, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
-	//connect(m_Pylon_camera_thread_2_Clock, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	//connect(m_Pylon_camera_thread_2_Clock, SIGNAL(signal_image(void*)), this, SLOT(receiveRightImage(void*)));	//最右视图显示
-	//connect(m_Pylon_camera_thread_2_Clock, SIGNAL(finished()), m_Pylon_camera_thread_2_Clock, SLOT(deleteLater()));
-	//m_Pylon_camera_thread_2_Clock->start();
-
 	ui.OnLineRun->setEnabled(false);
+
+
+	/****************************/
+
+	m_TopCameraThread = new Halcon_Camera_Thread("[0] USB3_CMOS_8.8M(1)", this);
+	m_TopCameraThread->setSaveImageDirName("Images/Top/Good/");
+	m_TopCameraThread->setSaveImageNum(10);
+	m_TopCameraThread->setSaveImage(false);
+	m_TopCameraThread->setMutexTrigger(false);
+	//emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
+	connect(m_TopCameraThread, SIGNAL(OpenCameraSinal(void**, int*)), this, SLOT(OpenTestCamera(void**, int*)), Qt::DirectConnection);
+	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
+	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
+	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
+	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
+	connect(m_TopCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
+	connect(m_TopCameraThread, SIGNAL(finished()), m_TopCameraThread, SLOT(deleteLater()));
+	m_TopCameraThread->start();
+
+
 
 }
 
@@ -903,8 +872,8 @@ void hxq::OnDetectEnd()
 {
 	if (Delta_Thread::GetSerialPort())
 	{
-		Delta_Thread::AddOneQueueInfo(DETECT_END_ON);
-		Delta_Thread::AddOneQueueInfo(DETECT_END_OFF);
+		/*Delta_Thread::AddOneQueueInfo(DETECT_END_ON);
+		Delta_Thread::AddOneQueueInfo(DETECT_END_OFF);*/
 	}
 }
 
@@ -980,7 +949,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		pPicThread->setCameraId(TopCamera);
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
 		//pPicThread->setModel(gbModel());
-		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
+		//connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 	}
@@ -993,7 +962,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		pPicThread->m_Image = ima;
 		pPicThread->setCameraId(SideCamera);
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
-		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
+		//connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 	}
@@ -1091,7 +1060,7 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 
 	m_Pic_Set.insert(cameraId);
 	qDebug() << "receive singleResult:   " << singleResult;
-/*
+
 	if (cameraId == TopCamera)
 	{
 		m_detectResult.current_area = m_detectResult.next_area;
@@ -1155,7 +1124,7 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 
 		return;
 	}
-	*/
+	
 }
 
 

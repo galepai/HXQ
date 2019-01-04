@@ -122,6 +122,9 @@
     <ClCompile Include="HalconCameraThread.cpp">
       <Filter>Source Files\CameraThread</Filter>
     </ClCompile>
+    <ClCompile Include="Widgets\camera2Widget.cpp">
+      <Filter>Form Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="aboutdialog.ui">
@@ -184,6 +187,9 @@
     <QtUic Include="Widgets\motionCardWidget.ui">
       <Filter>Form Files\Widgets</Filter>
     </QtUic>
+    <QtUic Include="Widgets\camera2Widget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CHH.h">
@@ -225,6 +231,9 @@
     <ClInclude Include="GeneratedFiles\ui_motionCardWidget.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_camera2Widget.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\qss\css.h">
@@ -259,6 +268,9 @@
     </QtMoc>
     <QtMoc Include="HikVisionCameraThread.h">
       <Filter>Header Files\CameraThread</Filter>
+    </QtMoc>
+    <QtMoc Include="Widgets\camera2Widget.h">
+      <Filter>Form Files</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

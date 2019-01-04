@@ -36,8 +36,16 @@
             <height>100</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Arial Black</family>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
-           <string>select:</string>
+           <string>选择相机：</string>
           </property>
          </widget>
         </item>
@@ -48,6 +56,26 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Arial Black</family>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(227, 227, 227);</string>
+          </property>
+          <property name="currentText">
+           <string/>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
           </property>
          </widget>
         </item>

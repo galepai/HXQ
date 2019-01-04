@@ -267,7 +267,6 @@
     <ClCompile Include="PylonCameraThread.cpp" />
     <ClCompile Include="TestDialog.cpp" />
     <ClCompile Include="Widgets\camera2Widget.cpp" />
-    <ClCompile Include="Widgets\cameraWidget.cpp" />
     <ClCompile Include="Widgets\modelWidget.cpp" />
     <ClCompile Include="Widgets\motionCardWidget.cpp" />
   </ItemGroup>
@@ -292,8 +291,6 @@
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;WIN32;WIN64;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;QT_WEBENGINE_LIB;QT_WEBENGINECORE_LIB;QT_WEBENGINEWIDGETS_LIB;QT_XML_LIB;QT_XMLPATTERNS_LIB</Define>
     </QtMoc>
     <QtMoc Include="Widgets\modelWidget.h">
-    </QtMoc>
-    <QtMoc Include="Widgets\cameraWidget.h">
     </QtMoc>
     <QtMoc Include="Widgets\motionCardWidget.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets</IncludePath>
@@ -329,7 +326,6 @@
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;WIN32;WIN64;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
     <ClInclude Include="GeneratedFiles\ui_camera2Widget.h" />
-    <ClInclude Include="GeneratedFiles\ui_cameraWidget.h" />
     <ClInclude Include="GeneratedFiles\ui_ConfigureDialog.h" />
     <QtMoc Include="PicThreadLeft.h">
     </QtMoc>
@@ -392,8 +388,6 @@
     <None Include="Resources\qss\css.h" />
     <QtUic Include="Widgets\camera2Widget.ui" />
     <QtUic Include="Widgets\motionCardWidget.ui" />
-    <QtUic Include="Widgets\cameraWidget.ui">
-    </QtUic>
     <QtUic Include="Widgets\modelWidget.ui">
     </QtUic>
   </ItemGroup>

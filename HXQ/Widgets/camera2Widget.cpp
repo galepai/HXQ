@@ -5,6 +5,7 @@
 #include <qdebug.h>
 #include "ConstParam.h"
 #include <QtXml\QDomElement>
+#include <QStandardItemModel>
 
 
 
@@ -15,27 +16,115 @@ camera2Widget::camera2Widget(QWidget *parent) :
     ui->setupUi(this);
 	ui->verticalLayout_main->addStretch(1);
 
-	ReadIni();
-
 	connect(ui->confirmButton, SIGNAL(clicked()), this, SLOT(SaveExposureToIni()));
+	updateCombox();
+}
+
+camera2Widget::~camera2Widget()
+{
+    delete ui;
+}
+
+void camera2Widget::ReadIni(int index)
+{
+	QString tagName = ui->comboBox->currentText();
+	std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent;
+	if (ParserXmlNode(QString(XML_Camera), tagName, xmlContent))
+	{
+		int size = xmlContent.size();
+		name.clear();
+		type.clear();
+		value.clear();
+
+		int num = vector_horizontalLayout.size();
+		if (num)
+		{
+			for (auto each_horizontalLayout : vector_horizontalLayout)
+			{
+				QObject* label = (QObject*)queue_labels.front();
+				label->deleteLater();
+
+				//ui->groupBox->destroyed
+				QObject* lineEdit = (QObject*)queue_lineEdits.front();
+				lineEdit->deleteLater();
+
+				//ui->verticalLayout->removeItem((QHBoxLayout*)each_horizontalLayout);
+				QObject* horizontalLayout = (QObject*)each_horizontalLayout;
+				horizontalLayout->deleteLater();
+
+				queue_labels.pop();
+				queue_lineEdits.pop();
+			}
+		}
+		vector_horizontalLayout.clear();
 
 
+		for (auto &eachContent : xmlContent)
+		{
+			name.push_back(eachContent.first.first);
+			type.push_back(eachContent.first.second);
+			value.push_back(eachContent.second);
 
-	//QHBoxLayout* horizontalLayout = new QHBoxLayout();
-	//horizontalLayout->setSpacing(6);
-	//horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-	//QLabel* nameLabel = new QLabel(ui->groupBox);
-	//QLineEdit* value = new QLineEdit(ui->groupBox);
-	//nameLabel->setText("text");
-	//value->setText("555");
-	//QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-	//value->setSizePolicy(sizePolicy);
-	//nameLabel->setSizePolicy(sizePolicy);
-	//horizontalLayout->addWidget(nameLabel);
-	//horizontalLayout->addWidget(value);
-	//ui->verticalLayout->addLayout(horizontalLayout);
+			QHBoxLayout* horizontalLayout = new QHBoxLayout();
+			horizontalLayout->setSpacing(6);
 
+			QLabel* nameLabel = new QLabel();
+			QLineEdit* text = new QLineEdit();
+			nameLabel->setText(eachContent.first.first);
+			text->setText(eachContent.second);
+			text->setAlignment(Qt::AlignCenter);
+			QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+			text->setSizePolicy(sizePolicy);
+			nameLabel->setSizePolicy(sizePolicy);
+			horizontalLayout->addWidget(nameLabel);
+			horizontalLayout->addWidget(text);
+			ui->verticalLayout->addLayout(horizontalLayout);
 
+			vector_horizontalLayout.push_back(horizontalLayout);
+			queue_labels.push(nameLabel);
+			queue_lineEdits.push(text);
+		}
+
+	}
+	else
+	{
+		//error;
+	}
+
+	
+}
+
+void camera2Widget::SaveExposureToIni()
+{
+	int sucessCount = 0;
+	int count = vector_horizontalLayout.size();
+
+	for (auto each : vector_horizontalLayout)
+	{
+		QLabel* label = (QLabel*)queue_labels.front();
+		QLineEdit* lineEdit = (QLineEdit*)queue_lineEdits.front();
+
+		if (UpdateXmlNodeText(QString(XML_Camera), ui->comboBox->currentText(), label->text(), lineEdit->text()) == ChhXml::UpdateOK)
+		{
+			sucessCount++;
+		}
+
+		queue_labels.push(label);
+		queue_labels.pop();
+
+		queue_lineEdits.push(lineEdit);
+		queue_lineEdits.pop();	
+	}
+
+	if (sucessCount == count && sucessCount!=0)
+	{
+		QMessageBox::StandardButton reply;
+		reply = QMessageBox::information(this, G2U("信息"), G2U("曝光参数成功写入配置文件"));
+	}
+}
+
+void camera2Widget::updateCombox()
+{
 	/////////////////////////
 	QDomDocument doc;
 	QFile file(XML_Camera);
@@ -56,99 +145,25 @@ camera2Widget::camera2Widget(QWidget *parent) :
 	for (int index = 0; index < count; index++)
 	{
 		QString name = list.at(index).nodeName();
+
+		QLineEdit *lineEdit = new QLineEdit();
+		QFont font;
+		font.setFamily(QStringLiteral("Arial Black"));
+		font.setPointSize(10);
+		font.setBold(true);
+		font.setWeight(75);
+		lineEdit->setFont(font);
+		lineEdit->setText(name);
+		lineEdit->setReadOnly(true);
+		lineEdit->setAlignment(Qt::AlignCenter);
+		//lineEdit->setStyleSheet();
+		ui->comboBox->setLineEdit(lineEdit);
+
 		ui->comboBox->addItem(name);
+		static_cast<QStandardItemModel*>(ui->comboBox->view()->model())->item(index)->setTextAlignment(Qt::AlignCenter);
 	}
+	/////////////////
 
-	connect(ui->comboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
-		[=](int index)
-	{ 
-		QString tagName = ui->comboBox->currentText();
-		std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent;
-		if (ParserXmlNode(QString(XML_Camera), tagName, xmlContent))
-		{
-			int size = xmlContent.size();
-			name.clear();
-			type.clear();
-			value.clear();
-			int num = vector_horizontalLayout.size();
-			if (num)
-			{
-				for (auto each : vector_horizontalLayout)
-				{
-					delete queue_labels.front();
-					delete queue_lineEdits.front();
-
-					ui->verticalLayout->removeItem((QHBoxLayout*)each);;
-					//delete each;
-					//ee->removeWidget((QWidget*)autoLabels[0]);
-					queue_labels.pop();
-					queue_lineEdits.pop();
-				}
-			}
-			vector_horizontalLayout.clear();
-
-			
-			for (auto &each : xmlContent)
-			{
-				name.push_back(each.first.first);
-				type.push_back(each.first.second);
-				value.push_back(each.second);
-
-				QHBoxLayout* horizontalLayout = new QHBoxLayout();
-				horizontalLayout->setSpacing(6);
-				//horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-				QLabel* nameLabel = new QLabel();
-				QLineEdit* value = new QLineEdit();
-				nameLabel->setText(each.first.first);
-				value->setText(each.second);
-				QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-				value->setSizePolicy(sizePolicy);
-				nameLabel->setSizePolicy(sizePolicy);
-				horizontalLayout->addWidget(nameLabel);
-				horizontalLayout->addWidget(value);
-				ui->verticalLayout->addLayout(horizontalLayout);
-
-				vector_horizontalLayout.push_back(horizontalLayout);
-				queue_labels.push(nameLabel);
-				queue_lineEdits.push(value);
-				
-			}
-			
-			
-		}
-		else
-		{
-			//error;
-		}
-	}
-	);
-
-}
-
-camera2Widget::~camera2Widget()
-{
-    delete ui;
-}
-
-void camera2Widget::ReadIni()
-{
-
-	QString type, value;
-	READ_XML_ElEMENT(XML_Camera, Node_TopCamera, HikVision_ExposureTime, type, value);
-	
-
-	
-}
-
-void camera2Widget::SaveExposureToIni()
-{
-
-		/*if (UpdateXmlNodeText(QString(XML_Camera), QString(Node_TopCamera), QString(HikVision_ExposureTime), QString("%1").arg(ui->spinBox_top->value())) == ChhXml::UpdateOK)
-		{
-			QMessageBox::StandardButton reply;
-			reply = QMessageBox::information(this, G2U("信息"), G2U("曝光参数成功写入配置文件"));
-		}
-*/	
-
-
+	connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(ReadIni(int)));
+	ui->comboBox->activated(1);
 }

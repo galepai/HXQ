@@ -95,9 +95,6 @@
     <ClCompile Include="CameraThread.cpp">
       <Filter>Source Files\CameraThread</Filter>
     </ClCompile>
-    <ClCompile Include="Widgets\cameraWidget.cpp">
-      <Filter>Source Files\Widgets</Filter>
-    </ClCompile>
     <ClCompile Include="CHH2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -123,7 +120,7 @@
       <Filter>Source Files\CameraThread</Filter>
     </ClCompile>
     <ClCompile Include="Widgets\camera2Widget.cpp">
-      <Filter>Form Files</Filter>
+      <Filter>Source Files\Widgets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,12 +160,6 @@
     <QtMoc Include="PylonCameraThread.h">
       <Filter>Header Files\CameraThread</Filter>
     </QtMoc>
-    <QtUic Include="Widgets\cameraWidget.ui">
-      <Filter>Form Files\Widgets</Filter>
-    </QtUic>
-    <QtMoc Include="Widgets\cameraWidget.h">
-      <Filter>Header Files\Widgets</Filter>
-    </QtMoc>
     <QtUic Include="Widgets\modelWidget.ui">
       <Filter>Form Files\Widgets</Filter>
     </QtUic>
@@ -188,7 +179,7 @@
       <Filter>Form Files\Widgets</Filter>
     </QtUic>
     <QtUic Include="Widgets\camera2Widget.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Widgets</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
@@ -211,9 +202,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_ConfigureDialog.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_cameraWidget.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="CHH2.h">
@@ -270,7 +258,7 @@
       <Filter>Header Files\CameraThread</Filter>
     </QtMoc>
     <QtMoc Include="Widgets\camera2Widget.h">
-      <Filter>Form Files</Filter>
+      <Filter>Header Files\Widgets</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

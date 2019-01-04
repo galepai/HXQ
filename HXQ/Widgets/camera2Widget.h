@@ -19,17 +19,20 @@ public:
 	explicit camera2Widget(QWidget *parent = 0);
 	~camera2Widget();
 
-	void ReadIni();
+	void updateCombox();
 
 public slots:
 	void SaveExposureToIni();
+	void ReadIni(int index);
 
 private:
 	Ui::camera2Widget *ui;
 	std::vector<QString> name, type, value;
 	std::vector<void*> vector_horizontalLayout;
 	std::queue<void*> queue_labels, queue_lineEdits;
-	QHBoxLayout* horizontalLayout;
+	//QHBoxLayout* horizontalLayout;
+	QLineEdit* value2;
+	QLabel* nameLabel2;
 };
 
 #endif // _CAMERA2_WIDGET_H

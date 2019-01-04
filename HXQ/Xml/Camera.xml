@@ -4,7 +4,7 @@
     <HikVision_Top>
         <id type="string">c42f90f0ff29_Hikvision_MVCE10031GM</id>
         <interface type="string">GigEVision2</interface>
-        <color type="string">gray</color>
+        <color type="string">rgb</color>
         <AcquisitionMode type="string">Continuous</AcquisitionMode>
         <TriggerSelector type="string">FrameBurstStart</TriggerSelector>
         <TriggerMode type="string">Off</TriggerMode>

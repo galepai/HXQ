@@ -31,33 +31,30 @@ void camera2Widget::ReadIni(int index)
 	std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent;
 	if (ParserXmlNode(QString(XML_Camera), tagName, xmlContent))
 	{
-		int size = xmlContent.size();
-		name.clear();
-		type.clear();
-		value.clear();
-
-		int num = vector_horizontalLayout.size();
-		if (num)
+	
+	/*	if (vector_horizontalLayout.size())
 		{
 			for (auto each_horizontalLayout : vector_horizontalLayout)
 			{
-				QObject* label = (QObject*)queue_labels.front();
-				label->deleteLater();
 
-				//ui->groupBox->destroyed
-				QObject* lineEdit = (QObject*)queue_lineEdits.front();
-				lineEdit->deleteLater();
-
-				//ui->verticalLayout->removeItem((QHBoxLayout*)each_horizontalLayout);
 				QObject* horizontalLayout = (QObject*)each_horizontalLayout;
 				horizontalLayout->deleteLater();
 
-				queue_labels.pop();
-				queue_lineEdits.pop();
 			}
-		}
-		vector_horizontalLayout.clear();
+		}*/
 
+		for each (auto each_horizontalLayout in vector_horizontalLayout)
+		{
+			QObject* horizontalLayout = (QObject*)each_horizontalLayout;
+			horizontalLayout->deleteLater();
+		}
+
+		name.clear();
+		type.clear();
+		value.clear();
+		vector_horizontalLayout.clear();
+		vector_labels.clear();
+		vector_lineEdits.clear();
 
 		for (auto &eachContent : xmlContent)
 		{
@@ -80,9 +77,15 @@ void camera2Widget::ReadIni(int index)
 			horizontalLayout->addWidget(text);
 			ui->verticalLayout->addLayout(horizontalLayout);
 
+			connect(horizontalLayout, &QHBoxLayout::destroyed, [=](QObject* obj) 
+			{
+				nameLabel->deleteLater();
+				text->deleteLater();
+			});
+
 			vector_horizontalLayout.push_back(horizontalLayout);
-			queue_labels.push(nameLabel);
-			queue_lineEdits.push(text);
+			vector_labels.push_back(nameLabel);
+			vector_lineEdits.push_back(text);
 		}
 
 	}
@@ -99,21 +102,15 @@ void camera2Widget::SaveExposureToIni()
 	int sucessCount = 0;
 	int count = vector_horizontalLayout.size();
 
-	for (auto each : vector_horizontalLayout)
+	for (int index=0;index<vector_labels.size();index++)
 	{
-		QLabel* label = (QLabel*)queue_labels.front();
-		QLineEdit* lineEdit = (QLineEdit*)queue_lineEdits.front();
+		QLabel* label = (QLabel*)vector_labels[index];
+		QLineEdit* lineEdit = (QLineEdit*)vector_lineEdits[index];
 
 		if (UpdateXmlNodeText(QString(XML_Camera), ui->comboBox->currentText(), label->text(), lineEdit->text()) == ChhXml::UpdateOK)
 		{
 			sucessCount++;
 		}
-
-		queue_labels.push(label);
-		queue_labels.pop();
-
-		queue_lineEdits.push(lineEdit);
-		queue_lineEdits.pop();	
 	}
 
 	if (sucessCount == count && sucessCount!=0)
@@ -156,7 +153,7 @@ void camera2Widget::updateCombox()
 		lineEdit->setText(name);
 		lineEdit->setReadOnly(true);
 		lineEdit->setAlignment(Qt::AlignCenter);
-		//lineEdit->setStyleSheet();
+
 		ui->comboBox->setLineEdit(lineEdit);
 
 		ui->comboBox->addItem(name);

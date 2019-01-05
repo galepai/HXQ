@@ -563,6 +563,8 @@ void hxq::DispPic(HImage& Image, LocationView location)
 		SetOpenWindowHandle(Image, pWindowHandle, location);
 		DispObj(Image, *pWindowHandle);
 		SetPicViewScroll(width, height, location);	
+		//ClearWindow(*pWindowHandle);
+		//CloseWindow(*pWindowHandle);
 
 	}
 	else
@@ -607,7 +609,7 @@ void hxq::SetOpenWindowHandle(HImage& Image, HTuple* pWindowHandle, LocationView
 		float width_scale = (float)width / (float)pic_width;
 		float height_scale = (float)height / (float)pic_height;
 
-		if(width_scale<1 && height_scale<1)
+		if(width_scale<1 || height_scale<1)
 		{ 
 			if (width_scale < height_scale)
 			{
@@ -863,7 +865,6 @@ void hxq::OnStop()
 	ui.OnStop->setEnabled(false);
 	ui.OnLineRun->setEnabled(true);
 	ui.AreaCamera->setEnabled(true);
-
 
 }
 

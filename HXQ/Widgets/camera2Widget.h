@@ -28,11 +28,11 @@ public slots:
 private:
 	Ui::camera2Widget *ui;
 	std::vector<QString> name, type, value;
-	std::vector<void*> vector_horizontalLayout;
-	std::queue<void*> queue_labels, queue_lineEdits;
+	std::vector<void*> vector_horizontalLayout, vector_labels, vector_lineEdits;
+	//std::queue<void*> queue_labels, queue_lineEdits;
 	//QHBoxLayout* horizontalLayout;
-	QLineEdit* value2;
-	QLabel* nameLabel2;
+	//QLineEdit* value2;
+	//QLabel* nameLabel2;
 };
 
 #endif // _CAMERA2_WIDGET_H

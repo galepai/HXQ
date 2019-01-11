@@ -122,6 +122,9 @@
     <ClCompile Include="Widgets\camera2Widget.cpp">
       <Filter>Source Files\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="Widgets\cameraWidget.cpp">
+      <Filter>Form Files\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="aboutdialog.ui">
@@ -179,6 +182,9 @@
       <Filter>Form Files\Widgets</Filter>
     </QtUic>
     <QtUic Include="Widgets\camera2Widget.ui">
+      <Filter>Form Files\Widgets</Filter>
+    </QtUic>
+    <QtUic Include="Widgets\cameraWidget.ui">
       <Filter>Form Files\Widgets</Filter>
     </QtUic>
   </ItemGroup>
@@ -259,6 +265,9 @@
     </QtMoc>
     <QtMoc Include="Widgets\camera2Widget.h">
       <Filter>Header Files\Widgets</Filter>
+    </QtMoc>
+    <QtMoc Include="Widgets\cameraWidget.h">
+      <Filter>Form Files\Widgets</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

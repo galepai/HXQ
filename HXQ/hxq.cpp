@@ -222,7 +222,7 @@ void hxq::OnDisplayAreaCamera()
 	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
 	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
 	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	connect(m_TopCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
+	connect(m_TopCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImageAndHandle(void*)));	//左视图显示
 	connect(m_TopCameraThread, SIGNAL(finished()), m_TopCameraThread, SLOT(deleteLater()));
 	m_TopCameraThread->start();
 
@@ -882,8 +882,9 @@ void hxq::OnDetectEnd()
 //******对应视图显示图片
 void hxq::receiveLeftImage(void* image)
 {
-	HImage ima = *(HImage*)image;
-	DispPic(ima, LeftView);
+	HImage* ima = (HImage*)image;
+	DispPic(*ima, LeftView);
+	delete ima;
 }
 
 void hxq::receiveMiddleImage(void* image)
@@ -909,9 +910,10 @@ void hxq::receiveRightImage(void* image)
 //******对应视图显示图片,并处理图片
 void hxq::receiveLeftImageAndHandle(void* image)
 {
-	HImage ima = *(HImage*)image;
-	DispPic(ima, LeftView);
-	OnHandleImageThread(ima, LeftView);
+	HImage* ima = (HImage*)image;
+	DispPic(*ima, LeftView);
+	OnHandleImageThread(*ima, LeftView);
+	delete ima;
 }
 
 void hxq::receiveMiddleImageAndHandle(void* image)
@@ -932,7 +934,6 @@ void hxq::receiveSecondRightImageAndHandle(void* image)
 void hxq::receiveRightImageAndHandle(void* image)
 {
 	HImage ima = *(HImage*)image;
-	DispPic(ima, RightView);
 	OnHandleImageThread(ima, RightView);
 
 }

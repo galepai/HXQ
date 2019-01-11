@@ -94,6 +94,7 @@ private:
 	QString m_CameraId;
 	ConnectionType m_connectionType;
 	HFramegrabber* m_pGrabber;
+	HImage m_Image;
 
 	bool m_bIsStop, m_bIsMutexTrigger;
 	QString m_SaveDatePath, m_SaveImageDirName;

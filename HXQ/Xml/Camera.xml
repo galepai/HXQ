@@ -22,15 +22,15 @@
         <grab_timeout type="int">5000</grab_timeout>
     </Dalsa_Side>
     <DoThink>
-        <id type="string">[0] aoni FHD Webcam</id>
+        <id type="string">[0] USB3_CMOS_8.8M(1)</id>
         <interface type="string">DirectShow</interface>
         <color type="string">rgb</color>
         <grab_timeout type="int">5000</grab_timeout>
     </DoThink>
-  <Basler>
-    <id type="string">ac7005gm</id>
-    <interface type="string">DirectShow</interface>
-    <color type="string">gray</color>
-    <grab_timeout type="int">5000</grab_timeout>
-  </Basler>  
+    <Basler>
+        <id type="string">ac7005gm</id>
+        <interface type="string">DirectShow</interface>
+        <color type="string">gray</color>
+        <grab_timeout type="int">5000</grab_timeout>
+    </Basler>
 </fivision>

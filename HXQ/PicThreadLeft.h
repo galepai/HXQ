@@ -23,7 +23,7 @@ public:
 	HImage m_Image;
 	HTuple m_WindowHandle;
 
-	void OnHandle(HTuple WindowHandle);
+	void OnHandle(HObject& image, const HTuple& WindowHandle,HTuple* Result);
 
 	void setCameraId(int id) { m_CameraId = id; }
 

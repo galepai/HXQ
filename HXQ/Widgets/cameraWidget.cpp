@@ -1,31 +1,55 @@
-#include "camera2Widget.h"
-#include "ui_camera2Widget.h"
+#include "cameraWidget.h"
+#include "ui_cameraWidget.h"
 #include "Func.h"
 #include <QMessageBox>
 #include <qdebug.h>
 #include "ConstParam.h"
 #include <QtXml\QDomElement>
-#include <QStandardItemModel>
 
 
 
-camera2Widget::camera2Widget(QWidget *parent) :
+
+
+cameraWidget::cameraWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::camera2Widget)
+    ui(new Ui::cameraWidget)
 {
     ui->setupUi(this);
 	ui->verticalLayout_main->addStretch(1);
 
 	connect(ui->confirmButton, SIGNAL(clicked()), this, SLOT(SaveExposureToIni()));
+	
+	//ui->tableView->setVisible(false);
+	ui->tableView->setVerticalHeader(nullptr);
+
+
+	_model = new QStandardItemModel();
+	_model->setColumnCount(2);
+	_model->setHeaderData(0, Qt::Horizontal, G2U("属性"));
+	_model->setHeaderData(1, Qt::Horizontal, G2U("值"));
+	//_model->setHeaderData(2, Qt::Horizontal, "性别");
+
+	/*_model->setrowcount(3);
+	_model->setheaderdata(0, qt::vertical, "记录一");
+	_model->setheaderdata(1, qt::vertical, "记录二");
+	_model->setheaderdata(2, qt::vertical, "记录三");*/
+
+	/*_model->setItem(0, 0, new QStandardItem("张三"));
+	_model->setItem(0, 1, new QStandardItem("3"));
+	_model->setItem(0, 2, new QStandardItem("男"));*/
+
+	ui->tableView->setModel(_model);
+
+
 	updateCombox();
 }
 
-camera2Widget::~camera2Widget()
+cameraWidget::~cameraWidget()
 {
     delete ui;
 }
 
-void camera2Widget::ReadIni(int index)
+void cameraWidget::ReadIni(int index)
 {
 	QString tagName = ui->comboBox->currentText();
 	std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent;
@@ -44,38 +68,18 @@ void camera2Widget::ReadIni(int index)
 		vector_labels.clear();
 		vector_lineEdits.clear();
 
+		int count = -1;
 		for (auto &eachContent : xmlContent)
 		{
 			name.push_back(eachContent.first.first);
 			type.push_back(eachContent.first.second);
 			value.push_back(eachContent.second);
+			count++;
+			//_model->setRowCount(xmlContent.size());
+			_model->setItem(count, 0, new QStandardItem(eachContent.first.first));
+			_model->setItem(count, 1, new QStandardItem(eachContent.second));
 
-			QHBoxLayout* horizontalLayout = new QHBoxLayout();
-			horizontalLayout->setSpacing(6);
-
-			QLabel* nameLabel = new QLabel();
-			QLineEdit* text = new QLineEdit();
-			nameLabel->setText(eachContent.first.first);
-			text->setText(eachContent.second);
-			text->setAlignment(Qt::AlignCenter);
-			QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-			text->setSizePolicy(sizePolicy);
-			nameLabel->setSizePolicy(sizePolicy);
-			horizontalLayout->addWidget(nameLabel);
-			horizontalLayout->addWidget(text);
-			ui->verticalLayout->addLayout(horizontalLayout);
-
-			connect(horizontalLayout, &QHBoxLayout::destroyed, [=](QObject* obj) 
-			{
-				nameLabel->deleteLater();
-				text->deleteLater();
-			});
-
-			vector_horizontalLayout.push_back(horizontalLayout);
-			vector_labels.push_back(nameLabel);
-			vector_lineEdits.push_back(text);
 		}
-
 	}
 	else
 	{
@@ -85,17 +89,16 @@ void camera2Widget::ReadIni(int index)
 	
 }
 
-void camera2Widget::SaveExposureToIni()
+void cameraWidget::SaveExposureToIni()
 {
 	int sucessCount = 0;
-	int count = vector_horizontalLayout.size();
+	int count = name.size();
 
-	for (int index=0;index<vector_labels.size();index++)
+	for (int index=0;index<name.size();index++)
 	{
-		QLabel* label = (QLabel*)vector_labels[index];
-		QLineEdit* lineEdit = (QLineEdit*)vector_lineEdits[index];
-
-		if (UpdateXmlNodeText(QString(XML_Camera), ui->comboBox->currentText(), label->text(), lineEdit->text()) == ChhXml::UpdateOK)
+	
+		if (UpdateXmlNodeText(QString(XML_Camera), ui->comboBox->currentText(), ui->tableView->indexAt(QPoint(index, 0)).data().toString(),\
+			ui->tableView->indexAt(QPoint(index,1)).data().toString()) == ChhXml::UpdateOK)
 		{
 			sucessCount++;
 		}
@@ -108,7 +111,7 @@ void camera2Widget::SaveExposureToIni()
 	}
 }
 
-void camera2Widget::updateCombox()
+void cameraWidget::updateCombox()
 {
 	/////////////////////////
 	QDomDocument doc;

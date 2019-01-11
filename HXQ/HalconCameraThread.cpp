@@ -58,7 +58,7 @@ void Halcon_Camera_Thread::run()
 	
 
 	m_bIsStop = false;
-	HImage Image;
+	
 
 	bool first = true;
 	
@@ -89,16 +89,16 @@ void Halcon_Camera_Thread::run()
 			if (m_bIsStop)
 				break;
 
-
-			Image = m_pGrabber->GrabImage();
+			HImage* pImage = new HImage();
+			*pImage = m_pGrabber->GrabImage();
 			//Image = m_pGrabber->GrabImageAsync(-1);
 			
 			emit grab_correct_image(1);
-			emit sendImage(&Image);
+			emit sendImage(pImage);
 			//DispColor(Image, m_WindowHandle);
 			if (m_bIsSaveImage)
 			{
-				QueueSaveImage(Image, m_MaxNum);
+				QueueSaveImage(*pImage, m_MaxNum);
 			}	
 		
 		}
@@ -111,15 +111,15 @@ void Halcon_Camera_Thread::run()
 				qDebug() << "Camere enter exception error" << ": " << error << "\n";
 
 				{
-
-					Image = m_pGrabber->GrabImage();
+					HImage* pImage = new HImage();
+					*pImage = m_pGrabber->GrabImage();
 
 					emit grab_correct_image(1);
-					emit sendImage(&Image);
+					emit sendImage(pImage);
 				
 					if (m_bIsSaveImage)
 					{
-						QueueSaveImage(Image, m_MaxNum);
+						QueueSaveImage(*pImage, m_MaxNum);
 					}
 				}
 

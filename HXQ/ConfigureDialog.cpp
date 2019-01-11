@@ -6,6 +6,7 @@
 #include <QGroupBox>
 #include <QMessageBox>
 #include "Widgets\motionCardWidget.h"
+#include "Widgets\cameraWidget.h"
 #include "Widgets\camera2Widget.h"
 #include "Widgets\modelWidget.h"
 

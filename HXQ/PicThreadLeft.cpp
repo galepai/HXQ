@@ -17,12 +17,10 @@ void PicThreadLeft::run()
 			HTuple hv_DownRow, hv_IsBad, hv_ModelHandle;
 			HObject TileImage, ImageEmphasize;
 			//CHH::PingJie(m_Image, &m_Image, 500, 40, 3, 40, &hv_DownRow);
-			DispObj(m_Image, m_WindowHandle);
+			//DispObj(m_Image, m_WindowHandle);
 			//Emphasize(m_Image, &ImageEmphasize, 3, 102, 1);
 
-			//OnHandle(m_WindowHandle);
-			//ReadClassMlp(getModel().toStdString().c_str(), &hv_ModelHandle);
-			//CHH2::GB_Camera1(ImageEmphasize, m_Image, hv_ModelHandle, m_WindowHandle, &hv_IsBad);
+			OnHandle(m_Image,m_WindowHandle,&hv_IsBad);
 
 			num++;
 			CHH::disp_message(m_WindowHandle, HTuple("number: ") + num, "image", 12, 12, "black", "true");
@@ -50,6 +48,7 @@ void PicThreadLeft::run()
 				emit resultReady(Liantong, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("²ÛÄÚÕ³Í­ "), "image", 120, 12, "red", "true");
 			}
+
 		}
 		catch (HException& e)
 		{
@@ -57,11 +56,15 @@ void PicThreadLeft::run()
 			//DispText(m_WindowHandle, error.toStdString().c_str(), "image", 120, 12, "red", HTuple(), HTuple());
 			qDebug() << "ThreadLeft error:  " << error;
 		}
+
+		
 	}
+
+	
 
 }
 
-void PicThreadLeft::OnHandle(HTuple WindowHandle)
+void PicThreadLeft::OnHandle(HObject& image,const HTuple& WindowHandle,HTuple* Result)
 {
 	static int step = 1;
 	step++;
@@ -77,4 +80,7 @@ void PicThreadLeft::OnHandle(HTuple WindowHandle)
 	}
 
 	DispObj(circle, WindowHandle);
+
+	//½á¹û
+	*Result = 1;
 }

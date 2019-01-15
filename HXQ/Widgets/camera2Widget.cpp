@@ -15,6 +15,7 @@ camera2Widget::camera2Widget(QWidget *parent) :
 {
     ui->setupUi(this);
 	ui->verticalLayout_main->addStretch(1);
+	ui->verticalLayout_select->addStretch(1);
 
 	connect(ui->confirmButton, SIGNAL(clicked()), this, SLOT(SaveExposureToIni()));
 	updateCombox();
@@ -88,7 +89,7 @@ void camera2Widget::ReadIni(int index)
 void camera2Widget::SaveExposureToIni()
 {
 	int sucessCount = 0;
-	int count = vector_horizontalLayout.size();
+	int count = vector_horizontalLayout.size() + 2;
 
 	for (int index=0;index<vector_labels.size();index++)
 	{
@@ -99,6 +100,16 @@ void camera2Widget::SaveExposureToIni()
 		{
 			sucessCount++;
 		}
+	}
+
+	if (UpdateXmlNodeText(QString(XML_Configure), QString(Node_Camera), QString(Camera_Top), ui->comboBox_topCamera->currentText()) == ChhXml::UpdateOK)
+	{
+		sucessCount++;
+	}
+
+	if (UpdateXmlNodeText(QString(XML_Configure), QString(Node_Camera), QString(Camera_Side), ui->comboBox_sideCamera->currentText()) == ChhXml::UpdateOK)
+	{
+		sucessCount++;
 	}
 
 	if (sucessCount == count && sucessCount!=0)
@@ -130,7 +141,6 @@ void camera2Widget::updateCombox()
 	for (int index = 0; index < count; index++)
 	{
 		QString name = list.at(index).nodeName();
-
 		QLineEdit *lineEdit = new QLineEdit();
 		QFont font;
 		font.setFamily(QStringLiteral("Arial Black"));
@@ -143,12 +153,68 @@ void camera2Widget::updateCombox()
 		lineEdit->setAlignment(Qt::AlignCenter);
 
 		ui->comboBox->setLineEdit(lineEdit);
-
 		ui->comboBox->addItem(name);
 		static_cast<QStandardItemModel*>(ui->comboBox->view()->model())->item(index)->setTextAlignment(Qt::AlignCenter);
+
+	}
+
+	QString topCameraName, sideCameraName, type;
+	ReadXmlElementText(QString(XML_Configure), QString(Node_Camera), QString(Camera_Top), type, topCameraName);
+	ReadXmlElementText(QString(XML_Configure), QString(Node_Camera), QString(Camera_Side), type, sideCameraName);
+	int topIndex, sideIndex;
+
+	for (int index = 0; index < count; index++)
+	{
+		QString name = list.at(index).nodeName();
+		QLineEdit *lineEdit = new QLineEdit();
+		QFont font;
+		font.setFamily(QStringLiteral("Arial Black"));
+		font.setPointSize(10);
+		font.setBold(true);
+		font.setWeight(75);
+		lineEdit->setFont(font);
+		lineEdit->setText(name);
+		lineEdit->setReadOnly(true);
+		lineEdit->setAlignment(Qt::AlignCenter);
+
+		ui->comboBox_topCamera->setLineEdit(lineEdit);
+		ui->comboBox_topCamera->addItem(name);
+		static_cast<QStandardItemModel*>(ui->comboBox_topCamera->view()->model())->item(index)->setTextAlignment(Qt::AlignCenter);
+
+		if (name == topCameraName)
+			topIndex = index;
+
+	}
+
+	
+	for (int index = 0; index < count; index++)
+	{
+		QString name = list.at(index).nodeName();
+		QLineEdit *lineEdit = new QLineEdit();
+		QFont font;
+		font.setFamily(QStringLiteral("Arial Black"));
+		font.setPointSize(10);
+		font.setBold(true);
+		font.setWeight(75);
+		lineEdit->setFont(font);
+		lineEdit->setText(name);
+		lineEdit->setReadOnly(true);
+		lineEdit->setAlignment(Qt::AlignCenter);
+
+		ui->comboBox_sideCamera->setLineEdit(lineEdit);
+		ui->comboBox_sideCamera->addItem(name);
+		static_cast<QStandardItemModel*>(ui->comboBox_sideCamera->view()->model())->item(index)->setTextAlignment(Qt::AlignCenter);
+
+		if (name == sideCameraName)
+			sideIndex = index;
+
+
 	}
 	/////////////////
 
 	connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(ReadIni(int)));
 	ui->comboBox->activated(1);
+	ui->comboBox_topCamera->setCurrentIndex(topIndex);
+	ui->comboBox_sideCamera->setCurrentIndex(sideIndex);
+
 }

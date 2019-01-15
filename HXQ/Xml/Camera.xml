@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!--Camera Param-->
 <fivision>
-    <HikVision_Top>
+    <HikVision_MVCE10031GM>
         <id type="string">c42f90f0ff29_Hikvision_MVCE10031GM</id>
         <interface type="string">GigEVision2</interface>
-        <color type="string">rgb</color>
+        <color type="string">gray</color>
         <AcquisitionMode type="string">Continuous</AcquisitionMode>
         <TriggerSelector type="string">FrameBurstStart</TriggerSelector>
         <TriggerMode type="string">Off</TriggerMode>
         <ExposureTime type="float">95065</ExposureTime>
         <grab_timeout type="int">5000</grab_timeout>
-    </HikVision_Top>
-    <Dalsa_Side>
+    </HikVision_MVCE10031GM>
+    <Dalsa_c42f90f0ff29>
         <id type="string">c42f90f0ff29_Hikvision_MVCE10031GM</id>
         <interface type="string">GigEVision2</interface>
         <color type="string">gray</color>
@@ -20,7 +20,7 @@
         <TriggerMode type="string">Off</TriggerMode>
         <ExposureTime type="float">300</ExposureTime>
         <grab_timeout type="int">5000</grab_timeout>
-    </Dalsa_Side>
+    </Dalsa_c42f90f0ff29>
     <DoThink>
         <id type="string">[0] USB3_CMOS_8.8M(1)</id>
         <interface type="string">DirectShow</interface>

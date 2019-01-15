@@ -89,9 +89,9 @@ public slots:
 	void OnOpenCameraIsCorrect(bool enable);
 
 	//
-	void OpenTopCamera(void**, int*);
-	void OpenSideCamera(void**, int*);
-	void OpenTestCamera(void** pGrabber, int* isCorrectOpen);
+	//void OpenTopCamera(void**, int*);
+	//void OpenSideCamera(void**, int*);
+	void OpenPreCamera(void** pGrabber, QString nodeCameraName,int* isCorrectOpen);
 
 private:
 	void OnClearCameraThread();	//清理相机线程
@@ -133,7 +133,7 @@ public:
 	PylonCamera_Thread* m_Pylon_camera_thread_10_Clock;
 
 	Halcon_Camera_Thread* m_TopCameraThread;
-
+	Halcon_Camera_Thread* m_SideCameraThread;
 
 	Galil_Thread* m_Galil;	//运动控制卡线程
 

@@ -88,10 +88,10 @@ signals:
 	void CameraErrorInformation(QString error);
 	void CameraErrorInformation(bool error);
 	void grab_correct_image(int num);
-	void OpenCameraSinal(void** pGrabber,int* returnCode);
+	void OpenCameraSinal(void** pGrabber,QString nodeCameraName,int* returnCode);
 
 private:
-	QString m_CameraId;
+	QString m_nodeCameraName,m_CameraId;
 	ConnectionType m_connectionType;
 	HFramegrabber* m_pGrabber;
 	HImage m_Image;

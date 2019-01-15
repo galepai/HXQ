@@ -11,18 +11,23 @@ QMutex Halcon_Camera_Thread::m_mutex;
 //QWaitCondition Halcon_Camera_Thread::m_waitWriteData;
 QStringList Halcon_Camera_Thread::m_CameraIdlist;
 
-Halcon_Camera_Thread::Halcon_Camera_Thread(QString CameraId, QObject *parent)
-	: m_CameraId(CameraId),QThread(parent)
+Halcon_Camera_Thread::Halcon_Camera_Thread(QString nodeCameraName, QObject *parent)
+	:m_nodeCameraName(nodeCameraName),QThread(parent)
 {
 	m_image_index = 50;
 	m_exposureTime = 30.0;
 	m_acquisitionLineRate = 10000.0;
 	m_height = 10000;
-	m_CameraIdlist.append(CameraId);
+	
 	m_pGrabber = nullptr;
 	m_WaitWake = false;
 	m_AcquisitionMode = "SingleFrame";
 	m_TriggerMode = "Off";
+
+	QString type, cameraName;
+	ReadXmlElementText(QString(XML_Configure), QString(Node_Camera), nodeCameraName, type, cameraName);
+	ReadXmlElementText(QString(XML_Camera), cameraName, QString("id"), type, m_CameraId);
+	m_CameraIdlist.append(m_CameraId);
 }
 
 void Halcon_Camera_Thread::run()
@@ -34,7 +39,7 @@ void Halcon_Camera_Thread::run()
 		
 	qDebug() << "halcon: "<<QThread::currentThreadId();
 
-	emit OpenCameraSinal((void**)&m_pGrabber, &isCorretOpen);
+	emit OpenCameraSinal((void**)&m_pGrabber, m_nodeCameraName, &isCorretOpen);
 
 	switch (isCorretOpen)
 	{

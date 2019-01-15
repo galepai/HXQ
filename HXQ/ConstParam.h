@@ -25,20 +25,20 @@ static const int IOPoint = 4;  //Galil控制卡的触发相机的input点
 
 /*******************    CameraParam    **************************/
 static const char* XML_Camera		= "Xml/Camera.xml";					//"Xml/Camera.xml"
-static const char* Node_TopCamera	= "HikVision_Top";					//"HikVision_Top"
-static const char* Node_SideCamera	= "Dalsa_Side";						//"Dalsa_Side"
-
-static const char* HikVision_AcquisitionMode	= "AcquisitionMode";	// "AcquisitionMode"
-static const char* HikVision_TriggerSelector	= "TriggerSelector";	// "ExposureTime"
-static const char* HikVision_TriggerMode		= "ExposureTime";		// "ExposureTime"
-static const char* HikVision_ExposureTime		= "ExposureTime";		// "ExposureTime"
-static const char* HikVision_grab_timeout		= "grab_timeout";		// "grab_timeout"
-
-static const char* Dalsa_AcquisitionMode	= "AcquisitionMode";		// "AcquisitionMode"
-static const char* Dalsa_TriggerSelector	= "TriggerSelector";		// "ExposureTime"
-static const char* Dalsa_TriggerMode		= "ExposureTime";			// "ExposureTime"
-static const char* Dalsa_ExposureTime		= "ExposureTime";			// "ExposureTime"
-static const char* Dalsa_grab_timeout		= "grab_timeout";			// "grab_timeout"
+//static const char* Node_TopCamera	= "HikVision_Top";					//"HikVision_Top"
+//static const char* Node_SideCamera	= "Dalsa_Side";						//"Dalsa_Side"
+//
+//static const char* HikVision_AcquisitionMode	= "AcquisitionMode";	// "AcquisitionMode"
+//static const char* HikVision_TriggerSelector	= "TriggerSelector";	// "ExposureTime"
+//static const char* HikVision_TriggerMode		= "ExposureTime";		// "ExposureTime"
+//static const char* HikVision_ExposureTime		= "ExposureTime";		// "ExposureTime"
+//static const char* HikVision_grab_timeout		= "grab_timeout";		// "grab_timeout"
+//
+//static const char* Dalsa_AcquisitionMode	= "AcquisitionMode";		// "AcquisitionMode"
+//static const char* Dalsa_TriggerSelector	= "TriggerSelector";		// "ExposureTime"
+//static const char* Dalsa_TriggerMode		= "ExposureTime";			// "ExposureTime"
+//static const char* Dalsa_ExposureTime		= "ExposureTime";			// "ExposureTime"
+//static const char* Dalsa_grab_timeout		= "grab_timeout";			// "grab_timeout"
 
 
 /*******************    MotionCardParam    **************************/
@@ -47,6 +47,12 @@ static const char* Node_MotionCard			= "MotionCard";				//"MotionCard"
 static const char* MotionCard_ip			= "ip";						//"MotionCard"
 
 
+/*******************    CameraParam    **************************/
+static const char* XML_Configure		= "Xml/Configure.xml";			//"Xml/Configure.xml"
+static const char* Node_Camera			= "Camera";						//"Camera"
+
+static const char* Camera_Top			= "Camera_Top";					// "Camera_Top"
+static const char* Camera_Side			= "Camera_Side";				// "Camera_Side"
 
 /****************************************************/
 static const int TopCamera	= 0x00;

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--Camera Param-->
+<fivision>
+    <Camera>
+        <Camera_Top type="string">HikVision_MVCE10031GM</Camera_Top>
+        <Camera_Side type="string">DoThink</Camera_Side>
+    </Camera>
+</fivision>

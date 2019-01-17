@@ -95,16 +95,6 @@ enum LocationView
 	RightView,
 };
 
-struct Delta_Ascii_Info
-{
-	short Slave;
-	short Function_Code;
-	short Start_Address_High;
-	short Start_Address_Low;
-	short End_Address_High;
-	short End_Address_Low;
-	short Other_Info;
-};
 
 struct Detect_Result
 {
@@ -125,6 +115,17 @@ struct DetectResultInfo
 	int next_area;
 };
 
+struct DetectParam
+{
+	float diameterUp;
+	float diameterDown;
+	float slotWidthUP;
+	float slotWidthDown;
+	float gouWidthUP;
+	float gouWidthDown;
+	float maociWidth;
+	float maociHeight;
+};
 
 extern QMutex mutex_Camera;
 extern QWaitCondition condition_Camera;

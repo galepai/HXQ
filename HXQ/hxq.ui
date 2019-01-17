@@ -356,7 +356,7 @@
     <property name="title">
      <string> 关于</string>
     </property>
-    <addaction name="About"/>
+    <addaction name="OnAbout"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -399,24 +399,24 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="Open"/>
+   <addaction name="OnOpen"/>
    <addaction name="OnRun"/>
    <addaction name="separator"/>
-   <addaction name="AreaCamera"/>
-   <addaction name="Configure2"/>
-   <addaction name="Configure"/>
+   <addaction name="OnAreaCamera"/>
+   <addaction name="OnMotionCard"/>
+   <addaction name="OnConfigure"/>
    <addaction name="separator"/>
    <addaction name="OnLineRun"/>
    <addaction name="OnStop"/>
    <addaction name="separator"/>
-   <addaction name="ShutDown"/>
+   <addaction name="OnShutDown"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="enabled">
     <bool>true</bool>
    </property>
   </widget>
-  <action name="Configure">
+  <action name="OnConfigure">
    <property name="icon">
     <iconset>
      <normalon>:/icon03/Resources/icon03/setting_on.png</normalon>
@@ -440,7 +440,7 @@
     <string>单次</string>
    </property>
   </action>
-  <action name="Open">
+  <action name="OnOpen">
    <property name="icon">
     <iconset>
      <normalon>:/icon03/Resources/icon03/folder_on.png</normalon>
@@ -451,7 +451,7 @@
     <string>Open</string>
    </property>
   </action>
-  <action name="About">
+  <action name="OnAbout">
    <property name="checkable">
     <bool>false</bool>
    </property>
@@ -462,7 +462,7 @@
     <string>关于……</string>
    </property>
   </action>
-  <action name="Configure2">
+  <action name="OnMotionCard">
    <property name="icon">
     <iconset resource="HXQ.qrc">
      <normaloff>:/icon03/Resources/icon03/motion_on.png</normaloff>
@@ -471,13 +471,13 @@
      <activeon>:/icon03/Resources/icon03/motion_off.png</activeon>:/icon03/Resources/icon03/motion_on.png</iconset>
    </property>
    <property name="text">
-    <string>配置2</string>
+    <string>运动控制</string>
    </property>
    <property name="toolTip">
-    <string>配置2</string>
+    <string>运动控制</string>
    </property>
   </action>
-  <action name="ShutDown">
+  <action name="OnShutDown">
    <property name="icon">
     <iconset resource="HXQ.qrc">
      <normaloff>:/icon03/Resources/icon03/close_on.png</normaloff>
@@ -556,7 +556,7 @@
     <string>操作员</string>
    </property>
   </action>
-  <action name="AreaCamera">
+  <action name="OnAreaCamera">
    <property name="icon">
     <iconset resource="HXQ.qrc">
      <normaloff>:/icon03/Resources/icon03/camera_on.png</normaloff>

@@ -153,19 +153,29 @@ void Galil_Thread::ExceptionInformation(GReturn gr)
 void Galil_Thread::run()
 {
 	qDebug() << "Galil_Thread Run Thread : " << QThread::currentThreadId();
-	int value = 0;
-
+	//int value = 0;
+	QString varValue;
 	while (!m_StopThread)
 	{
-		value = 0;
-		CmdI("TI", &value);
-		qDebug() << "Input : " << value;
+		//value = 0;
+		//CmdI("TI", &value);
+		//qDebug() << "Input : " << value;
+		//m_input.clear();
+		//m_input = Parse_Galil_Input(value);
+		//emit sendInputValue(value);
+		//if (m_input[IOPoint - 1])  //发射触发相机信号
+		//{
+		//	emit triggerSinal();
+		//}
+		//Sleep(100);
 
-		m_input.clear();
-		m_input = Parse_Galil_Input(value);
-		emit sendInputValue(value);
-		if (m_input[IOPoint - 1])  //发射触发相机信号
+		CmdT(m_varName, varValue);
+		qDebug() << m_varName + "	:" << varValue;
+		
+		
+		if (varValue == "正确值")  //发射触发相机信号
 		{
+			emit sendVarValue(varValue);
 			emit triggerSinal();
 		}
 

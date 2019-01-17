@@ -8,7 +8,7 @@
         <AcquisitionMode type="string">Continuous</AcquisitionMode>
         <TriggerSelector type="string">FrameBurstStart</TriggerSelector>
         <TriggerMode type="string">Off</TriggerMode>
-        <ExposureTime type="float">95065</ExposureTime>
+        <ExposureTime type="float">50120</ExposureTime>
         <grab_timeout type="int">5000</grab_timeout>
     </HikVision_MVCE10031GM>
     <Dalsa_c42f90f0ff29>

@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>相机设置</string>
+      <string>相机参数设置</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -115,7 +115,7 @@
            </font>
           </property>
           <property name="text">
-           <string>选择相机：</string>
+           <string>顶部相机：</string>
           </property>
          </widget>
         </item>
@@ -170,7 +170,7 @@
            </font>
           </property>
           <property name="text">
-           <string>选择相机：</string>
+           <string>工作面相机：</string>
           </property>
          </widget>
         </item>
@@ -215,6 +215,13 @@
       <widget class="QPushButton" name="confirmButton">
        <property name="text">
         <string>设置</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="testButton">
+       <property name="text">
+        <string>测试</string>
        </property>
       </widget>
      </item>

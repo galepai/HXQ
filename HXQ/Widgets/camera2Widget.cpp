@@ -6,6 +6,7 @@
 #include "ConstParam.h"
 #include <QtXml\QDomElement>
 #include <QStandardItemModel>
+#include "HalconCpp.h"
 
 
 
@@ -17,7 +18,8 @@ camera2Widget::camera2Widget(QWidget *parent) :
 	ui->verticalLayout_main->addStretch(1);
 	ui->verticalLayout_select->addStretch(1);
 
-	connect(ui->confirmButton, SIGNAL(clicked()), this, SLOT(SaveExposureToIni()));
+	connect(ui->confirmButton, SIGNAL(clicked()), this, SLOT(SaveToXml()));
+	connect(ui->testButton, SIGNAL(clicked()), this, SLOT(OnTest()));
 	updateCombox();
 }
 
@@ -26,7 +28,7 @@ camera2Widget::~camera2Widget()
     delete ui;
 }
 
-void camera2Widget::ReadIni(int index)
+void camera2Widget::ReadFromXml(int index)
 {
 	QString tagName = ui->comboBox->currentText();
 	std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent;
@@ -86,7 +88,7 @@ void camera2Widget::ReadIni(int index)
 	
 }
 
-void camera2Widget::SaveExposureToIni()
+void camera2Widget::SaveToXml()
 {
 	int sucessCount = 0;
 	int count = vector_horizontalLayout.size() + 2;
@@ -212,9 +214,65 @@ void camera2Widget::updateCombox()
 	}
 	/////////////////
 
-	connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(ReadIni(int)));
+	connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(ReadFromXml(int)));
 	ui->comboBox->activated(1);
 	ui->comboBox_topCamera->setCurrentIndex(topIndex);
 	ui->comboBox_sideCamera->setCurrentIndex(sideIndex);
 
+}
+
+
+void camera2Widget::OnTest()
+{
+	using namespace HalconCpp;
+	HFramegrabber* pGrabber = new HFramegrabber;
+
+	try {
+		QLineEdit* pLineEdit = (QLineEdit*)vector_lineEdits[0];
+		QString id = pLineEdit->text();
+		pLineEdit = (QLineEdit*)vector_lineEdits[1];
+		QString interFace = pLineEdit->text();
+		pLineEdit = (QLineEdit*)vector_lineEdits[2];
+		QString color = pLineEdit->text();
+		
+		pGrabber->OpenFramegrabber(interFace.toStdString().c_str(), 1, 1, 0, 0, 0, 0, "default", 8, \
+			color.toStdString().c_str(), -1, "false", "default", \
+			id.toStdString().c_str(), 0, -1);
+
+		for (int index = 3; index < vector_lineEdits.size(); index++)
+		{
+			QLineEdit* pLineEdit = (QLineEdit*)vector_lineEdits[index];
+			QString name1 = name[index];
+			QString type1 = name[index];
+			QString value1 = pLineEdit->text();
+
+			if (type1.contains("float"))
+			{
+				pGrabber->SetFramegrabberParam(name1.toStdString().c_str(), value1.toFloat());
+			}
+			else if (type1.contains("int"))
+			{
+				pGrabber->SetFramegrabberParam(name1.toStdString().c_str(), value1.toInt());
+			}
+			else
+			{
+				pGrabber->SetFramegrabberParam(name1.toStdString().c_str(), value1.toStdString().c_str());
+			}
+
+		}
+
+		QMessageBox::StandardButton reply;
+		reply = QMessageBox::information(this, G2U("提示"), G2U("CCD连接设置正确"));
+		delete pGrabber;
+		pGrabber = nullptr;
+
+	}
+	catch (HException& e)
+	{
+		QMessageBox::StandardButton reply;
+		reply = QMessageBox::information(this, G2U("提示"), G2U(e.ErrorMessage().Text()));
+		delete pGrabber;
+		pGrabber = nullptr;
+	}
+	
 }

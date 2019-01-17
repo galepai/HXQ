@@ -51,6 +51,12 @@ public:
 	QString ip() const { return m_ip; }
 	void setIp(QString ip) { m_ip = ip; }
 
+	QString varName() const { return m_varName; }
+	void setVarName(QString varName) { m_varName = varName; }
+
+	QString rightValue() const { return m_rightValue; }
+	void setRightValue(QString rightValue) { m_rightValue = rightValue; }
+
 	void stop() { m_StopThread = true; }
 
 	//QString ip;
@@ -68,11 +74,12 @@ private:
 	int m_buf_size = G_SMALL_BUFFER;
 	char m_buf[G_SMALL_BUFFER]; //traffic buffer
 	//char* m_front;
-	QString m_ip;
+	QString m_ip, m_varName,m_rightValue;
 	bool m_StopThread;
 
 signals:
 	void sendInputValue(int value);
+	void sendVarValue(QString varValue);
 	void triggerSinal();
 
 };

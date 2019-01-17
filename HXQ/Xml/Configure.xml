@@ -5,4 +5,14 @@
         <Camera_Top type="string">HikVision_MVCE10031GM</Camera_Top>
         <Camera_Side type="string">DoThink</Camera_Side>
     </Camera>
+    <Hxq>
+        <包络线上限 type="float">28.7</包络线上限>
+        <包络线下限 type="float">28.1</包络线下限>
+        <槽宽上限 type="float">0.65</槽宽上限>
+        <槽宽下限 type="float">0.55</槽宽下限>
+        <钩宽上限 type="float">1.9</钩宽上限>
+        <钩宽下限 type="float">1.5</钩宽下限>
+        <毛刺宽 type="float">0.15</毛刺宽>
+        <毛刺高 type="float">0.15</毛刺高>
+    </Hxq>
 </fivision>

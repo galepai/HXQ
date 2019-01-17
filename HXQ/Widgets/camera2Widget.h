@@ -22,8 +22,9 @@ public:
 	void updateCombox();
 
 public slots:
-	void SaveExposureToIni();
-	void ReadIni(int index);
+	void SaveToXml();
+	void OnTest();
+	void ReadFromXml(int index);
 
 private:
 	Ui::camera2Widget *ui;

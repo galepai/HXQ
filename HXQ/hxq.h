@@ -4,7 +4,6 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_hxq.h"
 #include "HalconCpp.h"
-#include "HalconCpp.h"
 #include "Func.h"
 #include "TestDialog.h"
 #include "CameraThread.h"
@@ -15,6 +14,7 @@
 #include <set>
 #include "GalilThread.h"
 #include <qprocess.h>
+#include "ConstParam.h"
 
 using namespace HalconCpp;
 
@@ -57,8 +57,8 @@ public slots:
 	void OnOpen();
 	void OnLineRun();
 	void OnConfigure();
-	void OnShutDown();	//关闭系统
-	void OnTest();
+	void OnShutDown();			//关闭系统
+	void OnMotionCardDebug();	//开启motionCard调试程序
 	void OnDisplayAreaCamera();
 
 	/***********右端电气功能************/
@@ -137,6 +137,7 @@ public:
 
 	Galil_Thread* m_Galil;	//运动控制卡线程
 
+	static DetectParam g_DetectParam;
 };
 
 #endif // hxq_H

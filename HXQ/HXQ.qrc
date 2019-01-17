@@ -3,6 +3,7 @@
     <file>Resources/fivision.ico</file>
   </qresource>
   <qresource prefix="/icon03">
+    <file>Resources/icon03/camera_on.ico</file>
     <file>Resources/icon03/motion_off.png</file>
     <file>Resources/icon03/motion_on.png</file>
     <file>Resources/icon03/close_off.png</file>

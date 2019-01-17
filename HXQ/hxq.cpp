@@ -7,7 +7,7 @@
 #include "aboutdialog.h"
 #include "EngineerDialog.h"
 #include "DeltaThread.h"
-#include "ConstParam.h"
+
 #include "ConfigureDialog.h"
 #include "PicThreadMiddle.h"
 #include "PicThreadLeft.h"
@@ -18,7 +18,7 @@
 
 
 
-
+DetectParam hxq::g_DetectParam = {0};
 
 hxq::hxq(QWidget *parent)
 	: QMainWindow(parent)
@@ -68,6 +68,17 @@ hxq::hxq(QWidget *parent)
 	
 	process = new QProcess(this);
 
+	std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent;
+	if (ParserXmlNode(QString(XML_Configure), QString(Node_Hxq), xmlContent))
+	{
+		int total = sizeof(g_DetectParam) / sizeof(float);
+		float* p = (float*)&g_DetectParam;
+		for (int index = 0;index<total;index++)
+		{
+			*p = xmlContent[index].second.toFloat();
+			p++;
+		}
+	}
 }
 
 
@@ -76,20 +87,20 @@ void hxq::menuConnect()
 {
 	connect(ui.OnEngineer, &QAction::triggered, this, &hxq::OnEngineer);
 	connect(ui.OnOperator, &QAction::triggered, this, &hxq::OnOperator);
-	connect(ui.About, &QAction::triggered, this, &hxq::OnAbout);
+	connect(ui.OnAbout, &QAction::triggered, this, &hxq::OnAbout);
 }
 
 //工具栏对应功能
 void hxq::toolConnect()
 {
-	connect(ui.Open, &QAction::triggered, this, &hxq::OnOpen);
+	connect(ui.OnOpen, &QAction::triggered, this, &hxq::OnOpen);
 	connect(ui.OnRun, &QAction::triggered, this, &hxq::OnOneHandle_AllPic);
 	connect(ui.OnLineRun, SIGNAL(triggered()), this, SLOT(OnStart()));
 	connect(ui.OnStop, SIGNAL(triggered()), this, SLOT(OnStop()));
-	connect(ui.Configure, SIGNAL(triggered()), this, SLOT(OnConfigure()));
-	connect(ui.ShutDown, SIGNAL(triggered()), this, SLOT(OnShutDown()));
-	connect(ui.Configure2, SIGNAL(triggered()), this, SLOT(OnTest()));
-	connect(ui.AreaCamera, SIGNAL(triggered()), this, SLOT(OnDisplayAreaCamera()));
+	connect(ui.OnConfigure, SIGNAL(triggered()), this, SLOT(OnConfigure()));
+	connect(ui.OnShutDown, SIGNAL(triggered()), this, SLOT(OnShutDown()));
+	connect(ui.OnMotionCard, SIGNAL(triggered()), this, SLOT(OnMotionCardDebug()));
+	connect(ui.OnAreaCamera, SIGNAL(triggered()), this, SLOT(OnDisplayAreaCamera()));
 
 }
 
@@ -132,21 +143,16 @@ void hxq::OnOperator()
 	ui.OnOperator->setChecked(true);
 	ui.OnEngineer->setChecked(false);
 	OnOperatorStatus();
-
-	//process->start("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
-	//process->startDetached("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
-	
-	//QProcess::execute("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
 }
 
 void hxq::OnEngineerStatus()
 {
-	ui.Configure->setEnabled(true);
+	ui.OnConfigure->setEnabled(true);
 }
 
 void hxq::OnOperatorStatus()
 {
-	ui.Configure->setEnabled(false);
+	ui.OnConfigure->setEnabled(false);
 }
 
 void hxq::OnAbout()
@@ -225,6 +231,22 @@ void hxq::OnDisplayAreaCamera()
 	connect(m_TopCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImageAndHandle(void*)));	//左视图显示
 	connect(m_TopCameraThread, SIGNAL(finished()), m_TopCameraThread, SLOT(deleteLater()));
 	m_TopCameraThread->start();
+
+
+	m_SideCameraThread = new Halcon_Camera_Thread(QString(Camera_Side), this);
+	m_SideCameraThread->setSaveImageDirName("Images/Side/Good/");
+	m_SideCameraThread->setSaveImageNum(10);
+	m_SideCameraThread->setSaveImage(false);
+	m_SideCameraThread->setMutexTrigger(false);
+	//emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
+	connect(m_SideCameraThread, SIGNAL(OpenCameraSinal(void**, QString, int*)), this, SLOT(OpenPreCamera(void**, QString, int*)), Qt::DirectConnection);
+	connect(m_SideCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
+	connect(m_SideCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
+	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
+	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
+	connect(m_SideCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveMiddleImageAndHandle(void*)));	//中视图显示
+	connect(m_SideCameraThread, SIGNAL(finished()), m_SideCameraThread, SLOT(deleteLater()));
+	m_SideCameraThread->start();
 
 
 
@@ -357,7 +379,7 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 	if (enable)
 	{
 		ui.OnStop->setEnabled(true);
-		ui.AreaCamera->setEnabled(false);
+		ui.OnAreaCamera->setEnabled(false);
 	}
 }
 
@@ -485,7 +507,7 @@ void hxq::OnConfigure()
 
 void hxq::OnLineRun()
 {
-	OnTest();
+	
 }
 
 //对应串口的读取槽函数
@@ -888,7 +910,7 @@ void hxq::OnStop()
 	m_Result_AllQueue;
 	ui.OnStop->setEnabled(false);
 	ui.OnLineRun->setEnabled(true);
-	ui.AreaCamera->setEnabled(true);
+	ui.OnAreaCamera->setEnabled(true);
 
 }
 
@@ -1055,7 +1077,7 @@ void hxq::receiveCorrectImage(int value)
 }
 
 
-void hxq::OnTest()
+void hxq::OnMotionCardDebug()
 {
 	//if (m_bIsOnLine)
 	//{
@@ -1073,8 +1095,12 @@ void hxq::OnTest()
 	//	}
 
 	//}
+	process->start("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
+	//process->startDetached("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
 
-	OnWakeCamera();
+	//QProcess::execute("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
+	
+	//OnWakeCamera();
 }
 
 

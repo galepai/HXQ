@@ -98,9 +98,6 @@
     <ClCompile Include="CHH2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Widgets\modelWidget.cpp">
-      <Filter>Source Files\Widgets</Filter>
-    </ClCompile>
     <ClCompile Include="hxq.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -122,8 +119,8 @@
     <ClCompile Include="Widgets\camera2Widget.cpp">
       <Filter>Source Files\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="Widgets\cameraWidget.cpp">
-      <Filter>Form Files\Widgets</Filter>
+    <ClCompile Include="Widgets\detectWidget.cpp">
+      <Filter>Source Files\Widgets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,12 +160,6 @@
     <QtMoc Include="PylonCameraThread.h">
       <Filter>Header Files\CameraThread</Filter>
     </QtMoc>
-    <QtUic Include="Widgets\modelWidget.ui">
-      <Filter>Form Files\Widgets</Filter>
-    </QtUic>
-    <QtMoc Include="Widgets\modelWidget.h">
-      <Filter>Header Files\Widgets</Filter>
-    </QtMoc>
     <QtMoc Include="hxq.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -184,7 +175,7 @@
     <QtUic Include="Widgets\camera2Widget.ui">
       <Filter>Form Files\Widgets</Filter>
     </QtUic>
-    <QtUic Include="Widgets\cameraWidget.ui">
+    <QtUic Include="Widgets\detectWidget.ui">
       <Filter>Form Files\Widgets</Filter>
     </QtUic>
   </ItemGroup>
@@ -212,9 +203,6 @@
     </ClInclude>
     <ClInclude Include="CHH2.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_modelWidget.h">
-      <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_hxq.h">
       <Filter>Generated Files</Filter>
@@ -266,8 +254,8 @@
     <QtMoc Include="Widgets\camera2Widget.h">
       <Filter>Header Files\Widgets</Filter>
     </QtMoc>
-    <QtMoc Include="Widgets\cameraWidget.h">
-      <Filter>Form Files\Widgets</Filter>
+    <QtMoc Include="Widgets\detectWidget.h">
+      <Filter>Header Files\Widgets</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

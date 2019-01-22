@@ -17,7 +17,6 @@
 #include <map>
 
 
-
 DetectParam hxq::g_DetectParam = {0};
 
 hxq::hxq(QWidget *parent)
@@ -201,10 +200,12 @@ void hxq::OnOpen()
 		if (path.length() != 0 &&
 			(path.contains(".jpg") || path.contains(".tiff") || path.contains(".bmp")))
 		{
-			ReadImage(&m_Image, path.toLocal8Bit().constData());
+			ReadImage(&m_LeftImage, path.toLocal8Bit().constData());
 			m_bIsDisOneImage = true;
-			DispPic(m_Image, LeftView);
+			DispPic(m_LeftImage, LeftView);
 			statusBar()->showMessage(path);
+			
+
 		}
 	}
 
@@ -594,7 +595,6 @@ void hxq::DispPic(HImage& Image, LocationView location)
 		SetPicViewScroll(width, height, location);	
 		//ClearWindow(*pWindowHandle);
 		//CloseWindow(*pWindowHandle);
-
 	}
 	else
 	{

@@ -3,6 +3,7 @@
 #include "CHH.h"
 #include "CHH2.h"
 #include <QDebug>
+#include "../../Detect/Detect/Detect.h"
 
 int PicThreadLeft::num = 0;
 
@@ -61,7 +62,6 @@ void PicThreadLeft::run()
 	}
 
 	
-
 }
 
 void PicThreadLeft::OnHandle(HObject& image,const HTuple& WindowHandle,HTuple* Result)
@@ -83,4 +83,8 @@ void PicThreadLeft::OnHandle(HObject& image,const HTuple& WindowHandle,HTuple* R
 
 	//结果
 	*Result = 1;
+
+	//引用动态库
+	int tmp_Result = 0;HString ExceptionInformation("");
+	DetectModule::detectTop(image, WindowHandle, tmp_Result, ExceptionInformation);
 }

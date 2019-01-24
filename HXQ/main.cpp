@@ -8,9 +8,69 @@
 #include <QTime>
 
 #define STARTLOGO
+#define OUTPUTLOG
+
+void MessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+	QByteArray localMsg = msg.toLocal8Bit();
+
+	QString strMsg("");
+	switch (type)
+	{
+	case QtDebugMsg:
+		strMsg = QString("Debug:  ");
+		break;
+	case QtWarningMsg:
+		strMsg = QString("Warning:  ");
+		break;
+	case QtCriticalMsg:
+		strMsg = QString("Critical:  ");
+		break;
+	case QtFatalMsg:
+		strMsg = QString("Fatal:  ");
+		break;
+	}
+
+	// 设置输出信息格式
+	QString strDateTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss ddd");
+	QString strMessage = strMsg + QString("File:%1  Line:%2  Function:%3  Message:%4  DateTime:%5\r\n")
+		.arg(context.file).arg(context.line).arg(context.function).arg(localMsg.constData()).arg(strDateTime);
+	
+	// 加锁
+	static QMutex mutex;
+	mutex.lock();
+	// 循环写日志
+	QFile file1("log1.txt");
+	QFile file2("log2.txt");
+	file1.open(QIODevice::WriteOnly | QIODevice::Append);
+	if (file1.size() >= 5*1024*1024)
+	{
+		file1.close();
+		file2.remove();
+		QFile::copy("log1.txt", "log2.txt");
+		file1.remove();
+
+		QFile file3("log1.txt");
+		file3.open(QIODevice::WriteOnly | QIODevice::Append);
+		QTextStream stream(&file3);
+		stream << strMessage << endl;
+	}
+	else
+	{
+		QTextStream stream(&file1);
+		stream << strMessage << endl;
+	}
+
+	// 解锁
+	mutex.unlock();
+}
 
 int main(int argc, char *argv[])
 {
+#ifdef OUTPUTLOG
+	qInstallMessageHandler(MessageOutput);
+#endif
+
 	QApplication a(argc, argv);
 
 	QFile qss("Resources/qss/css.h");
@@ -44,6 +104,6 @@ int main(int argc, char *argv[])
 	screen->finish(&w);
 	
 	delete screen;
-
+	qDebug() << "Open Program!";
 	return a.exec();
 }

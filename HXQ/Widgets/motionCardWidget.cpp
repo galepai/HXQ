@@ -125,7 +125,7 @@ void motionCardWidget::OnTest()
 	if (!m_pGalil)
 	{
 		m_pGalil = new Galil_Thread(this);
-		connect(m_pGalil, SIGNAL(sendVarValue(QString)), m_pGalil, SLOT(OnReceiveVarValue(QString)));
+		connect(m_pGalil, SIGNAL(sendVarValue(QString)), this, SLOT(OnReceiveVarValue(QString)));
 		connect(m_pGalil, SIGNAL(finished()), m_pGalil, SLOT(deleteLater()));
 
 

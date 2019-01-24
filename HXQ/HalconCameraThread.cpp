@@ -37,7 +37,7 @@ void Halcon_Camera_Thread::run()
 	//if (!OpenCamera(m_pGrabber))
 	//	return;
 		
-	qDebug() << "halcon: "<<QThread::currentThreadId();
+	qDebug() << "HalconThread: "<<QThread::currentThreadId();
 
 	emit OpenCameraSinal((void**)&m_pGrabber, m_nodeCameraName, &isCorretOpen);
 

@@ -13,8 +13,8 @@ namespace DetectModule {
 
 	**/
 
-	__declspec(dllexport) void detectTop(HalconCpp::HObject& input_Image, const HalconCpp::HTuple& input_WindowHandle, int& output_Result, HalconCpp::HString& output_ExceptionInformtion);
+	__declspec(dllexport) void detectTop(HalconCpp::HObject& input_Image, const HTuple& input_WindowHandle, HTuple* output_Result, HTuple* output_ExceptionInformtion);
 
-	__declspec(dllexport) void detectSide(HalconCpp::HObject& input_Image, const HalconCpp::HTuple& input_WindowHandle, int& output_Result, HalconCpp::HString& output_ExceptionInformtion);
+	__declspec(dllexport) void detectSide(HalconCpp::HObject& input_Image, const HTuple& input_WindowHandle, HTuple* output_Result, HTuple* output_ExceptionInformtion);
 
 }

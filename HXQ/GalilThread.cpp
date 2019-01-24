@@ -133,7 +133,7 @@ bool Galil_Thread::CmdT(QString command, QString& value)
 
 void Galil_Thread::ExceptionInformation(GReturn gr)
 {
-	qDebug() << "Function returned " << gr << '\n';
+	//qDebug() << "Function returned " << gr << '\n';
 	GError(gr, m_buf, sizeof(m_buf));
 	qDebug() << m_buf << '\n';
 	GSize size = sizeof(m_buf);

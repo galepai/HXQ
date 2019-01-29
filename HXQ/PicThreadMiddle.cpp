@@ -1,5 +1,6 @@
 #include "PicThreadMiddle.h"
 #include <QTime>
+#include <Func.h>
 #include "CHH.h"
 #include "CHH2.h"
 
@@ -41,6 +42,8 @@ void PicThreadMiddle::run()
 				emit resultReady(MiddleBad, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("Bad "), "image", 120, 12, "red", "true");
 			}
+			//ÉÏÉıÑØÊ¹ÄÜ
+			g_UpWaveEnable = true;
 		}
 		catch (HException& e)
 		{

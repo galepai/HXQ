@@ -154,7 +154,7 @@ void Galil_Thread::run()
 {
 	qDebug() << "Galil_Thread Run Thread : " << QThread::currentThreadId();
 	//int value = 0;
-	QString varValue;
+	QString varValue1,varValue2;
 	while (!m_StopThread)
 	{
 		//value = 0;
@@ -169,13 +169,17 @@ void Galil_Thread::run()
 		//}
 		//Sleep(100);
 
-		CmdT(m_varName, varValue);
-		qDebug() << m_varName + "	:" << varValue;
+		CmdT(m_varName, varValue1);
+		qDebug() << m_varName + "	:" << varValue1;
+		CmdT(m_varName, varValue2);
+		qDebug() << m_varName + "	:" << varValue2;
+
 		
-		
-		if (varValue == "正确值")  //发射触发相机信号
+		if (varValue1.toFloat() && varValue2.toFloat() && g_UpWaveEnable)  //发射触发相机信号
 		{
-			emit sendVarValue(varValue);
+			//取上升沿
+			g_UpWaveEnable = false;
+			emit sendVarValue(varValue1);
 			emit triggerSinal();
 		}
 

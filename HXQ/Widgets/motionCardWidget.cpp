@@ -15,7 +15,6 @@ motionCardWidget::motionCardWidget(QWidget *parent) :
 	connect(ui->testButton, SIGNAL(clicked()), this, SLOT(OnTest()));
 	ReadFromXml();
 	m_pGalil = nullptr;
-	
 }
 
 motionCardWidget::~motionCardWidget()

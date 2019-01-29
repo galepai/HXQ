@@ -3,7 +3,7 @@
 <fivision>
     <MotionCard>
         <ip type="string">192.168.2.7</ip>
-        <varName type="string">Trigger</varName>
-        <varValue type="string">0</varValue>
+        <varName1 type="string">MG @OUT[1]</varName1>
+		    <varName2 type="string">MG @OUT[2]</varName2>
     </MotionCard>
 </fivision>

@@ -841,9 +841,9 @@ void hxq::OnOpenCameras()
 
 	m_TopCameraThread = new Halcon_Camera_Thread(QString(Camera_Top), this);
 	m_TopCameraThread->setSaveImageDirName("Images/Top/Good/");
-	m_TopCameraThread->setSaveImageNum(10);
-	m_TopCameraThread->setSaveImage(false);
-	m_TopCameraThread->setMutexTrigger(false);
+	m_TopCameraThread->setSaveImageNum(50);
+	m_TopCameraThread->setSaveImage(true);
+	m_TopCameraThread->setMutexTrigger(true);
 	//emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
 	connect(m_TopCameraThread, SIGNAL(OpenCameraSinal(void**, QString,int*)), this, SLOT(OpenPreCamera(void**, QString,int*)), Qt::DirectConnection);
 	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
@@ -856,9 +856,9 @@ void hxq::OnOpenCameras()
 
 	m_SideCameraThread = new Halcon_Camera_Thread(QString(Camera_Side), this);
 	m_SideCameraThread->setSaveImageDirName("Images/Side/Good/");
-	m_SideCameraThread->setSaveImageNum(10);
-	m_SideCameraThread->setSaveImage(false);
-	m_SideCameraThread->setMutexTrigger(false);
+	m_SideCameraThread->setSaveImageNum(50);
+	m_SideCameraThread->setSaveImage(true);
+	m_SideCameraThread->setMutexTrigger(true);
 	//emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
 	connect(m_SideCameraThread, SIGNAL(OpenCameraSinal(void**, QString, int*)), this, SLOT(OpenPreCamera(void**, QString, int*)), Qt::DirectConnection);
 	connect(m_SideCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
@@ -1013,6 +1013,13 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		//connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
+
+		//关灯，可以取上升沿状态
+		if (m_Galil)
+		{
+			m_Galil->Cmd("CB1;CB2");
+		}
+		
 	}
 	break;
 
@@ -1140,7 +1147,7 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 			if (m_bIsOnLine)
 			{
 				if (m_Galil)
-					m_Galil->Cmd("SB0");
+					m_Galil->Cmd("SB3；SB4");
 
 			}
 			qDebug() << "Send Good!!!	";
@@ -1153,7 +1160,7 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 			if (m_bIsOnLine)
 			{
 				if (m_Galil)
-					m_Galil->Cmd("SB1");
+					m_Galil->Cmd("CB3；CB4");
 			}
 
 			qDebug() << "Send Bad!!!	";

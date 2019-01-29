@@ -129,5 +129,6 @@ struct DetectParam
 
 extern QMutex mutex_Camera;
 extern QWaitCondition condition_Camera;
+extern bool g_UpWaveEnable;
 
 #endif // FUNC_H

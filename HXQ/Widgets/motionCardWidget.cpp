@@ -13,6 +13,8 @@ motionCardWidget::motionCardWidget(QWidget *parent) :
 
 	connect(ui->confirmButton, SIGNAL(clicked()), this, SLOT(SaveToXml()));
 	connect(ui->testButton, SIGNAL(clicked()), this, SLOT(OnTest()));
+	connect(ui->goodButton, SIGNAL(clicked()), this, SLOT(OnGood()));
+	connect(ui->badButton, SIGNAL(clicked()), this, SLOT(OnBad()));
 	ReadFromXml();
 	m_pGalil = nullptr;
 }
@@ -120,6 +122,75 @@ void motionCardWidget::SaveToXml()
 }
 
 void motionCardWidget::OnTest()
+{
+	if (!m_pGalil)
+	{
+		m_pGalil = new Galil_Thread(this);
+		connect(m_pGalil, SIGNAL(sendVarValue(QString)), this, SLOT(OnReceiveVarValue(QString)));
+		connect(m_pGalil, SIGNAL(finished()), m_pGalil, SLOT(deleteLater()));
+
+
+		QString Revision, ip, varName1, varName2;
+		QLineEdit* pLineEdit = (QLineEdit*)vector_lineEdits[0];
+		ip = pLineEdit->text();
+		pLineEdit = (QLineEdit*)vector_lineEdits[1];
+		varName1 = pLineEdit->text();
+		pLineEdit = (QLineEdit*)vector_lineEdits[2];
+		varName2 = pLineEdit->text();
+
+		if (m_pGalil->Open(ip))
+		{
+			m_pGalil->CmdT("\x12\x16", Revision);
+			QMessageBox::StandardButton reply;
+			reply = QMessageBox::information(this, G2U("控制卡信息"), Revision + (G2U("\r\n连接成功！")));
+		}
+		else
+		{
+			QMessageBox::StandardButton reply;
+			reply = QMessageBox::warning(this, G2U("信息"), G2U("控制卡连接失败"));
+			delete m_pGalil;
+			m_pGalil = nullptr;
+			return;
+		}
+
+		m_pGalil->setVarName1(varName1);
+		m_pGalil->setVarName2(varName2);
+		m_pGalil->start();
+		ui->testButton->setText(G2U("已连接"));
+	}
+}
+void motionCardWidget::OnGood()
+{
+	if (!m_pGalil)
+	{
+		m_pGalil = new Galil_Thread(this);
+		connect(m_pGalil, SIGNAL(sendVarValue(QString)), this, SLOT(OnReceiveVarValue(QString)));
+		connect(m_pGalil, SIGNAL(finished()), m_pGalil, SLOT(deleteLater()));
+
+
+		if (m_pGalil->Open(ip))
+		{
+			m_pGalil->CmdT("\x12\x16", Revision);
+			QMessageBox::StandardButton reply;
+			reply = QMessageBox::information(this, G2U("控制卡信息"), Revision + (G2U("\r\n连接成功！")));
+		}
+		else
+		{
+			QMessageBox::StandardButton reply;
+			reply = QMessageBox::warning(this, G2U("信息"), G2U("控制卡连接失败"));
+			delete m_pGalil;
+			m_pGalil = nullptr;
+			return;
+		}
+
+		m_pGalil->setVarName1(varName1);
+		m_pGalil->setVarName2(varName2);
+		m_pGalil->start();
+		ui->testButton->setText(G2U("已连接"));
+	}
+}
+
+void motionCardWidget::OnBad()
 {
 	if (!m_pGalil)
 	{

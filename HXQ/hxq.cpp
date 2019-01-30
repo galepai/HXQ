@@ -1155,9 +1155,9 @@ void hxq::OnMotionCardDebug()
 	//	}
 
 	//}
-	process->start("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
-	//process->startDetached("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
+	process->start("C:/Program Files/Galil/GalilTools/bin/GalilTools.exe", QStringList("C:/Program Files/Galil/GalilTools/bin/GalilTools.exe"));
 
+	//process->startDetached("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
 	//QProcess::execute("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
 	
 	//OnWakeCamera();

@@ -87,7 +87,7 @@ void PicThreadLeft::OnHandle(HObject& image,const HTuple& WindowHandle,HTuple* R
 	//ÒýÓÃ¶¯Ì¬¿â
 	HTuple tmp_Result = 0;
 	HTuple ExceptionInformation("");
-	DetectModule::detectTop(image, WindowHandle, &tmp_Result, &ExceptionInformation);
+	//DetectModule::detectTop(image, WindowHandle, &tmp_Result, &ExceptionInformation);
 
 	qDebug() << ExceptionInformation.ToString().Text();
 }

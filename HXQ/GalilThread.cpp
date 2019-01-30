@@ -171,11 +171,11 @@ void Galil_Thread::run()
 
 		CmdT(m_varName1, varValue1);
 		//qDebug() << m_varName1 + "	:" << varValue1;
-		CmdT(m_varName2, varValue2);
+		//CmdT(m_varName2, varValue2);
 		//qDebug() << m_varName2 + "	:" << varValue2;
 
 		
-		if (varValue1.toFloat() && varValue2.toFloat() && g_UpWaveEnable)  //发射触发相机信号
+		if (varValue1.toFloat() &&  g_UpWaveEnable)  //发射触发相机信号
 		{
 			//取上升沿
 			g_UpWaveEnable = false;

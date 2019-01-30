@@ -128,11 +128,13 @@ void motionCardWidget::OnTest()
 		connect(m_pGalil, SIGNAL(finished()), m_pGalil, SLOT(deleteLater()));
 
 
-		QString Revision, ip, varName, varValue;
+		QString Revision, ip, varName1, varName2;
 		QLineEdit* pLineEdit = (QLineEdit*)vector_lineEdits[0];
 		ip = pLineEdit->text();
 		pLineEdit = (QLineEdit*)vector_lineEdits[1];
-		varName = pLineEdit->text();
+		varName1 = pLineEdit->text();
+		pLineEdit = (QLineEdit*)vector_lineEdits[2];
+		varName2 = pLineEdit->text();
 
 		if (m_pGalil->Open(ip))
 		{
@@ -149,7 +151,8 @@ void motionCardWidget::OnTest()
 			return;
 		}
 
-		m_pGalil->setVarName(varName);
+		m_pGalil->setVarName1(varName1);
+		m_pGalil->setVarName2(varName2);
 		m_pGalil->start();
 		ui->testButton->setText(G2U("ÒÑÁ¬½Ó"));
 	}

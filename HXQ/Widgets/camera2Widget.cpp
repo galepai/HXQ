@@ -226,6 +226,7 @@ void camera2Widget::OnTest()
 {
 	using namespace HalconCpp;
 	HFramegrabber* pGrabber = new HFramegrabber;
+	QString name1, type1, value1;
 
 	try {
 		QLineEdit* pLineEdit = (QLineEdit*)vector_lineEdits[0];
@@ -238,13 +239,13 @@ void camera2Widget::OnTest()
 		pGrabber->OpenFramegrabber(interFace.toStdString().c_str(), 1, 1, 0, 0, 0, 0, "default", 8, \
 			color.toStdString().c_str(), -1, "false", "default", \
 			id.toStdString().c_str(), 0, -1);
-
+		
 		for (int index = 3; index < vector_lineEdits.size(); index++)
 		{
 			QLineEdit* pLineEdit = (QLineEdit*)vector_lineEdits[index];
-			QString name1 = name[index];
-			QString type1 = name[index];
-			QString value1 = pLineEdit->text();
+			name1 = name[index];
+			type1 = type[index];
+			value1 = pLineEdit->text();
 
 			if (type1.contains("float"))
 			{
@@ -270,7 +271,7 @@ void camera2Widget::OnTest()
 	catch (HException& e)
 	{
 		QMessageBox::StandardButton reply;
-		reply = QMessageBox::information(this, G2U("提示"), G2U(e.ErrorMessage().Text()));
+		reply = QMessageBox::information(this, G2U("提示"), QString(e.ErrorMessage().Text()) + "\r\n"  + name1 + "\r\n"  + type1 + "\r\n" + value1 );
 		delete pGrabber;
 		pGrabber = nullptr;
 	}

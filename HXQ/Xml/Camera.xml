@@ -1,26 +1,28 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!--Camera Param-->
 <fivision>
-    <HikVision_MVCE10031GM>
-        <id type="string">c42f90f0ff29_Hikvision_MVCE10031GM</id>
+    <Hikvision_MVCE12010GM>
+        <id type="string">c42f90f2b80a_Hikvision_MVCE12010GM</id>
         <interface type="string">GigEVision2</interface>
         <color type="string">gray</color>
-        <AcquisitionMode type="string">Continuous</AcquisitionMode>
+        <AcquisitionMode type="string">SingleFrame</AcquisitionMode>
         <TriggerSelector type="string">FrameBurstStart</TriggerSelector>
         <TriggerMode type="string">Off</TriggerMode>
         <ExposureTime type="float">50120</ExposureTime>
         <grab_timeout type="int">5000</grab_timeout>
-    </HikVision_MVCE10031GM>
-    <Dalsa_c42f90f0ff29>
-        <id type="string">c42f90f0ff29_Hikvision_MVCE10031GM</id>
+    </Hikvision_MVCE12010GM>
+    <Baser_raL204848gm>
+        <id type="string">0030531d42b0_Basler_raL204848gm</id>
         <interface type="string">GigEVision2</interface>
         <color type="string">gray</color>
-        <AcquisitionMode type="string">Continuous</AcquisitionMode>
-        <TriggerSelector type="string">FrameBurstStart</TriggerSelector>
+        <AcquisitionMode type="string">SingleFrame</AcquisitionMode>
+        <TriggerSelector type="string">FrameStart</TriggerSelector>
         <TriggerMode type="string">Off</TriggerMode>
-        <ExposureTime type="float">300</ExposureTime>
+        <ExposureTimeRaw type="int">700</ExposureTimeRaw>
+        <Height type="int">8000</Height>
+        <AcquisitionLineRateAbs type="float">16000.0</AcquisitionLineRateAbs>
         <grab_timeout type="int">5000</grab_timeout>
-    </Dalsa_c42f90f0ff29>
+    </Baser_raL204848gm>
     <DoThink>
         <id type="string">[0] USB3_CMOS_8.8M(1)</id>
         <interface type="string">DirectShow</interface>

@@ -21,7 +21,7 @@ void PicThreadLeft::run()
 			//DispObj(m_Image, m_WindowHandle);
 			//Emphasize(m_Image, &ImageEmphasize, 3, 102, 1);
 
-			OnHandle(m_Image,m_WindowHandle,&hv_IsBad);
+			//OnHandle(m_Image,m_WindowHandle,&hv_IsBad);
 
 			num++;
 			CHH::disp_message(m_WindowHandle, HTuple("number: ") + num, "image", 12, 12, "black", "true");

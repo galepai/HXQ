@@ -169,10 +169,10 @@ void Galil_Thread::run()
 		//}
 		//Sleep(100);
 
-		CmdT(m_varName, varValue1);
-		qDebug() << m_varName + "	:" << varValue1;
-		CmdT(m_varName, varValue2);
-		qDebug() << m_varName + "	:" << varValue2;
+		CmdT(m_varName1, varValue1);
+		//qDebug() << m_varName1 + "	:" << varValue1;
+		CmdT(m_varName2, varValue2);
+		//qDebug() << m_varName2 + "	:" << varValue2;
 
 		
 		if (varValue1.toFloat() && varValue2.toFloat() && g_UpWaveEnable)  //发射触发相机信号

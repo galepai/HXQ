@@ -38,6 +38,10 @@ public:
 	void menuConnect();
 	void toolConnect();
 
+	void AllButtonFalse();
+	void autoStartButtonStatus();
+	void normalButtonStatus();
+
 	//bool ParserXml(QString& path, QString& childeNodeName, std::vector<std::pair<QString, QString>>& xmlContent);
 	//void ParserCamParam(HFramegrabber* pGrabber, std::vector<std::pair<QString, QString>>& CamParam);
 

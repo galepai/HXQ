@@ -51,8 +51,11 @@ public:
 	QString ip() const { return m_ip; }
 	void setIp(QString ip) { m_ip = ip; }
 
-	QString varName() const { return m_varName; }
-	void setVarName(QString varName) { m_varName = varName; }
+	QString varName1() const { return m_varName1; }
+	void setVarName1(QString varName) { m_varName1 = varName; }
+
+	QString varName2() const { return m_varName2; }
+	void setVarName2(QString varName) { m_varName2 = varName; }
 
 	QString rightValue() const { return m_rightValue; }
 	void setRightValue(QString rightValue) { m_rightValue = rightValue; }
@@ -74,7 +77,7 @@ private:
 	int m_buf_size = G_SMALL_BUFFER;
 	char m_buf[G_SMALL_BUFFER]; //traffic buffer
 	//char* m_front;
-	QString m_ip, m_varName,m_rightValue;
+	QString m_ip, m_varName1,m_varName2,m_rightValue;
 	bool m_StopThread;
 
 signals:

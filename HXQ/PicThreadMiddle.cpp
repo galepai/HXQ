@@ -15,16 +15,16 @@ void PicThreadMiddle::run()
 		{
 			HTuple hv_DownRow, hv_IsBad;
 			HObject TileImage, ImageEmphasize;
-			CHH::PingJie(m_Image, &m_Image, 700, 30, 3, 80, &hv_DownRow);
-			DispObj(m_Image, m_WindowHandle);
-			Emphasize(m_Image, &ImageEmphasize, 3, 102, 1);
-			SetColor(m_WindowHandle, "red");
-			SetDraw(m_WindowHandle,"margin");
+		//	CHH::PingJie(m_Image, &m_Image, 700, 30, 3, 80, &hv_DownRow);
+		//	DispObj(m_Image, m_WindowHandle);
+			//Emphasize(m_Image, &ImageEmphasize, 3, 102, 1);
+		//	SetColor(m_WindowHandle, "red");
+		//	SetDraw(m_WindowHandle,"margin");
 			
 			//QTime ti;
 			//ti.start();
 
-			CHH2::PengShang_Camera2(ImageEmphasize, m_WindowHandle, &hv_IsBad);
+		//	CHH2::PengShang_Camera2(ImageEmphasize, m_WindowHandle, &hv_IsBad);
 
 			//qDebug() << "middle: "<<ti.elapsed() << "ms";
 			num++;

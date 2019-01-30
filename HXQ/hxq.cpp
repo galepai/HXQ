@@ -377,10 +377,22 @@ void hxq::OpenPreCamera(void** pGrabber, QString nodeCameraName,int* isCorrectOp
 
 void hxq::OnOpenCameraIsCorrect(bool enable)
 {
-	if (enable)
+	static std::vector<bool> CameraStatus;
+	CameraStatus.push_back(enable);
+
+	if (CameraStatus.size() == 2)
 	{
-		ui.OnStop->setEnabled(true);
-		ui.OnAreaCamera->setEnabled(false);
+		if (CameraStatus[0] && CameraStatus[1])
+		{
+			autoStartButtonStatus();
+			genErrorDialog(G2U("相机已正确打开！"));
+		}
+		else
+		{
+			genErrorDialog(G2U("相机未正确打开！"));
+			normalButtonStatus();
+		}
+		CameraStatus.clear();
 	}
 }
 
@@ -451,6 +463,9 @@ void hxq::OnClearCameraThread()
 	if (m_TopCameraThread)
 		m_TopCameraThread->setStopStatus(true);
 
+	if (m_SideCameraThread)
+		m_SideCameraThread->setStopStatus(true);
+
 	Sleep(20);
 	condition_Camera.wakeAll();
 
@@ -463,14 +478,14 @@ void hxq::OnClearCameraThread()
 		}
 	}
 
-	//if (Camera_Thread::IsExistCameraId(LineCameraId_Dalsa_7_Clock))
-	//{
-	//	if (m_camera_thread_7_Clock->isRunning())
-	//	{
-	//		m_camera_thread_7_Clock->stop();
-	//		m_camera_thread_7_Clock->wait();
-	//	}
-	//}
+	if (Camera_Thread::IsExistCameraId(sideCameraId))
+	{
+		if (m_SideCameraThread->isRunning())
+		{
+			m_SideCameraThread->setStopStatus(true);
+			m_SideCameraThread->wait();
+		}
+	}
 
 	//if (Camera_Thread::IsExistCameraId(LineCameraId_Dalsa_11_Clock))
 	//{
@@ -751,9 +766,11 @@ const HalconCpp::HTuple hxq::GetViewWindowHandle(LocationView location)
 //启动
 void hxq::OnStart()
 {
-	QString type,Ip;
+	QString type,Ip,varName1,varName2;
 
 	ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString(MotionCard_ip), type,Ip);
+	ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName1"), type, varName1);
+	ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName2"), type, varName2);
 
 	/*if (ModeValue.toString() == "OnLine")
 	{
@@ -778,6 +795,8 @@ void hxq::OnStart()
 		m_Galil->GcLibVersion();
 		if (m_Galil->Open(Ip + ""))
 		{
+			m_Galil->setVarName1(varName1);
+			m_Galil->setVarName2(varName2);
 			m_Galil->start();
 		}
 		else
@@ -789,16 +808,54 @@ void hxq::OnStart()
 		}
 
 		OnOpenCameras();
-	//}
-	//else
-	//{
-		//OnOpenCameras();
-	//}
 
-	//readAllModelFromIni();
+		AllButtonFalse();
+
+
+}
+
+void hxq:: AllButtonFalse()
+{
+	ui.OnOpen->setEnabled(false);
+	ui.OnRun->setEnabled(false);
+
+	ui.OnAreaCamera->setEnabled(false);
+	ui.OnMotionCard->setEnabled(false);
+	ui.OnConfigure->setEnabled(false);
+
 	ui.OnLineRun->setEnabled(false);
+	ui.OnStop->setEnabled(false);
+
+	ui.OnShutDown->setEnabled(false);
+}
+
+void hxq::autoStartButtonStatus()
+{
+	ui.OnOpen->setEnabled(false);
+	ui.OnRun->setEnabled(false);
+
+	ui.OnAreaCamera->setEnabled(false);
+	ui.OnMotionCard->setEnabled(false);
+	ui.OnConfigure->setEnabled(false);
+
+	ui.OnLineRun->setEnabled(false); 
 	ui.OnStop->setEnabled(true);
 
+	ui.OnShutDown->setEnabled(false);
+}
+void hxq::normalButtonStatus()
+{
+	ui.OnOpen->setEnabled(true);
+	ui.OnRun->setEnabled(true);
+
+	ui.OnAreaCamera->setEnabled(true);
+	ui.OnMotionCard->setEnabled(true);
+	ui.OnConfigure->setEnabled(true);
+
+	ui.OnLineRun->setEnabled(true);
+	ui.OnStop->setEnabled(false);
+
+	ui.OnShutDown->setEnabled(true);
 }
 
 void hxq::OnOpenCameras()
@@ -865,11 +922,9 @@ void hxq::OnOpenCameras()
 	connect(m_SideCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
 	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
 	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	connect(m_SideCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
+	connect(m_SideCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImage(void*)));	//中视图显示
 	connect(m_SideCameraThread, SIGNAL(finished()), m_SideCameraThread, SLOT(deleteLater()));
 	m_SideCameraThread->start();
-
-
 
 }
 
@@ -908,9 +963,7 @@ void hxq::OnStop()
 	OnClearCameraThread();
 
 	m_Result_AllQueue;
-	ui.OnStop->setEnabled(false);
-	ui.OnLineRun->setEnabled(true);
-	ui.OnAreaCamera->setEnabled(true);
+	normalButtonStatus();
 
 }
 
@@ -1014,7 +1067,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 
-		//关灯，可以取上升沿状态
+		//关灯
 		if (m_Galil)
 		{
 			m_Galil->Cmd("CB1;CB2");
@@ -1147,7 +1200,7 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 			if (m_bIsOnLine)
 			{
 				if (m_Galil)
-					m_Galil->Cmd("SB3；SB4");
+					m_Galil->Cmd("SB1;SB4");
 
 			}
 			qDebug() << "Send Good!!!	";
@@ -1160,7 +1213,7 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 			if (m_bIsOnLine)
 			{
 				if (m_Galil)
-					m_Galil->Cmd("CB3；CB4");
+					m_Galil->Cmd("CB1;CB4");
 			}
 
 			qDebug() << "Send Bad!!!	";

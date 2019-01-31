@@ -9,8 +9,10 @@
 #include <QtXml\QDomElement>
 
 QMutex mutex_Camera;
+QMutex mutex_Result;
 QWaitCondition condition_Camera;
 bool g_UpWaveEnable = true;
+std::queue<bool> g_Result_Queue;
 
 //配置文件中写入当前时间 Use QSetting slower than QFile 
 void WriteCurrenDateTime(const QString& file, const QString& beginGroup, const QString& SetValueName)

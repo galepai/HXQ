@@ -30,7 +30,7 @@ public:
 	{
 		XmlError,		
 		ParamError,	
-		Good
+		Ok
 	};
 
 	explicit Halcon_Camera_Thread(QString CameraId, QObject *parent = 0);

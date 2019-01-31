@@ -83,6 +83,7 @@ private:
 signals:
 	void sendInputValue(int value);
 	void sendVarValue(QString varValue);
+	void ModToRight();
 	void triggerSinal();
 
 };

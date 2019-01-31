@@ -32,7 +32,7 @@ Halcon_Camera_Thread::Halcon_Camera_Thread(QString nodeCameraName, QObject *pare
 
 void Halcon_Camera_Thread::run()
 {
-	int isCorretOpen = Code::Good;
+	int isCorretOpen = Code::Ok;
 
 	//if (!OpenCamera(m_pGrabber))
 	//	return;
@@ -43,7 +43,7 @@ void Halcon_Camera_Thread::run()
 
 	switch (isCorretOpen)
 	{
-	case Code::Good:
+	case Code::Ok:
 		emit CameraErrorInformation(true);
 		
 		break;
@@ -78,7 +78,7 @@ void Halcon_Camera_Thread::run()
 			{
 				mutex_Camera.lock();
 				if (first) {
-					emit ReadyOk(1);
+					//emit ReadyOk(1);
 					first = false;
 				}
 

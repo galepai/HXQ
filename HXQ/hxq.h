@@ -26,7 +26,7 @@ public:
 	hxq(QWidget *parent = 0);
 	~hxq();
 
-	void OnWakeCamera();
+	
 	//void setBottomModel(QString path) { m_BottomModel = path; }
 	//const QString& bottomModel() { return m_BottomModel; }
 	//void setGbModel(QString path) { m_GBModel = path; }
@@ -85,6 +85,10 @@ public slots:
 	void genErrorDialog(QString error);
 	void receiveCorrectImage(int value);
 	void OnReadyOk(int num);
+
+	//
+	void OnWakeCamera();
+	void OnModToRight();
 
 	//
 	void OnSetExposure();

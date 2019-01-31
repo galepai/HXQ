@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="17.12">
+<procedure name="main">
+<interface/>
+<body>
+<c></c>
+<l>BaoluoDiameterUp:=28.7		//包络线直径上限</l>
+<l>BaoluoDiameterDown:=28.1	//包络线直径下限</l>
+<l>GouWidthUp:=1.9			   //钩宽上限</l>
+<l>GouWidthDown:=1.5			   //钩宽下限</l>
+<c></c>
+<l>dev_close_window()</l>
+<l>dev_update_off()</l>
+<l>read_image(Image, 'printer_chip/printer_chip_01')</l>
+<l>dev_open_window_fit_image(Image, 0, 0, -1, -1, WindowHandle)</l>
+<c></c>
+<l># 检测槽内异物，包络线直径，钩宽，钩变形，钩不居中</l>
+<l>detectTop (Image, WindowHandle, \
+           BaoluoDiameterUp, BaoluoDiameterDown, \
+           GouWidthUp, GouWidthDown,\
+           Result)</l>
+<c></c>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+<procedure name="detectTop">
+<interface>
+<io>
+<par name="Image" base_type="iconic" dimension="0"/>
+</io>
+<ic>
+<par name="WindowHandle" base_type="ctrl" dimension="0"/>
+<par name="BaoLuoDiameterUp" base_type="ctrl" dimension="0"/>
+<par name="BaoLuoDiameterDown" base_type="ctrl" dimension="0"/>
+<par name="GouWidthUp" base_type="ctrl" dimension="0"/>
+<par name="GouWidthDown" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="Result" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>return ()</l>
+</body>
+<docu id="detectTop">
+<parameters>
+<parameter id="BaoLuoDiameterDown"/>
+<parameter id="BaoLuoDiameterUp"/>
+<parameter id="GouWidthDown"/>
+<parameter id="GouWidthUp"/>
+<parameter id="Image"/>
+<parameter id="Result"/>
+<parameter id="WindowHandle"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

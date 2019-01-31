@@ -15,6 +15,7 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <HalconCpp.h>
+#include <queue>
 
 //#define HARDTRIGGER
 
@@ -128,7 +129,9 @@ struct DetectParam
 };
 
 extern QMutex mutex_Camera;
+extern QMutex mutex_Result;
 extern QWaitCondition condition_Camera;
 extern bool g_UpWaveEnable;
+extern std::queue<bool> g_Result_Queue;
 
 #endif // FUNC_H

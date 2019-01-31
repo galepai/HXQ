@@ -78,6 +78,7 @@ hxq::hxq(QWidget *parent)
 			p++;
 		}
 	}
+
 }
 
 
@@ -274,7 +275,7 @@ void hxq::OpenCamera(void** pGrabber, int* isCorrectOpen,QString& xmlPath,QStrin
 
 		ParserCamParamAndSetFramerabber(Grabber, Param);
 
-		*isCorrectOpen = Halcon_Camera_Thread::Code::Good;
+		*isCorrectOpen = Halcon_Camera_Thread::Code::Ok;
 		*pGrabber = Grabber;
 	}
 	catch (HException& e)
@@ -570,9 +571,18 @@ void hxq::OnWakeCamera()
 	condition_Camera.wakeAll();
 	mutex_Camera.unlock();
 	Sleep(10);
-	mutex_Camera.lock();
-	condition_Camera.wakeAll();
-	mutex_Camera.unlock();
+	//mutex_Camera.lock();
+	//condition_Camera.wakeAll();
+	//mutex_Camera.unlock();
+}
+
+void hxq::OnModToRight()
+{
+	if (m_Galil)
+	{
+		m_Galil->Cmd("SB4");
+	}
+		
 }
 
 
@@ -772,32 +782,21 @@ void hxq::OnStart()
 	ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName1"), type, varName1);
 	ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName2"), type, varName2);
 
-	/*if (ModeValue.toString() == "OnLine")
-	{
-		m_bIsOnLine = true;
-	}
-	else
-	{
-		m_bIsOnLine = false;
-	}*/
-
-
-	//if (!m_bIsOnLine)
-	//{
-
 		///****/
 		if (!m_Galil)
 		{
 			m_Galil = new Galil_Thread(this);
 		}
+		
+		connect(m_Galil, SIGNAL(triggerSinal()), this, SLOT(OnWakeCamera()), Qt::DirectConnection);
 		connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater()));
-		//connect(m_Galil, SIGNAL(triggerSinal()), m_Galil, SLOT(OnWakeCamera()));
-		m_Galil->GcLibVersion();
+
 		if (m_Galil->Open(Ip + ""))
 		{
-			m_Galil->setVarName1(varName1);
-			m_Galil->setVarName2(varName2);
 			m_Galil->start();
+			//m_Galil->Cmd(CLASSIFIY_GOOD);
+			g_Result_Queue.push(true);
+			g_Result_Queue.push(true);
 		}
 		else
 		{
@@ -892,7 +891,6 @@ void hxq::OnOpenCameras()
 	//m_Pylon_camera_thread_10_Clock->start();
 
 	//ui.OnLineRun->setEnabled(false);
-
 
 	/****************************/
 
@@ -1070,7 +1068,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		//นุตฦ
 		if (m_Galil)
 		{
-			m_Galil->Cmd("CB1;CB2");
+			m_Galil->Cmd(LIGHT_CLOSE);
 		}
 		
 	}
@@ -1194,15 +1192,19 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 
 		if (!(m_detectResult.current_area + m_detectResult.current_line))
 		{
-
-
 			m_good++;
-			if (m_bIsOnLine)
-			{
-				if (m_Galil)
-					m_Galil->Cmd("SB1;SB4");
+		//	if (m_bIsOnLine)
+		//	{
+				//if (m_Galil)
+				//{
+				//	m_Galil->Cmd("SB1;SB4");
+					mutex_Result.lock();
+					g_Result_Queue.push(true);
+					mutex_Result.unlock();
+			//}
+					
 
-			}
+		//	}
 			qDebug() << "Send Good!!!	";
 			ui.lcdNumber_good->display(m_good);
 
@@ -1210,11 +1212,17 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 		else
 		{
 			//Sleep(30);
-			if (m_bIsOnLine)
-			{
-				if (m_Galil)
-					m_Galil->Cmd("CB1;CB4");
-			}
+		//	if (m_bIsOnLine)
+		//	{
+				//if (m_Galil)
+			//	{
+			//		m_Galil->Cmd("CB1;CB4");
+					mutex_Result.lock();
+					g_Result_Queue.push(false);
+					mutex_Result.unlock();
+			//	}
+					
+		//	}
 
 			qDebug() << "Send Bad!!!	";
 			if (m_detectResult.current_area == Gou || m_detectResult.current_line == Gou)

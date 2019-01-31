@@ -15,7 +15,7 @@ namespace DetectModule {
 		input_Param_CaoWidthUp:						槽宽上限
 		input_Param_CaoWidthDown:				槽宽下限
 		input_Param_MaociWidth:						毛刺宽
-		input_Param_GouWidthHeight:				毛刺高
+		input_Param_MaociHeight:						毛刺高
 		output_Result：										输出结果
 		output_ExceptionInformtion：				异常信息，无异常是为空
 

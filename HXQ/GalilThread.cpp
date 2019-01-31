@@ -154,36 +154,49 @@ void Galil_Thread::run()
 {
 	qDebug() << "Galil_Thread Run Thread : " << QThread::currentThreadId();
 	//int value = 0;
-	QString varValue1,varValue2;
+	QString cameraValue, moveRightValue;
 	while (!m_StopThread)
 	{
-		//value = 0;
-		//CmdI("TI", &value);
-		//qDebug() << "Input : " << value;
-		//m_input.clear();
-		//m_input = Parse_Galil_Input(value);
-		//emit sendInputValue(value);
-		//if (m_input[IOPoint - 1])  //发射触发相机信号
-		//{
-		//	emit triggerSinal();
-		//}
-		//Sleep(100);
+		CmdT(SINAL_CAMERA, cameraValue);
+		CmdT(SINAL_MOVERIGHT1, moveRightValue);
 
-		CmdT(m_varName1, varValue1);
-		//qDebug() << m_varName1 + "	:" << varValue1;
-		//CmdT(m_varName2, varValue2);
-		//qDebug() << m_varName2 + "	:" << varValue2;
+		qDebug() << "OUTPUT[3] = " << cameraValue;
+		qDebug() << "-RPA =  " << moveRightValue;
 
-		
-		if (varValue1.toFloat() &&  g_UpWaveEnable)  //发射触发相机信号
+		//触发相机
+		if (cameraValue.toFloat() &&  g_UpWaveEnable)  //发射触发相机信号
 		{
 			//取上升沿
+			qDebug() << QString("echo ") + SINAL_CAMERA + " :	" << cameraValue;
 			g_UpWaveEnable = false;
-			emit sendVarValue(varValue1);
+			//emit sendVarValue(varValue1);
 			emit triggerSinal();
 		}
 
-		Sleep(100);
+		//右侧触发分料
+		if (moveRightValue.toFloat() == SINAL_MOVERIGHT1_THRESHOLD)
+		{
+			qDebug() << QString("echo ") + SINAL_MOVERIGHT1 + " :	" << moveRightValue;
+			Cmd(CLASSIFIY_BAD);		//分类良品
+
+			//	mutex_Result.lock();
+			//	if (g_Result_Queue.size())
+			//	{
+			//		if (g_Result_Queue.front())
+			//		{
+			//			Cmd(CLASSIFIY_GOOD);		//分类良品
+			//		}
+			//		else
+			//		{
+			//			Cmd(CLASSIFIY_BAD);		//分类不良品
+			//		}
+			//		g_Result_Queue.pop();
+			//	}
+			//	mutex_Result.unlock();
+			//	
+		}
+	
+		Sleep(20);
 	}
 
 }

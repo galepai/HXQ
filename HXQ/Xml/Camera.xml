@@ -20,19 +20,29 @@
         <TriggerMode type="string">Off</TriggerMode>
         <ExposureTimeRaw type="int">350</ExposureTimeRaw>
         <Height type="int">8000</Height>
-        <AcquisitionLineRateAbs type="float">16000.0</AcquisitionLineRateAbs>
+        <AcquisitionLineRateAbs type="float">8000.0</AcquisitionLineRateAbs>
         <grab_timeout type="int">5000</grab_timeout>
     </Baser_raL204848gm>
-    <DoThink>
-        <id type="string">[0] USB3_CMOS_8.8M(1)</id>
-        <interface type="string">DirectShow</interface>
-        <color type="string">rgb</color>
-        <grab_timeout type="int">5000</grab_timeout>
-    </DoThink>
-    <Basler>
-        <id type="string">ac7005gm</id>
-        <interface type="string">DirectShow</interface>
+    <Hikvision_MVCE12010GM_Continue>
+        <id type="string">c42f90f2b80a_Hikvision_MVCE12010GM</id>
+        <interface type="string">GigEVision2</interface>
         <color type="string">gray</color>
+        <AcquisitionMode type="string">Continuous</AcquisitionMode>
+        <TriggerSelector type="string">FrameBurstStart</TriggerSelector>
+        <TriggerMode type="string">Off</TriggerMode>
+        <ExposureTime type="float">10000</ExposureTime>
         <grab_timeout type="int">5000</grab_timeout>
-    </Basler>
+    </Hikvision_MVCE12010GM_Continue>
+    <Baser_raL204848gm_Continue>
+        <id type="string">0030531d42b0_Basler_raL204848gm</id>
+        <interface type="string">GigEVision2</interface>
+        <color type="string">gray</color>
+        <AcquisitionMode type="string">SingleFrame</AcquisitionMode>
+        <TriggerSelector type="string">FrameStart</TriggerSelector>
+        <TriggerMode type="string">Off</TriggerMode>
+        <ExposureTimeRaw type="int">350</ExposureTimeRaw>
+        <Height type="int">8000</Height>
+        <AcquisitionLineRateAbs type="float">8000.0</AcquisitionLineRateAbs>
+        <grab_timeout type="int">5000</grab_timeout>
+    </Baser_raL204848gm_Continue>
 </fivision>

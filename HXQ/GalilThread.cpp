@@ -160,14 +160,14 @@ void Galil_Thread::run()
 		CmdT(SINAL_CAMERA, cameraValue);
 		CmdT(SINAL_MOVERIGHT1, moveRightValue);
 
-		qDebug() << "OUTPUT[3] = " << cameraValue;
-		qDebug() << "-RPA =  " << moveRightValue;
+		//qDebug() << "OUTPUT[3] = " << cameraValue;
+		//qDebug() << "-RPA =  " << moveRightValue;
 
 		//触发相机
 		if (cameraValue.toFloat() &&  g_UpWaveEnable)  //发射触发相机信号
 		{
 			//取上升沿
-			qDebug() << QString("echo ") + SINAL_CAMERA + " :	" << cameraValue;
+			//qDebug() << QString("echo ") + SINAL_CAMERA + " :	" << cameraValue;
 			g_UpWaveEnable = false;
 			//emit sendVarValue(varValue1);
 			emit triggerSinal();
@@ -176,27 +176,33 @@ void Galil_Thread::run()
 		//右侧触发分料
 		if (moveRightValue.toFloat() == SINAL_MOVERIGHT1_THRESHOLD)
 		{
-			qDebug() << QString("echo ") + SINAL_MOVERIGHT1 + " :	" << moveRightValue;
-			Cmd(CLASSIFIY_BAD);		//分类良品
+			//qDebug() << QString("echo ") + SINAL_MOVERIGHT1 + " :	" << moveRightValue;
+			//static int num = 0;
+			//num++;
+			//qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
+			//if (num % 3)
+			//	Cmd(CLASSIFIY_BAD);		//分类良品
+			//else
+			//	Cmd(CLASSIFIY_GOOD);
 
-			//	mutex_Result.lock();
-			//	if (g_Result_Queue.size())
-			//	{
-			//		if (g_Result_Queue.front())
-			//		{
-			//			Cmd(CLASSIFIY_GOOD);		//分类良品
-			//		}
-			//		else
-			//		{
-			//			Cmd(CLASSIFIY_BAD);		//分类不良品
-			//		}
-			//		g_Result_Queue.pop();
-			//	}
-			//	mutex_Result.unlock();
-			//	
+				mutex_Result.lock();
+				if (g_Result_Queue.size())
+				{
+					if (g_Result_Queue.front())
+					{
+						Cmd(CLASSIFIY_GOOD);		//分类良品
+					}
+					else
+					{
+						Cmd(CLASSIFIY_BAD);		//分类不良品
+					}
+					g_Result_Queue.pop();
+				}
+				mutex_Result.unlock();
+				
 		}
 	
-		Sleep(20);
+		Sleep(50);
 	}
 
 }

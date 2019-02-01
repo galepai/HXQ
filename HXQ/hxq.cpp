@@ -215,22 +215,18 @@ void hxq::OnOpen()
 
 void hxq::OnDisplayAreaCamera()
 {
-	//QString type, id;
-	//ReadXmlElementText(QString(XML_Camera), QString(Node_TopCamera), QString("id"), type, value);
-	//READ_XML_ElEMENT(XML_Camera, "DoThink", "id", type, id);
-	//m_HikVisionCameraThread = new Halcon_Camera_Thread(AreaCameraId.toString(), this);
+
 	m_TopCameraThread = new Halcon_Camera_Thread(QString(Camera_Top), this);
 	m_TopCameraThread->setSaveImageDirName("Images/Top/Good/");
 	m_TopCameraThread->setSaveImageNum(10);
 	m_TopCameraThread->setSaveImage(false);
 	m_TopCameraThread->setMutexTrigger(false);
-	//emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
 	connect(m_TopCameraThread, SIGNAL(OpenCameraSinal(void**,QString,int*)), this, SLOT(OpenPreCamera(void**, QString,int*)),Qt::DirectConnection);
 	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
 	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
 	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
 	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	connect(m_TopCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImageAndHandle(void*)));	//左视图显示
+	connect(m_TopCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
 	connect(m_TopCameraThread, SIGNAL(finished()), m_TopCameraThread, SLOT(deleteLater()));
 	m_TopCameraThread->start();
 
@@ -240,13 +236,12 @@ void hxq::OnDisplayAreaCamera()
 	m_SideCameraThread->setSaveImageNum(10);
 	m_SideCameraThread->setSaveImage(false);
 	m_SideCameraThread->setMutexTrigger(false);
-	//emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
 	connect(m_SideCameraThread, SIGNAL(OpenCameraSinal(void**, QString, int*)), this, SLOT(OpenPreCamera(void**, QString, int*)), Qt::DirectConnection);
 	connect(m_SideCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
 	connect(m_SideCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
 	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
 	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	connect(m_SideCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveMiddleImageAndHandle(void*)));	//中视图显示
+	connect(m_SideCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveMiddleImage(void*)));	//中视图显示
 	connect(m_SideCameraThread, SIGNAL(finished()), m_SideCameraThread, SLOT(deleteLater()));
 	m_SideCameraThread->start();
 
@@ -788,6 +783,7 @@ void hxq::OnStart()
 			m_Galil = new Galil_Thread(this);
 		}
 		
+		//connect(m_Galil, SIGNAL(triggerSinal()), this, SLOT(OnWakeCamera()), Qt::DirectConnection);
 		connect(m_Galil, SIGNAL(triggerSinal()), this, SLOT(OnWakeCamera()), Qt::DirectConnection);
 		connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater()));
 
@@ -796,7 +792,7 @@ void hxq::OnStart()
 			m_Galil->start();
 			//m_Galil->Cmd(CLASSIFIY_GOOD);
 			g_Result_Queue.push(true);
-			g_Result_Queue.push(true);
+			//g_Result_Queue.push(true);
 		}
 		else
 		{
@@ -905,7 +901,7 @@ void hxq::OnOpenCameras()
 	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
 	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
 	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	connect(m_TopCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImage(void*)));	//左视图显示
+	connect(m_TopCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImageAndHandle(void*)));	//左视图显示
 	connect(m_TopCameraThread, SIGNAL(finished()), m_TopCameraThread, SLOT(deleteLater()));
 	m_TopCameraThread->start();
 
@@ -920,7 +916,7 @@ void hxq::OnOpenCameras()
 	connect(m_SideCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
 	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
 	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	connect(m_SideCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImage(void*)));	//中视图显示
+	connect(m_SideCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveMiddleImageAndHandle(void*)));	//中视图显示
 	connect(m_SideCameraThread, SIGNAL(finished()), m_SideCameraThread, SLOT(deleteLater()));
 	m_SideCameraThread->start();
 
@@ -953,9 +949,11 @@ void hxq::OnReadyOk(int num)
 //停止
 void hxq::OnStop()
 {
-	if (m_Galil)
+	if (m_Galil && m_Galil->isRunning())
 	{
 		m_Galil->stop();
+		m_Galil->wait();
+		m_Galil = nullptr;
 	}
 
 	OnClearCameraThread();
@@ -1048,7 +1046,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		pPicThread->setCameraId(TopCamera);
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
 		//pPicThread->setModel(gbModel());
-		//connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
+		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 	}
@@ -1061,7 +1059,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		pPicThread->m_Image = ima;
 		pPicThread->setCameraId(SideCamera);
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
-		//connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
+		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 
@@ -1153,12 +1151,24 @@ void hxq::OnMotionCardDebug()
 	//	}
 
 	//}
-	process->start("C:/Program Files/Galil/GalilTools/bin/GalilTools.exe", QStringList("C:/Program Files/Galil/GalilTools/bin/GalilTools.exe"));
+	//process->start("C:/Program Files/Galil/GalilTools/bin/GalilTools.exe", QStringList("C:/Program Files/Galil/GalilTools/bin/GalilTools.exe"));
 
 	//process->startDetached("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
 	//QProcess::execute("d:/PanDownload/PanDownload.exe", QStringList("d:/PanDownload/PanDownload.exe"));
 	
 	//OnWakeCamera();
+
+
+	QString type, Ip;
+
+	///****/
+	ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString(MotionCard_ip), type, Ip);
+	Galil_Thread gali;
+	gali.Open(Ip);
+	gali.Cmd(LIGHT_CLOSE);
+
+	
+		
 }
 
 
@@ -1227,7 +1237,7 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 			qDebug() << "Send Bad!!!	";
 			if (m_detectResult.current_area == Gou || m_detectResult.current_line == Gou)
 			{
-				ui.lcdNumber_cao->display(++m_gou);
+				ui.lcdNumber_gou->display(++m_gou);
 			}
 			else if (m_detectResult.current_area == Cao || m_detectResult.current_line == Cao)
 			{
@@ -1237,9 +1247,10 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 			{
 				ui.lcdNumber_liantong->display(++m_liantong);
 			}
-
 		}
-		
+
+		ui.lcdNumber_total->display(ui.lcdNumber_gou->intValue() + ui.lcdNumber_cao->intValue() + ui.lcdNumber_liantong->intValue() + ui.lcdNumber_good->intValue());
+
 		m_peviousProductDectectEnd = true;
 
 		return;

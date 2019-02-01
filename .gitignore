@@ -327,6 +327,7 @@ GeneratedFiles/
 
 # Diy Images
 *.tiff
+*.tif
 
 # Own Log
 log1.txt

@@ -1,6 +1,7 @@
 #include "PicThreadMiddle.h"
 #include <QTime>
 #include <Func.h>
+#include <qdebug.h>
 #include "CHH.h"
 #include "CHH2.h"
 
@@ -13,6 +14,7 @@ void PicThreadMiddle::run()
 	{
 		try
 		{
+			
 			HTuple hv_DownRow, hv_IsBad;
 			HObject TileImage, ImageEmphasize;
 		//	CHH::PingJie(m_Image, &m_Image, 700, 30, 3, 80, &hv_DownRow);
@@ -31,8 +33,8 @@ void PicThreadMiddle::run()
 			CHH::disp_message(m_WindowHandle, HTuple("number: ") + num, "image", 12, 12, "black", "true");
 
 			qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-			//if (num % 3)
-			if (!hv_IsBad.I())
+			if (num % 3)
+			//if (!hv_IsBad.I())
 			{
 				emit resultReady(MiddleGood, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("Good "), "image", 120, 12, "black", "true");
@@ -44,12 +46,15 @@ void PicThreadMiddle::run()
 			}
 			//…œ…˝—ÿ πƒ‹
 			g_UpWaveEnable = true;
+	
 		}
 		catch (HException& e)
 		{
 			QString error = e.ErrorMessage().Text();
 			//DispText(m_WindowHandle, error.toStdString().c_str(), "image", 120, 12, "red", HTuple(), HTuple());
 			DispText(m_WindowHandle, "MiddleThread handle Error.", "image", 120, 12, "red", HTuple(), HTuple());
+			g_UpWaveEnable = true;
+
 		}
 	}
 		

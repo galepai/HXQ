@@ -3,7 +3,7 @@
 <fivision>
     <Camera>
         <Camera_Top type="string">Hikvision_MVCE12010GM</Camera_Top>
-        <Camera_Side type="string">Baser_raL204848gm</Camera_Side>
+        <Camera_Side type="string">Baser_raL204848gm_Pylon</Camera_Side>
     </Camera>
     <Hxq>
         <包络线上限 type="float">28.7</包络线上限>

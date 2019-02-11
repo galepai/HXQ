@@ -230,7 +230,6 @@ void hxq::OnDisplayAreaCamera()
 	connect(m_TopCameraThread, SIGNAL(finished()), m_TopCameraThread, SLOT(deleteLater()));
 	m_TopCameraThread->start();
 
-
 	m_SideCameraThread = new Halcon_Camera_Thread(QString(Camera_Side), this);
 	m_SideCameraThread->setSaveImageDirName("Images/Side/Good/");
 	m_SideCameraThread->setSaveImageNum(10);
@@ -244,8 +243,6 @@ void hxq::OnDisplayAreaCamera()
 	connect(m_SideCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveMiddleImage(void*)));	//中视图显示
 	connect(m_SideCameraThread, SIGNAL(finished()), m_SideCameraThread, SLOT(deleteLater()));
 	m_SideCameraThread->start();
-
-
 
 }
 
@@ -382,6 +379,46 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 		{
 			autoStartButtonStatus();
 			genErrorDialog(G2U("相机已正确打开！"));
+
+			{
+				QString type, Ip, varName1, varName2;
+
+				ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString(MotionCard_ip), type, Ip);
+				ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName1"), type, varName1);
+				ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName2"), type, varName2);
+
+				///****/
+				if (!m_Galil)
+				{
+					m_Galil = new Galil_Thread(this);
+				}
+
+				//connect(m_Galil, SIGNAL(triggerSinal()), this, SLOT(OnWakeCamera()), Qt::DirectConnection);
+				connect(m_Galil, SIGNAL(triggerSinal()), this, SLOT(OnWakeCamera()), Qt::DirectConnection);
+				connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater()));
+
+				if (m_Galil->Open(Ip + ""))
+				{
+					m_Galil->start();
+					//m_Galil->Cmd(CLASSIFIY_GOOD);
+					g_Result_Queue.push(true);
+					//g_Result_Queue.push(true);
+					m_bIsCameraCorrect = false;
+					genErrorDialog(G2U("控制卡连接成功！"));
+				}
+				else
+				{
+					genErrorDialog(G2U("控制卡连接错误！"));
+					delete m_Galil;
+					m_Galil = nullptr;
+					m_bIsCameraCorrect = false;
+					return;
+				}
+
+				AllButtonFalse();
+				ui.OnStop->setEnabled(true);
+			}
+
 		}
 		else
 		{
@@ -451,16 +488,19 @@ void hxq::OnClearCameraThread()
 {
 	QString topCameraName, sideCameraName, topCameraId, sideCameraId, type;
 	ReadXmlElementText(QString(XML_Configure), QString(Node_Camera), QString(Camera_Top), type, topCameraName);
-	ReadXmlElementText(QString(XML_Configure), QString(Node_Camera), QString(Camera_Side), type, sideCameraName);
+	//ReadXmlElementText(QString(XML_Configure), QString(Node_Camera), QString(Camera_Side), type, sideCameraName);
 
 	ReadXmlElementText(QString(XML_Camera), topCameraName, QString("id"), type, topCameraId);
-	ReadXmlElementText(QString(XML_Camera), sideCameraName, QString("id"), type, sideCameraId);
+	//ReadXmlElementText(QString(XML_Camera), sideCameraName, QString("id"), type, sideCameraId);
 
 	if (m_TopCameraThread)
 		m_TopCameraThread->setStopStatus(true);
 
-	if (m_SideCameraThread)
-		m_SideCameraThread->setStopStatus(true);
+	//if (m_SideCameraThread)
+	//	m_SideCameraThread->setStopStatus(true);
+
+	if (m_Pylon_camera_thread_10_Clock)
+		m_Pylon_camera_thread_10_Clock->setStopStatus(true);
 
 	Sleep(20);
 	condition_Camera.wakeAll();
@@ -474,14 +514,14 @@ void hxq::OnClearCameraThread()
 		}
 	}
 
-	if (Camera_Thread::IsExistCameraId(sideCameraId))
-	{
-		if (m_SideCameraThread->isRunning())
-		{
-			m_SideCameraThread->setStopStatus(true);
-			m_SideCameraThread->wait();
-		}
-	}
+	//if (Camera_Thread::IsExistCameraId(sideCameraId))
+	//{
+	//	if (m_SideCameraThread->isRunning())
+	//	{
+	//		m_SideCameraThread->setStopStatus(true);
+	//		m_SideCameraThread->wait();
+	//	}
+	//}
 
 	//if (Camera_Thread::IsExistCameraId(LineCameraId_Dalsa_11_Clock))
 	//{
@@ -501,14 +541,14 @@ void hxq::OnClearCameraThread()
 	//	}
 	//}
 
-	//if (PylonCamera_Thread::IsExistCameraId(LineCameraId_Pylon_Basler_10_Clock))
-	//{
-	//	if (m_Pylon_camera_thread_10_Clock->isRunning())
-	//	{
-	//		m_Pylon_camera_thread_10_Clock->stop();
-	//		m_Pylon_camera_thread_10_Clock->wait();
-	//	}
-	//}
+	if (PylonCamera_Thread::IsExistCameraId(LineCameraId_Pylon_Basler_Side))
+	{
+		if (m_Pylon_camera_thread_10_Clock->isRunning())
+		{
+			m_Pylon_camera_thread_10_Clock->setStopStatus(true);
+			m_Pylon_camera_thread_10_Clock->wait();
+		}
+	}
 }
 
 void hxq::OnConfigure()
@@ -771,42 +811,8 @@ const HalconCpp::HTuple hxq::GetViewWindowHandle(LocationView location)
 //启动
 void hxq::OnStart()
 {
-	QString type,Ip,varName1,varName2;
-
-	ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString(MotionCard_ip), type,Ip);
-	ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName1"), type, varName1);
-	ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName2"), type, varName2);
-
-		///****/
-		if (!m_Galil)
-		{
-			m_Galil = new Galil_Thread(this);
-		}
-		
-		//connect(m_Galil, SIGNAL(triggerSinal()), this, SLOT(OnWakeCamera()), Qt::DirectConnection);
-		connect(m_Galil, SIGNAL(triggerSinal()), this, SLOT(OnWakeCamera()), Qt::DirectConnection);
-		connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater()));
-
-		if (m_Galil->Open(Ip + ""))
-		{
-			m_Galil->start();
-			//m_Galil->Cmd(CLASSIFIY_GOOD);
-			g_Result_Queue.push(true);
-			//g_Result_Queue.push(true);
-		}
-		else
-		{
-			genErrorDialog(G2U("控制卡连接错误！"));
-			delete m_Galil;
-			m_Galil = nullptr;
-			return;
-		}
-
-		OnOpenCameras();
-
-		AllButtonFalse();
-
-
+	OnOpenCameras();
+	//OnOpenCameraIsCorrect   打开控制卡线程
 }
 
 void hxq:: AllButtonFalse()
@@ -905,20 +911,38 @@ void hxq::OnOpenCameras()
 	connect(m_TopCameraThread, SIGNAL(finished()), m_TopCameraThread, SLOT(deleteLater()));
 	m_TopCameraThread->start();
 
-	m_SideCameraThread = new Halcon_Camera_Thread(QString(Camera_Side), this);
-	m_SideCameraThread->setSaveImageDirName("Images/Side/Good/");
-	m_SideCameraThread->setSaveImageNum(50);
-	m_SideCameraThread->setSaveImage(true);
-	m_SideCameraThread->setMutexTrigger(true);
-	//emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
-	connect(m_SideCameraThread, SIGNAL(OpenCameraSinal(void**, QString, int*)), this, SLOT(OpenPreCamera(void**, QString, int*)), Qt::DirectConnection);
-	connect(m_SideCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
-	connect(m_SideCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
-	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
-	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
-	connect(m_SideCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveMiddleImageAndHandle(void*)));	//中视图显示
-	connect(m_SideCameraThread, SIGNAL(finished()), m_SideCameraThread, SLOT(deleteLater()));
-	m_SideCameraThread->start();
+	//m_SideCameraThread = new Halcon_Camera_Thread(QString(Camera_Side), this);
+	//m_SideCameraThread->setSaveImageDirName("Images/Side/Good/");
+	//m_SideCameraThread->setSaveImageNum(50);
+	//m_SideCameraThread->setSaveImage(true);
+	//m_SideCameraThread->setMutexTrigger(true);
+	////emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
+	//connect(m_SideCameraThread, SIGNAL(OpenCameraSinal(void**, QString, int*)), this, SLOT(OpenPreCamera(void**, QString, int*)), Qt::DirectConnection);
+	//connect(m_SideCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
+	//connect(m_SideCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
+	////connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
+	////connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
+	//connect(m_SideCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveMiddleImageAndHandle(void*)));	//中视图显示
+	//connect(m_SideCameraThread, SIGNAL(finished()), m_SideCameraThread, SLOT(deleteLater()));
+	//m_SideCameraThread->start();
+
+	//
+	
+	//m_Pylon_camera_thread_10_Clock = new PylonCamera_Thread(PylonCamera_Thread::ConnectionType::GigEVision, LineCameraId_Pylon_Basler_Side, this);
+	m_Pylon_camera_thread_10_Clock = new PylonCamera_Thread(QString(Camera_Side), this);
+	m_Pylon_camera_thread_10_Clock->setSaveImageDirName("Images/Side/Good/");
+	m_Pylon_camera_thread_10_Clock->setSaveImageNum(50);
+	m_Pylon_camera_thread_10_Clock->SetExposureTime(350);
+	m_Pylon_camera_thread_10_Clock->setSaveImage(true);
+	m_Pylon_camera_thread_10_Clock->setMutexTrigger(true);
+	//connect(m_Pylon_camera_thread_10_Clock, SIGNAL(signal_error(QString)), this, SLOT(genErrorDialog(QString)));
+	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
+	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
+	//connect(m_Pylon_camera_thread_10_Clock, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
+	//connect(m_Pylon_camera_thread_10_Clock, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
+	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(signal_image(void*)), this, SLOT(receiveMiddleImageAndHandle(void*)));	//中视图显示
+	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(finished()), m_Pylon_camera_thread_10_Clock, SLOT(deleteLater()));
+	m_Pylon_camera_thread_10_Clock->start();
 
 }
 

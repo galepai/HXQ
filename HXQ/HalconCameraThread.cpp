@@ -93,9 +93,13 @@ void Halcon_Camera_Thread::run()
 
 			if (m_bIsStop)
 				break;
-
+			
 			HImage* pImage = new HImage();
+			QTime timedebuge;//声明一个时钟对象
+			timedebuge.start();//开始计时
+		
 			*pImage = m_pGrabber->GrabImage();
+			qDebug() << "Camera：" << timedebuge.elapsed() / 1000.0 << "s";//输出计时
 			//Image = m_pGrabber->GrabImageAsync(-1);
 			
 			emit grab_correct_image(1);

@@ -399,19 +399,25 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 
 				if (m_Galil->Open(Ip + ""))
 				{
-					m_Galil->start();
-					//m_Galil->Cmd(CLASSIFIY_GOOD);
-					g_Result_Queue.push(true);
-					//g_Result_Queue.push(true);
-					m_bIsCameraCorrect = false;
 					genErrorDialog(G2U("控制卡连接成功！"));
+					m_Galil->Cmd(AUTOSTOP);
+					Sleep(100);
+					m_Galil->Cmd(AUTOSTART);
+
+					std::queue<bool> empty;
+					swap(empty, g_Result_Queue);
+					g_Result_Queue.push(true);
+
+					m_Galil->start();
+				
 				}
 				else
 				{
 					genErrorDialog(G2U("控制卡连接错误！"));
 					delete m_Galil;
 					m_Galil = nullptr;
-					m_bIsCameraCorrect = false;
+					OnStop();
+					CameraStatus.clear();
 					return;
 				}
 
@@ -423,8 +429,9 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 		else
 		{
 			genErrorDialog(G2U("相机未正确打开！"));
-			normalButtonStatus();
-		}
+			OnStop();
+			
+		}	
 		CameraStatus.clear();
 	}
 }
@@ -602,10 +609,11 @@ void hxq::receiveTriggerSinal(QByteArray str)
 
 void hxq::OnWakeCamera()
 {
+	Sleep(10);
 	mutex_Camera.lock();
 	condition_Camera.wakeAll();
 	mutex_Camera.unlock();
-	Sleep(10);
+	
 	//mutex_Camera.lock();
 	//condition_Camera.wakeAll();
 	//mutex_Camera.unlock();
@@ -811,8 +819,9 @@ const HalconCpp::HTuple hxq::GetViewWindowHandle(LocationView location)
 //启动
 void hxq::OnStart()
 {
+	AllButtonFalse();
 	OnOpenCameras();
-	//OnOpenCameraIsCorrect   打开控制卡线程
+	//OnOpenCameraIsCorrect()   打开控制卡线程
 }
 
 void hxq:: AllButtonFalse()
@@ -898,7 +907,7 @@ void hxq::OnOpenCameras()
 
 	m_TopCameraThread = new Halcon_Camera_Thread(QString(Camera_Top), this);
 	m_TopCameraThread->setSaveImageDirName("Images/Top/Good/");
-	m_TopCameraThread->setSaveImageNum(50);
+	m_TopCameraThread->setSaveImageNum(200);
 	m_TopCameraThread->setSaveImage(true);
 	m_TopCameraThread->setMutexTrigger(true);
 	//emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
@@ -906,7 +915,7 @@ void hxq::OnOpenCameras()
 	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
 	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
 	//connect(m_camera_top, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
-	//connect(m_camera_thread_top, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
+	connect(m_TopCameraThread, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
 	connect(m_TopCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImageAndHandle(void*)));	//左视图显示
 	connect(m_TopCameraThread, SIGNAL(finished()), m_TopCameraThread, SLOT(deleteLater()));
 	m_TopCameraThread->start();
@@ -931,7 +940,7 @@ void hxq::OnOpenCameras()
 	//m_Pylon_camera_thread_10_Clock = new PylonCamera_Thread(PylonCamera_Thread::ConnectionType::GigEVision, LineCameraId_Pylon_Basler_Side, this);
 	m_Pylon_camera_thread_10_Clock = new PylonCamera_Thread(QString(Camera_Side), this);
 	m_Pylon_camera_thread_10_Clock->setSaveImageDirName("Images/Side/Good/");
-	m_Pylon_camera_thread_10_Clock->setSaveImageNum(50);
+	m_Pylon_camera_thread_10_Clock->setSaveImageNum(200);
 	m_Pylon_camera_thread_10_Clock->SetExposureTime(350);
 	m_Pylon_camera_thread_10_Clock->setSaveImage(true);
 	m_Pylon_camera_thread_10_Clock->setMutexTrigger(true);
@@ -939,7 +948,7 @@ void hxq::OnOpenCameras()
 	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
 	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
 	//connect(m_Pylon_camera_thread_10_Clock, SIGNAL(ReadyOk(int)), this, SLOT(OnReadyOk(int)));
-	//connect(m_Pylon_camera_thread_10_Clock, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
+	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
 	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(signal_image(void*)), this, SLOT(receiveMiddleImageAndHandle(void*)));	//中视图显示
 	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(finished()), m_Pylon_camera_thread_10_Clock, SLOT(deleteLater()));
 	m_Pylon_camera_thread_10_Clock->start();
@@ -975,6 +984,7 @@ void hxq::OnStop()
 {
 	if (m_Galil && m_Galil->isRunning())
 	{
+		m_Galil->Cmd(AUTOSTOP);
 		m_Galil->stop();
 		m_Galil->wait();
 		m_Galil = nullptr;
@@ -982,7 +992,7 @@ void hxq::OnStop()
 
 	OnClearCameraThread();
 
-	m_Result_AllQueue;
+	//m_Result_AllQueue;
 	normalButtonStatus();
 
 }
@@ -1086,12 +1096,6 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
-
-		//关灯
-		if (m_Galil)
-		{
-			m_Galil->Cmd(LIGHT_CLOSE);
-		}
 		
 	}
 	break;
@@ -1134,24 +1138,29 @@ void hxq::genErrorDialog(QString error)
 
 
 
-
 //收到正确图片数,检测完成
 void hxq::receiveCorrectImage(int value)
 {
 	static int imageNum = 0;
 	imageNum += value;
 
-	if (imageNum == 3)  //收到1张图片
+	if (imageNum == 2)  //收到1张图片
 	{
-		m_total++;
-		if (m_bIsOnLine)
-		{
-			//OnDetectEnd();
-		}
-		imageNum = 0;
-		qDebug() << "Send M177:				" << m_total;
+		//m_total++;
 
-		ui.lcdNumber_total->display(m_total);
+		mutex_Result.lock();
+		if (m_Galil)
+		{
+			m_Galil->Cmd(LIGHT_CLOSE);
+		}
+		mutex_Result.unlock();
+		imageNum = 0;
+		qDebug() << "	grabed 2 pic !" ;
+
+		//上升沿使能
+		g_UpWaveEnable = true;
+
+		//ui.lcdNumber_total->display(m_total);
 	}
 
 }
@@ -1219,7 +1228,7 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 	if ((m_Pic_Set.count(TopCamera)) 
 		&& (m_Pic_Set.count(SideCamera)))
 	{
-		qDebug() << "acquice 2 pic....";
+		//qDebug() << "acquice 2 pic....";
 		m_Pic_Set.clear();
 
 		qDebug() << "Image num:	" << ++m_total;
@@ -1227,36 +1236,21 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 		if (!(m_detectResult.current_area + m_detectResult.current_line))
 		{
 			m_good++;
-		//	if (m_bIsOnLine)
-		//	{
-				//if (m_Galil)
-				//{
-				//	m_Galil->Cmd("SB1;SB4");
-					mutex_Result.lock();
-					g_Result_Queue.push(true);
-					mutex_Result.unlock();
-			//}
-					
 
-		//	}
+			mutex_Result.lock();
+			g_Result_Queue.push(true);
+			mutex_Result.unlock();
+
 			qDebug() << "Send Good!!!	";
 			ui.lcdNumber_good->display(m_good);
 
 		}
 		else
 		{
-			//Sleep(30);
-		//	if (m_bIsOnLine)
-		//	{
-				//if (m_Galil)
-			//	{
-			//		m_Galil->Cmd("CB1;CB4");
-					mutex_Result.lock();
-					g_Result_Queue.push(false);
-					mutex_Result.unlock();
-			//	}
-					
-		//	}
+
+				mutex_Result.lock();
+				g_Result_Queue.push(false);
+				mutex_Result.unlock();
 
 			qDebug() << "Send Bad!!!	";
 			if (m_detectResult.current_area == Gou || m_detectResult.current_line == Gou)

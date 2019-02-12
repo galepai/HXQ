@@ -10,6 +10,8 @@ QMutex Halcon_Camera_Thread::m_mutex;
 //QMutex Halcon_Camera_Thread::m_mutex_WriteData;
 //QWaitCondition Halcon_Camera_Thread::m_waitWriteData;
 QStringList Halcon_Camera_Thread::m_CameraIdlist;
+bool Halcon_Camera_Thread::m_WaitWake;
+
 
 Halcon_Camera_Thread::Halcon_Camera_Thread(QString nodeCameraName, QObject *parent)
 	:m_nodeCameraName(nodeCameraName),QThread(parent)

@@ -3,6 +3,8 @@
 #include <QMessageBox>
 #include <QTime>
 #include "ConstParam.h"
+#include "PylonCameraThread.h"
+#include "HalconCameraThread.h"
 
 
 //std::atomic<bool> Galil_Thread::m_bIsStop = false;
@@ -164,10 +166,13 @@ void Galil_Thread::run()
 		//qDebug() << "-RPA =  " << moveRightValue;
 
 		//触发相机
-		if (cameraValue.toFloat() &&  g_UpWaveEnable)  //发射触发相机信号
+		if (cameraValue.toFloat() 
+			//&&  g_UpWaveEnable 
+			&& PylonCamera_Thread::ReadyWake()
+			&& Halcon_Camera_Thread::ReadyWake())  //发射触发相机信号
 		{
 			//取上升沿
-			//qDebug() << QString("echo ") + SINAL_CAMERA + " :	" << cameraValue;
+			qDebug() << QString("echo ") + SINAL_CAMERA + " :	" << cameraValue;
 			g_UpWaveEnable = false;
 			//emit sendVarValue(varValue1);
 			emit triggerSinal();

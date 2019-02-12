@@ -8,7 +8,7 @@
 
 QMutex PylonCamera_Thread::m_mutex;
 QStringList PylonCamera_Thread::m_CameraIdlist;
-
+bool PylonCamera_Thread::m_WaitWake;
 
 class CHardwareTriggerConfiguration : public Pylon::CConfigurationEventHandler
 {
@@ -93,8 +93,6 @@ void PylonCamera_Thread::run()
 
 	emit CameraErrorInformation(true);
 
-	
-		
 
 	m_bIsStop = false;
 	HImage Image;

@@ -41,10 +41,7 @@ public:
 	{
 		m_exposureTime = exposureTime;
 	}
-	bool ReadyWake()
-	{
-		return m_WaitWake;
-	}
+
 
 	//Do Image save?
 	bool IsSaveImage() { return m_bIsSaveImage; }
@@ -61,6 +58,9 @@ public:
 
 	static QStringList m_CameraIdlist;
 	static bool IsExistCameraId(QString cameraId);
+
+	static bool m_WaitWake;
+	static bool ReadyWake(){return m_WaitWake;}
 
 	HTuple m_WindowHandle;
 	
@@ -91,7 +91,9 @@ private:
 	bool m_bIsStop;
 	QString m_SaveDatePath, m_SaveImageDirName;
 	int m_image_index, m_MaxNum, m_exposureTime;
-	bool m_WaitWake, m_bIsSaveImage, m_bIsMutexTrigger;
+	bool  m_bIsSaveImage, m_bIsMutexTrigger;
+	
+
 };
 
 #endif

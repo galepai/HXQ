@@ -45,7 +45,7 @@ void PicThreadMiddle::run()
 				CHH::disp_message(m_WindowHandle, HTuple("Bad "), "image", 120, 12, "red", "true");
 			}
 			//…œ…˝—ÿ πƒ‹
-			g_UpWaveEnable = true;
+			//g_UpWaveEnable = true;
 	
 		}
 		catch (HException& e)
@@ -53,7 +53,7 @@ void PicThreadMiddle::run()
 			QString error = e.ErrorMessage().Text();
 			//DispText(m_WindowHandle, error.toStdString().c_str(), "image", 120, 12, "red", HTuple(), HTuple());
 			DispText(m_WindowHandle, "MiddleThread handle Error.", "image", 120, 12, "red", HTuple(), HTuple());
-			g_UpWaveEnable = true;
+			//g_UpWaveEnable = true;
 
 		}
 	}

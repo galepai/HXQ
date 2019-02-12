@@ -18,6 +18,9 @@
 #define SINAL_MOVERIGHT2										"MG _BGA"						//==1
 #define SINAL_MOVERIGHT1_THRESHOLD				-300000							//移动右端RPA的阀值
 
+#define AUTOSTART	"XQ#ZERO"					//自动启动
+#define AUTOSTOP		"ST"								//自动停止
+
 /*******************    XML-CameraParam    **************************/
 #define XML_Camera				 "Xml/Camera.xml"					//"Xml/Camera.xml"
 

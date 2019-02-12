@@ -50,8 +50,6 @@ public:
 
 	void setHeight(int height){m_height = height;}
 
-	bool ReadyWake(){return m_WaitWake;}
-
 	//Do Image save?
 	bool IsSaveImage() { return m_bIsSaveImage; }
 	void setSaveImage(bool enable = true){ m_bIsSaveImage = enable;}
@@ -69,6 +67,9 @@ public:
 
 	static QStringList m_CameraIdlist;
 	static bool IsExistCameraId(QString cameraId);
+
+	static bool m_WaitWake;
+	static bool ReadyWake() { return m_WaitWake; }
 
 	HTuple m_WindowHandle;
 	
@@ -99,7 +100,6 @@ private:
 	bool m_bIsStop, m_bIsMutexTrigger;
 	QString m_SaveDatePath, m_SaveImageDirName;
 	int m_image_index, m_MaxNum;
-	bool m_WaitWake;
 	bool m_bIsSaveImage;
 
 	float m_exposureTime;

@@ -8,7 +8,7 @@
 #include <QTime>
 
 #define STARTLOGO
-//#define OUTPUTLOG
+#define OUTPUTLOG
 
 void MessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {

@@ -104,6 +104,6 @@ int main(int argc, char *argv[])
 	screen->finish(&w);
 	
 	delete screen;
-	qDebug() << "Open Program!";
+	qDebug() << "\r\n\r\n\r\nOpen Program!";
 	return a.exec();
 }

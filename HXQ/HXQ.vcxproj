@@ -257,6 +257,7 @@
     <ClCompile Include="Func.cpp" />
     <ClCompile Include="DeltaThread.cpp" />
     <ClCompile Include="GalilThread.cpp" />
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="HalconCameraThread.cpp" />
     <ClCompile Include="HikVisionCameraThread.cpp" />
     <ClCompile Include="hxq.cpp" />
@@ -365,6 +366,7 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files (x86)\Galil\gclib\include;.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;$(PYLON_DEV_DIR)\include;$(HALCONROOT)\include;$(HALCONROOT)\include\halconcpp;.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtWebEngine;$(QTDIR)\include\QtWebEngineCore;$(QTDIR)\include\QtWebEngineWidgets</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;WIN32;WIN64;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;QT_WEBENGINE_LIB;QT_WEBENGINECORE_LIB;QT_WEBENGINEWIDGETS_LIB</Define>
     </QtMoc>
+    <ClInclude Include="Global.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="CameraThread.h">
     </QtMoc>

@@ -39,7 +39,8 @@ public:
 	QString CameraId() const;
 	HFramegrabber* Camera() { return m_pGrabber; }
 
-	void setSaveImageDirName(const QString& path);
+	
+
 	void setAcquisitionMode(QString acquisitionMode){m_AcquisitionMode = acquisitionMode;}
 
 	void setTriggerMode(QString triggerMode){m_TriggerMode = triggerMode;}
@@ -50,11 +51,14 @@ public:
 
 	void setHeight(int height){m_height = height;}
 
-	//Do Image save?
+	//Set SaveImageDirName
+	void setSaveImageDirName(const QString& path) { m_SaveImageDirName = path; }
+
+	//Do Image save
 	bool IsSaveImage() { return m_bIsSaveImage; }
 	void setSaveImage(bool enable = true){ m_bIsSaveImage = enable;}
 
-	//Do thread stop? 
+	//Do thread stop
 	void setStopStatus(bool enable = true) { m_bIsStop = enable; }
 	bool StopStatus() { return m_bIsStop; }
 

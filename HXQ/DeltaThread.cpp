@@ -1,5 +1,6 @@
 #include "DeltaThread.h"
 #include "Func.h"
+#include "Global.h"
 #include <QMessageBox>
 #include <QTime>
 #include "ConstParam.h"

@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <QTime>
 #include "Func.h"
+#include "Global.h"
 #include "DeltaThread.h"
 #include "ConstParam.h"
 
@@ -193,12 +194,6 @@ bool Halcon_Camera_Thread::OpenCamera(HalconCpp::HFramegrabber* pGrabber)
 	}
 	
 
-}
-
-
-void Halcon_Camera_Thread::setSaveImageDirName(const QString& ImageDirName)
-{
-	m_SaveImageDirName = ImageDirName;
 }
 
 void Halcon_Camera_Thread::QueueSaveImage(const HObject& Image,int maxnum)

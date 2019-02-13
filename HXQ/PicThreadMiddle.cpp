@@ -1,6 +1,7 @@
 #include "PicThreadMiddle.h"
 #include <QTime>
-#include <Func.h>
+//#include <Func.h>
+#include "Global.h"
 #include <qdebug.h>
 #include "CHH.h"
 #include "CHH2.h"
@@ -9,6 +10,7 @@ int PicThreadMiddle::num = 0;
 void PicThreadMiddle::run()
 {
 	//qDebug() << "Worker Run Thread : " << QThread::currentThreadId();
+
 
 	if (m_Image.Key() != 0)
 	{
@@ -43,6 +45,9 @@ void PicThreadMiddle::run()
 			{
 				emit resultReady(MiddleBad, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("Bad "), "image", 120, 12, "red", "true");
+
+				if (IsSaveImage())
+					QueueSaveImage(m_Image, SaveImageNum());
 			}
 			//ÉÏÉýÑØÊ¹ÄÜ
 			//g_UpWaveEnable = true;
@@ -54,6 +59,8 @@ void PicThreadMiddle::run()
 			//DispText(m_WindowHandle, error.toStdString().c_str(), "image", 120, 12, "red", HTuple(), HTuple());
 			DispText(m_WindowHandle, "MiddleThread handle Error.", "image", 120, 12, "red", HTuple(), HTuple());
 			//g_UpWaveEnable = true;
+			if (IsSaveImage())
+				QueueSaveImage(m_Image, SaveImageNum());
 
 		}
 	}
@@ -65,4 +72,22 @@ void PicThreadMiddle::OnHandle(HTuple WindowHandle)
 	HTuple hv_DownRow;
 	CHH::PingJie(m_Image, &m_Image, 1000, 30, 3, 10, &hv_DownRow);
 	DispObj(m_Image, WindowHandle);
+}
+
+void PicThreadMiddle::QueueSaveImage(const HObject& Image, int maxnum)
+{
+
+	if (g_SaveTopBadIndex <= maxnum)
+	{
+		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveSideBadIndex, 4, 10, QChar('0'));
+		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		g_SaveSideBadIndex++;
+	}
+	else
+	{
+		g_SaveTopBadIndex = 1;
+		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveSideBadIndex, 4, 10, QChar('0'));
+		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		g_SaveSideBadIndex++;
+	}
 }

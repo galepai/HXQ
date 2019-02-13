@@ -3,6 +3,8 @@
 #include "CHH.h"
 #include "CHH2.h"
 #include <QDebug>
+//#include "Func.h"
+#include "Global.h"
 #include "../Detect/Detect/Detect.h"
 
 int PicThreadLeft::num = 0;
@@ -38,16 +40,25 @@ void PicThreadLeft::run()
 			{
 				emit resultReady(Gou,m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("¹³²»Á¼ "), "image", 120, 12, "red", "true");
+
+				if(IsSaveImage())
+					QueueSaveImage(m_Image, SaveImageNum());
 			}
 			else if (num % 7)
 			{
 				emit resultReady(Cao, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("²Û²»Á¼ "), "image", 120, 12, "red", "true");
+
+				if (IsSaveImage())
+					QueueSaveImage(m_Image, SaveImageNum());
 			}
 			else if (num % 11)
 			{
 				emit resultReady(Liantong, m_CameraId);
 				CHH::disp_message(m_WindowHandle, HTuple("²ÛÄÚÕ³Í­ "), "image", 120, 12, "red", "true");
+
+				if (IsSaveImage())
+					QueueSaveImage(m_Image, SaveImageNum());
 			}
 
 		}
@@ -56,11 +67,11 @@ void PicThreadLeft::run()
 			QString error = e.ErrorMessage().Text();
 			//DispText(m_WindowHandle, error.toStdString().c_str(), "image", 120, 12, "red", HTuple(), HTuple());
 			qDebug() << "ThreadLeft error:  " << error;
+			QueueSaveImage(m_Image, 5);
 		}
 
 		
 	}
-
 	
 }
 
@@ -90,4 +101,22 @@ void PicThreadLeft::OnHandle(HObject& image,const HTuple& WindowHandle,HTuple* R
 	//DetectModule::detectTop(image, WindowHandle, &tmp_Result, &ExceptionInformation);
 
 	qDebug() << ExceptionInformation.ToString().Text();
+}
+
+void PicThreadLeft::QueueSaveImage(const HObject& Image, int maxnum)
+{
+
+	if (g_SaveTopBadIndex <= maxnum)
+	{
+		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveTopBadIndex, 4, 10, QChar('0'));
+		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		g_SaveTopBadIndex++;
+	}
+	else
+	{
+		g_SaveTopBadIndex = 1;
+		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveTopBadIndex, 4, 10, QChar('0'));
+		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		g_SaveTopBadIndex++;
+	}
 }

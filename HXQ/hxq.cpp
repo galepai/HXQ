@@ -7,7 +7,7 @@
 #include "aboutdialog.h"
 #include "EngineerDialog.h"
 #include "DeltaThread.h"
-
+#include "Global.h"
 #include "ConfigureDialog.h"
 #include "PicThreadMiddle.h"
 #include "PicThreadLeft.h"
@@ -45,7 +45,7 @@ hxq::hxq(QWidget *parent)
 	//OnOperatorStatus();
 
 	//写入最后一次打开时间
-	WriteCurrenDateTime("config.ini", "Config", "OpenProgramTime");  //不支持中文写入配置文件
+	//WriteCurrenDateTime("config.ini", "Config", "OpenProgramTime");  //不支持中文写入配置文件
 
 	m_bIsDisOneImage = false;
 
@@ -78,6 +78,15 @@ hxq::hxq(QWidget *parent)
 			p++;
 		}
 	}
+
+	std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent2;
+	if (ParserXmlNode(QString(XML_Configure), QString(Node_Save), xmlContent2))
+	{
+		 g_SaveTopBadIndex = xmlContent2[0].second.toInt();
+		 g_SaveSideBadIndex = xmlContent2[1].second.toInt();
+	}
+
+	m_bOneDetect = false;
 
 }
 
@@ -115,7 +124,8 @@ void hxq::FullScreenShow()
 
 hxq::~hxq()
 {
-
+	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("TopBad"), QString("%1").arg(g_SaveTopBadIndex));
+	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("SideBad"), QString("%1").arg(g_SaveSideBadIndex));
 }
 
 void hxq::OnEngineer()
@@ -166,9 +176,29 @@ void hxq::OnOpen()
 
 	QString path = QFileDialog::getOpenFileName(this, tr("Open Image"), "", tr("Image Files(*.jpg *.tif *.bmp)"));
 
-	if (path.contains("Top")
-		//|| path.contains("Side")
-		//|| path.contains("camera3")
+	if(path.contains("Bad")
+		&&  path.contains("Images"))
+	{
+		int i = path.lastIndexOf('/');
+		QString ImageName = path.toStdString().substr(i, path.length() - 1).c_str();
+		QString tempPath = path.remove(ImageName);
+
+		i = tempPath.lastIndexOf("Images");
+		QString upDir = tempPath.toStdString().substr(0, i).c_str();
+
+		QString ImagePath = upDir + "Images/Top/Bad/" + ImageName;
+		ReadImage(&m_LeftImage, ImagePath.toLocal8Bit().constData());
+		DispPic(m_LeftImage, LeftView);
+
+		ImagePath = upDir + "Images/Side/Bad/" + ImageName;
+		ReadImage(&m_MiddleImage, ImagePath.toLocal8Bit().constData());
+		DispPic(m_MiddleImage, MiddleView);
+
+		statusBar()->showMessage(QString(G2U("单次检测图像: ")) + ImageName);
+
+		m_bOneDetect = true;
+	}
+	else if (path.contains("Top")
 		|| path.contains("Side"))
 	{
 		int i = path.lastIndexOf('/');
@@ -178,23 +208,17 @@ void hxq::OnOpen()
 		i = tempPath.lastIndexOf("Images");
 		QString upDir = tempPath.toStdString().substr(0, i).c_str();
 
-		QString ImagePath = upDir + "Images/Top/Good/" + ImageName;
+		QString ImagePath = upDir + "Images/Top/All/" + ImageName;
 		ReadImage(&m_LeftImage, ImagePath.toLocal8Bit().constData());
 		DispPic(m_LeftImage, LeftView);
 
-		ImagePath = upDir + "Images/Side/Good/" + ImageName;
+		ImagePath = upDir + "Images/Side/All/" + ImageName;
 		ReadImage(&m_MiddleImage, ImagePath.toLocal8Bit().constData());
 		DispPic(m_MiddleImage, MiddleView);
 
-		/*ImagePath = upDir + "camera3/Camera3_" + ImageName;
-		ReadImage(&m_SecondRightImage, ImagePath.toLocal8Bit().constData());
-		DispPic(m_SecondRightImage, SecondRightView);*/
-
-		/*ImagePath = upDir + "camera4/Camera4_" + ImageName;
-		ReadImage(&m_RightImage, ImagePath.toLocal8Bit().constData());
-		DispPic(m_RightImage, RightView);*/
-
 		statusBar()->showMessage(QString(G2U("单次检测图像: ")) + ImageName);
+
+		m_bOneDetect = true;
 	}
 	else
 	{
@@ -205,7 +229,6 @@ void hxq::OnOpen()
 			m_bIsDisOneImage = true;
 			DispPic(m_LeftImage, LeftView);
 			statusBar()->showMessage(path);
-			
 
 		}
 	}
@@ -217,7 +240,7 @@ void hxq::OnDisplayAreaCamera()
 {
 
 	m_TopCameraThread = new Halcon_Camera_Thread(QString(Camera_Top), this);
-	m_TopCameraThread->setSaveImageDirName("Images/Top/Good/");
+	m_TopCameraThread->setSaveImageDirName(SaveTopImageDir);
 	m_TopCameraThread->setSaveImageNum(10);
 	m_TopCameraThread->setSaveImage(false);
 	m_TopCameraThread->setMutexTrigger(false);
@@ -231,7 +254,7 @@ void hxq::OnDisplayAreaCamera()
 	m_TopCameraThread->start();
 
 	m_SideCameraThread = new Halcon_Camera_Thread(QString(Camera_Side), this);
-	m_SideCameraThread->setSaveImageDirName("Images/Side/Good/");
+	m_SideCameraThread->setSaveImageDirName(SaveSideImageDir);
 	m_SideCameraThread->setSaveImageNum(10);
 	m_SideCameraThread->setSaveImage(false);
 	m_SideCameraThread->setMutexTrigger(false);
@@ -819,6 +842,7 @@ const HalconCpp::HTuple hxq::GetViewWindowHandle(LocationView location)
 //启动
 void hxq::OnStart()
 {
+	m_bOneDetect = false;
 	AllButtonFalse();
 	OnOpenCameras();
 	//OnOpenCameraIsCorrect()   打开控制卡线程
@@ -906,7 +930,7 @@ void hxq::OnOpenCameras()
 	/****************************/
 
 	m_TopCameraThread = new Halcon_Camera_Thread(QString(Camera_Top), this);
-	m_TopCameraThread->setSaveImageDirName("Images/Top/Good/");
+	m_TopCameraThread->setSaveImageDirName(SaveTopImageDir);
 	m_TopCameraThread->setSaveImageNum(200);
 	m_TopCameraThread->setSaveImage(true);
 	m_TopCameraThread->setMutexTrigger(true);
@@ -939,7 +963,7 @@ void hxq::OnOpenCameras()
 	
 	//m_Pylon_camera_thread_10_Clock = new PylonCamera_Thread(PylonCamera_Thread::ConnectionType::GigEVision, LineCameraId_Pylon_Basler_Side, this);
 	m_Pylon_camera_thread_10_Clock = new PylonCamera_Thread(QString(Camera_Side), this);
-	m_Pylon_camera_thread_10_Clock->setSaveImageDirName("Images/Side/Good/");
+	m_Pylon_camera_thread_10_Clock->setSaveImageDirName(SaveSideImageDir);
 	m_Pylon_camera_thread_10_Clock->setSaveImageNum(200);
 	m_Pylon_camera_thread_10_Clock->SetExposureTime(350);
 	m_Pylon_camera_thread_10_Clock->setSaveImage(true);
@@ -994,6 +1018,9 @@ void hxq::OnStop()
 
 	//m_Result_AllQueue;
 	normalButtonStatus();
+
+	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("TopBad"), QString("%1").arg(g_SaveTopBadIndex));
+	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("SideBad"), QString("%1").arg(g_SaveSideBadIndex));
 
 }
 
@@ -1079,8 +1106,16 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		pPicThread->m_Image = ima;
 		pPicThread->setCameraId(TopCamera);
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
-		//pPicThread->setModel(gbModel());
-		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
+
+
+		if (!m_bOneDetect)
+		{
+			pPicThread->setSaveImage(true);
+			pPicThread->setSaveImageDirName("Images/Top/Bad/");
+			pPicThread->setSaveImageNum(100);
+			connect(pPicThread, SIGNAL(resultReady(int, int)), this, SLOT(OnHandleResults(int, int)));
+		}
+		
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 	}
@@ -1093,7 +1128,14 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		pPicThread->m_Image = ima;
 		pPicThread->setCameraId(SideCamera);
 		pPicThread->m_WindowHandle = GetViewWindowHandle(view);
-		connect(pPicThread, SIGNAL(resultReady(int,int)), this, SLOT(OnHandleResults(int,int)));
+
+		if (!m_bOneDetect)
+		{
+			pPicThread->setSaveImage(true);
+			pPicThread->setSaveImageDirName("Images/Side/Bad/");
+			pPicThread->setSaveImageNum(100);
+			connect(pPicThread, SIGNAL(resultReady(int, int)), this, SLOT(OnHandleResults(int, int)));
+		}
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
 		pPicThread->start();
 		

@@ -128,10 +128,11 @@ struct DetectParam
 	float maociHeight;
 };
 
-extern QMutex mutex_Camera;
-extern QMutex mutex_Result;
-extern QWaitCondition condition_Camera;
-extern bool g_UpWaveEnable;
-extern std::queue<bool> g_Result_Queue;
+//extern QMutex mutex_Camera;
+//extern QMutex mutex_Result;
+//extern QWaitCondition condition_Camera;
+//extern bool g_UpWaveEnable;
+//extern std::queue<bool> g_Result_Queue;
+//extern int g_SaveTopBadIndex,g_SaveSideBadIndex;
 
 #endif // FUNC_H

@@ -131,6 +131,8 @@ private:
 	DetectResultInfo m_detectResult;
 	//bool m_bIsCameraCorrect;
 
+	bool m_bOneDetect;
+
 signals:
 	void ReadyLoop();
 

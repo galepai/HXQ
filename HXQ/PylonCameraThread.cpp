@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <QTime>
 #include "Func.h"
+#include "Global.h"
 #include "ConstParam.h"
 #include "pylon/PylonGUIIncludes.h"
 #include "DeltaThread.h"

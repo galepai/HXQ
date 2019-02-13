@@ -122,6 +122,9 @@
     <ClCompile Include="Widgets\detectWidget.cpp">
       <Filter>Source Files\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="aboutdialog.ui">
@@ -215,6 +218,9 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_camera2Widget.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

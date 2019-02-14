@@ -335,6 +335,7 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;$(PYLON_DEV_DIR)\include;$(HALCONROOT)\include;$(HALCONROOT)\include\halconcpp;.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;WIN32;WIN64;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
+    <ClInclude Include="Detect.h" />
     <ClInclude Include="GeneratedFiles\ui_camera2Widget.h" />
     <ClInclude Include="GeneratedFiles\ui_ConfigureDialog.h" />
     <QtMoc Include="PicThreadLeft.h">

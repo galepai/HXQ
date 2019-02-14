@@ -13,7 +13,7 @@ class PicThreadLeft : public QThread
 
 public:
 	explicit PicThreadLeft(QObject *parent = 0)
-		: QThread(parent), m_CameraId(0),m_MaxNum(50)
+		: QThread(parent), m_CameraId(0),m_MaxNum(50),m_bIsSaveImage(false)
 	{
 		//qDebug() << "Worker Thread : " << QThread::currentThreadId();
 		

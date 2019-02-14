@@ -13,12 +13,12 @@ class PicThreadMiddle : public QThread
 
 public:
 	explicit PicThreadMiddle(QObject *parent = 0)
-		: QThread(parent)
+		: QThread(parent), m_CameraId(0), m_MaxNum(50), m_bIsSaveImage(false)
 	{
 		//qDebug() << "Worker Thread : " << QThread::currentThreadId();
 	}
 
-	void OnHandle(HTuple WindowHandle);
+	void OnHandle(HObject& image, const HTuple& WindowHandle, HTuple* Result);
 	void QueueSaveImage(const HObject& Image, int maxnum);
 
 

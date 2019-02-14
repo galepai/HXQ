@@ -5,7 +5,9 @@
 #include <QDebug>
 //#include "Func.h"
 #include "Global.h"
-#include "../Detect/Detect/Detect.h"
+//#include "../Detect/Detect/Detect.h"
+#include "Detect.h"
+
 
 int PicThreadLeft::num = 0;
 
@@ -23,43 +25,83 @@ void PicThreadLeft::run()
 			//DispObj(m_Image, m_WindowHandle);
 			//Emphasize(m_Image, &ImageEmphasize, 3, 102, 1);
 
-			//OnHandle(m_Image,m_WindowHandle,&hv_IsBad);
+			OnHandle(m_Image,m_WindowHandle,&hv_IsBad);
+
+			int result = hv_IsBad.I();
+
+			switch (result)
+			{
+			case Good:
+
+				emit resultReady(Good, m_CameraId);
+				CHH::disp_message(m_WindowHandle, HTuple("Á¼Æ· "), "image", 120, 12, "black", "true");
+				break;
+
+			case Bad:
+
+				if (IsSaveImage())
+					QueueSaveImage(m_Image, SaveImageNum());
+				break;
+
+			case Gou:
+
+				emit resultReady(Gou, m_CameraId);
+				CHH::disp_message(m_WindowHandle, HTuple("¹³²»Á¼ "), "image", 120, 12, "red", "true");
+				if (IsSaveImage())
+					QueueSaveImage(m_Image, SaveImageNum());
+				break;
+
+			case Cao:
+
+				emit resultReady(Cao, m_CameraId);
+				CHH::disp_message(m_WindowHandle, HTuple("²Û²»Á¼ "), "image", 120, 12, "red", "true");
+				if (IsSaveImage())
+					QueueSaveImage(m_Image, SaveImageNum());
+				break;
+
+			case Liantong:
+
+				break;
+
+			default:
+				break;
+			}
 
 			num++;
 			CHH::disp_message(m_WindowHandle, HTuple("number: ") + num, "image", 12, 12, "black", "true");
 			
 
-			qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-			//if (hv_IsBad.I()==0)
-			if (num % 3)
-			{
-				emit resultReady(Good,m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("Á¼Æ· "), "image", 120, 12, "black", "true");
-			}
-			else if (num % 5)
-			{
-				emit resultReady(Gou,m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("¹³²»Á¼ "), "image", 120, 12, "red", "true");
+			//qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
+			////if (hv_IsBad.I()==0)
+			//if (num % 3)
+			//{
+			//	emit resultReady(Good,m_CameraId);
+			//	CHH::disp_message(m_WindowHandle, HTuple("Á¼Æ· "), "image", 120, 12, "black", "true");
+			//}
+			//else if (num % 5)
+			//{
+			//	emit resultReady(Gou,m_CameraId);
+			//	CHH::disp_message(m_WindowHandle, HTuple("¹³²»Á¼ "), "image", 120, 12, "red", "true");
 
-				if(IsSaveImage())
-					QueueSaveImage(m_Image, SaveImageNum());
-			}
-			else if (num % 7)
-			{
-				emit resultReady(Cao, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("²Û²»Á¼ "), "image", 120, 12, "red", "true");
+			//	if(IsSaveImage())
+			//		QueueSaveImage(m_Image, SaveImageNum());
+			//}
+			//else if (num % 7)
+			//{
+			//	emit resultReady(Cao, m_CameraId);
+			//	CHH::disp_message(m_WindowHandle, HTuple("²Û²»Á¼ "), "image", 120, 12, "red", "true");
 
-				if (IsSaveImage())
-					QueueSaveImage(m_Image, SaveImageNum());
-			}
-			else if (num % 11)
-			{
-				emit resultReady(Liantong, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("²ÛÄÚÕ³Í­ "), "image", 120, 12, "red", "true");
+			//	if (IsSaveImage())
+			//		QueueSaveImage(m_Image, SaveImageNum());
+			//}
+			//else if (num % 11)
+			//{
+			//	emit resultReady(Liantong, m_CameraId);
+			//	CHH::disp_message(m_WindowHandle, HTuple("²ÛÄÚÕ³Í­ "), "image", 120, 12, "red", "true");
 
-				if (IsSaveImage())
-					QueueSaveImage(m_Image, SaveImageNum());
-			}
+			//	if (IsSaveImage())
+			//		QueueSaveImage(m_Image, SaveImageNum());
+			//}
 
 		}
 		catch (HException& e)
@@ -67,7 +109,7 @@ void PicThreadLeft::run()
 			QString error = e.ErrorMessage().Text();
 			//DispText(m_WindowHandle, error.toStdString().c_str(), "image", 120, 12, "red", HTuple(), HTuple());
 			qDebug() << "ThreadLeft error:  " << error;
-			QueueSaveImage(m_Image, 5);
+			QueueSaveImage(m_Image, SaveImageNum());
 		}
 
 		
@@ -99,6 +141,12 @@ void PicThreadLeft::OnHandle(HObject& image,const HTuple& WindowHandle,HTuple* R
 	HTuple tmp_Result = 0;
 	HTuple ExceptionInformation("");
 	//DetectModule::detectTop(image, WindowHandle, &tmp_Result, &ExceptionInformation);
+
+	HTuple output_ExceptionInformtion;
+	DetectModule::detectTop(image, WindowHandle,
+		28.7, 28.1,
+		1.9, 1.5,
+		Result, &output_ExceptionInformtion);
 
 	qDebug() << ExceptionInformation.ToString().Text();
 }

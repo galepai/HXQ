@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <qdebug.h>
 #include <QFileDialog>
+#include "Global.h"
 
 detectWidget::detectWidget(QWidget *parent) :
     QWidget(parent),
@@ -46,11 +47,26 @@ void detectWidget::SaveToXml()
 		}
 	}
 
+	std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent;
+	if (ParserXmlNode(QString(XML_Configure), QString(Node_Hxq), xmlContent))
+	{
+		int total = sizeof(g_DetectParam) / sizeof(float);
+		float* p = (float*)&g_DetectParam;
+		for (int index = 0; index<total; index++)
+		{
+			*p = xmlContent[index].second.toFloat();
+			p++;
+		}
+	}
+
+
 	if (sucessCount == count && sucessCount != 0)
 	{
 		QMessageBox::StandardButton reply;
 		reply = QMessageBox::information(this, G2U("信息"), G2U("参数成功写入配置文件"));
 	}
+
+
 }
 
 void detectWidget::ReadFromXml()

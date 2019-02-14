@@ -16,7 +16,7 @@
         <毛刺高 type="float">0.15</毛刺高>
     </Hxq>
     <Save>
-        <TopBad type="int">2</TopBad>
-        <SideBad type="int">12</SideBad>
+        <TopBad type="int">44</TopBad>
+        <SideBad type="int">1125</SideBad>
     </Save>
 </fivision>

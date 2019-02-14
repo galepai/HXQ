@@ -19,16 +19,12 @@ void PicThreadLeft::run()
 	{
 		try
 		{
-			HTuple hv_DownRow, hv_IsBad, hv_ModelHandle;
-			HObject TileImage, ImageEmphasize;
-			//CHH::PingJie(m_Image, &m_Image, 500, 40, 3, 40, &hv_DownRow);
-			//DispObj(m_Image, m_WindowHandle);
-			//Emphasize(m_Image, &ImageEmphasize, 3, 102, 1);
+			HTuple hv_IsBad;
 
 			OnHandle(m_Image,m_WindowHandle,&hv_IsBad);
-
 			int result = hv_IsBad.I();
 
+			//int result = 1;
 			switch (result)
 			{
 			case Good:
@@ -39,6 +35,8 @@ void PicThreadLeft::run()
 
 			case Bad:
 
+				emit resultReady(Bad, m_CameraId);
+				CHH::disp_message(m_WindowHandle, HTuple("不良品 "), "image", 120, 12, "black", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;
@@ -61,9 +59,18 @@ void PicThreadLeft::run()
 
 			case Liantong:
 
+				emit resultReady(Liantong, m_CameraId);
+				CHH::disp_message(m_WindowHandle, HTuple("连铜 "), "image", 120, 12, "red", "true");
+				if (IsSaveImage())
+					QueueSaveImage(m_Image, SaveImageNum());
 				break;
 
 			default:
+
+				emit resultReady(Bad, m_CameraId);
+				CHH::disp_message(m_WindowHandle, HTuple("无正确分类号"), "image", 120, 12, "red", "true");
+				if (IsSaveImage())
+					QueueSaveImage(m_Image, SaveImageNum());
 				break;
 			}
 
@@ -107,7 +114,9 @@ void PicThreadLeft::run()
 		catch (HException& e)
 		{
 			QString error = e.ErrorMessage().Text();
-			//DispText(m_WindowHandle, error.toStdString().c_str(), "image", 120, 12, "red", HTuple(), HTuple());
+			DispText(m_WindowHandle, "LeftThread handle Error.", "image", 120, 12, "red", HTuple(), HTuple());
+			emit resultReady(Bad, m_CameraId);
+			CHH::disp_message(m_WindowHandle, HTuple("无正确分类号"), "image", 120, 12, "red", "true");
 			qDebug() << "ThreadLeft error:  " << error;
 			QueueSaveImage(m_Image, SaveImageNum());
 		}
@@ -119,36 +128,35 @@ void PicThreadLeft::run()
 
 void PicThreadLeft::OnHandle(HObject& image,const HTuple& WindowHandle,HTuple* Result)
 {
-	static int step = 1;
-	step++;
+	//static int step = 1;
+	//step++;
 
-	HObject circle;
-	int row = 100 + 50 * step;
-	if (row < 2000)
-		GenCircle(&circle, 100 + 50 * step, 300, 100);
-	else
-	{
-		GenCircle(&circle, 100 + 50 * step, 300, 100);
-		step = 1;
-	}
+	//HObject circle;
+	//int row = 100 + 50 * step;
+	//if (row < 2000)
+	//	GenCircle(&circle, 100 + 50 * step, 300, 100);
+	//else
+	//{
+	//	GenCircle(&circle, 100 + 50 * step, 300, 100);
+	//	step = 1;
+	//}
 
-	DispObj(circle, WindowHandle);
+	//DispObj(circle, WindowHandle);
 
-	//结果
-	*Result = 1;
+	////结果
+	//*Result = 1;
 
 	//引用动态库
-	HTuple tmp_Result = 0;
-	HTuple ExceptionInformation("");
-	//DetectModule::detectTop(image, WindowHandle, &tmp_Result, &ExceptionInformation);
-
-	HTuple output_ExceptionInformtion;
+	HTuple output_ExceptionInformtion("");
 	DetectModule::detectTop(image, WindowHandle,
-		28.7, 28.1,
-		1.9, 1.5,
-		Result, &output_ExceptionInformtion);
+		g_DetectParam.diameterUp, 
+		g_DetectParam.diameterDown,
+		g_DetectParam.gouWidthUP, 
+		g_DetectParam.gouWidthDown,
+		Result,
+		&output_ExceptionInformtion);
 
-	qDebug() << ExceptionInformation.ToString().Text();
+	qDebug() <<  "Top Detect Information :	"<< output_ExceptionInformtion.ToString().Text();
 }
 
 void PicThreadLeft::QueueSaveImage(const HObject& Image, int maxnum)

@@ -17,7 +17,7 @@
 #include <map>
 
 
-DetectParam hxq::g_DetectParam = {0};
+//DetectParam hxq::g_DetectParam = {0};
 
 hxq::hxq(QWidget *parent)
 	: QMainWindow(parent)
@@ -179,6 +179,7 @@ void hxq::OnOpen()
 	if(path.contains("Bad")
 		&&  path.contains("Images"))
 	{
+		m_bOneDetect = true;
 		int i = path.lastIndexOf('/');
 		QString ImageName = path.toStdString().substr(i, path.length() - 1).c_str();
 		QString tempPath = path.remove(ImageName);
@@ -196,11 +197,12 @@ void hxq::OnOpen()
 
 		statusBar()->showMessage(QString(G2U("单次检测图像: ")) + ImageName);
 
-		m_bOneDetect = true;
+		
 	}
 	else if (path.contains("Top")
 		|| path.contains("Side"))
 	{
+		m_bOneDetect = true;
 		int i = path.lastIndexOf('/');
 		QString ImageName = path.toStdString().substr(i, path.length() - 1).c_str();
 		QString tempPath = path.remove(ImageName);
@@ -218,7 +220,7 @@ void hxq::OnOpen()
 
 		statusBar()->showMessage(QString(G2U("单次检测图像: ")) + ImageName);
 
-		m_bOneDetect = true;
+		
 	}
 	else
 	{
@@ -637,9 +639,10 @@ void hxq::OnWakeCamera()
 	condition_Camera.wakeAll();
 	mutex_Camera.unlock();
 	
-	//mutex_Camera.lock();
-	//condition_Camera.wakeAll();
-	//mutex_Camera.unlock();
+	Sleep(10);
+	mutex_Camera.lock();
+	condition_Camera.wakeAll();
+	mutex_Camera.unlock();
 }
 
 void hxq::OnModToRight()
@@ -1038,9 +1041,13 @@ void hxq::OnDetectEnd()
 //******对应视图显示图片
 void hxq::receiveLeftImage(void* image)
 {
-	HImage* ima = (HImage*)image;
+	/*HImage* ima = (HImage*)image;
 	DispPic(*ima, LeftView);
-	delete ima;
+	delete ima;*/
+
+	HImage ima =* (HImage*)image;
+	DispPic(ima, LeftView);
+	
 }
 
 void hxq::receiveMiddleImage(void* image)
@@ -1066,17 +1073,31 @@ void hxq::receiveRightImage(void* image)
 //******对应视图显示图片,并处理图片
 void hxq::receiveLeftImageAndHandle(void* image)
 {
-	HImage* ima = (HImage*)image;
-	DispPic(*ima, LeftView);
-	OnHandleImageThread(*ima, LeftView);
-	delete ima;
+	//HImage* ima = (HImage*)image;
+	//DispPic(*ima, LeftView);
+	//OnHandleImageThread(*ima, LeftView);
+	//delete ima;
+
+	//HImage ima = *(HImage*)image;
+	//DispPic(ima, LeftView);
+	//OnHandleImageThread(ima, LeftView);
+
+	
+	m_LeftImage = *(HImage*)image;
+	DispPic(m_LeftImage, LeftView);
+	OnHandleImageThread(m_LeftImage, LeftView);
+
 }
 
 void hxq::receiveMiddleImageAndHandle(void* image)
 {
-	HImage ima = *(HImage*)image;
+	/*HImage ima = *(HImage*)image;
 	DispPic(ima, MiddleView);
-	OnHandleImageThread(ima, MiddleView);
+	OnHandleImageThread(ima, MiddleView);*/
+
+	m_MiddleImage = *(HImage*)image;
+	DispPic(m_MiddleImage, MiddleView);
+	OnHandleImageThread(m_MiddleImage, MiddleView);
 }
 
 void hxq::receiveSecondRightImageAndHandle(void* image)

@@ -28,7 +28,7 @@
         <Width type="int">2048</Width>
         <Height type="int">8000</Height>
         <ExposureTimeRaw type="int">350</ExposureTimeRaw>
-        <AcquisitionLineRateAbs type="float">16000.0</AcquisitionLineRateAbs>
+        <AcquisitionLineRateAbs type="float">14000.0</AcquisitionLineRateAbs>
         <TriggerSelector type="string">FrameStart</TriggerSelector>
         <TriggerMode type="string">Off</TriggerMode>
     </Baser_raL204848gm_Pylon>

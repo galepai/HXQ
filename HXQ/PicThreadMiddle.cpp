@@ -18,24 +18,11 @@ void PicThreadMiddle::run()
 		try
 		{
 			
-			HTuple hv_DownRow, hv_IsBad;
-			HObject TileImage, ImageEmphasize;
-		//	CHH::PingJie(m_Image, &m_Image, 700, 30, 3, 80, &hv_DownRow);
-		//	DispObj(m_Image, m_WindowHandle);
-			//Emphasize(m_Image, &ImageEmphasize, 3, 102, 1);
-		//	SetColor(m_WindowHandle, "red");
-		//	SetDraw(m_WindowHandle,"margin");
-			
-			//QTime ti;
-			//ti.start();
-
-		//	CHH2::PengShang_Camera2(ImageEmphasize, m_WindowHandle, &hv_IsBad);
-
-			//qDebug() << "middle: "<<ti.elapsed() << "ms";
-
+			HTuple  hv_IsBad;
 			OnHandle(m_Image, m_WindowHandle, &hv_IsBad);
 			int result = hv_IsBad.I();
 
+			//int result = 1;
 			switch (result)
 			{
 			case Good:
@@ -46,6 +33,8 @@ void PicThreadMiddle::run()
 
 			case Bad:
 
+				emit resultReady(Bad, m_CameraId);
+				CHH::disp_message(m_WindowHandle, HTuple("不良品 "), "image", 120, 12, "black", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;
@@ -68,10 +57,20 @@ void PicThreadMiddle::run()
 
 			case Liantong:
 
+				emit resultReady(Liantong, m_CameraId);
+				CHH::disp_message(m_WindowHandle, HTuple("连铜 "), "image", 120, 12, "red", "true");
+				if (IsSaveImage())
+					QueueSaveImage(m_Image, SaveImageNum());
 				break;
 
 			default:
+
+				emit resultReady(Bad, m_CameraId);
+				CHH::disp_message(m_WindowHandle, HTuple("无正确分类号"), "image", 120, 12, "red", "true");
+				if (IsSaveImage())
+					QueueSaveImage(m_Image, SaveImageNum());
 				break;
+
 			}
 
 			num++;
@@ -102,6 +101,8 @@ void PicThreadMiddle::run()
 			//DispText(m_WindowHandle, error.toStdString().c_str(), "image", 120, 12, "red", HTuple(), HTuple());
 			DispText(m_WindowHandle, "MiddleThread handle Error.", "image", 120, 12, "red", HTuple(), HTuple());
 			//g_UpWaveEnable = true;
+			emit resultReady(Bad, m_CameraId);
+			CHH::disp_message(m_WindowHandle, HTuple("代码处理异常"), "image", 120, 12, "red", "true");
 			if (IsSaveImage())
 				QueueSaveImage(m_Image, SaveImageNum());
 
@@ -112,11 +113,19 @@ void PicThreadMiddle::run()
 
 void PicThreadMiddle::OnHandle(HObject& image, const HTuple& WindowHandle, HTuple* Result)
 {
-	HTuple hv_DownRow, output_ExceptionInformation;
-	CHH::PingJie(m_Image, &m_Image, 1000, 30, 3, 10, &hv_DownRow);
-	DispObj(m_Image, WindowHandle);
+	HTuple  output_ExceptionInformation("");
+	//CHH::PingJie(m_Image, &m_Image, 1000, 30, 3, 10, &hv_DownRow);
+	//DispObj(m_Image, WindowHandle);
 
-	DetectModule::detectSide(image, WindowHandle, 0.65, 0.55, 0.15, 0.15, Result, &output_ExceptionInformation);
+	DetectModule::detectSide(image, WindowHandle,
+		g_DetectParam.slotWidthUP, 
+		g_DetectParam.slotWidthDown,
+		g_DetectParam.maociWidth,
+		g_DetectParam.maociHeight,
+		Result, 
+		&output_ExceptionInformation);
+
+	qDebug() << "Side Detect Information :	"<<output_ExceptionInformation.ToString().Text();
 }
 
 void PicThreadMiddle::QueueSaveImage(const HObject& Image, int maxnum)

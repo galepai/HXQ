@@ -158,29 +158,35 @@ void Galil_Thread::run()
 	qDebug() << "Galil_Thread Run Thread : " << QThread::currentThreadId();
 	//int value = 0;
 	QString cameraValue, moveRightValue;
+	bool IsWake = true;
 	while (!m_StopThread)
 	{
 		CmdT(SINAL_CAMERA, cameraValue);
 		CmdT(SINAL_MOVERIGHT1, moveRightValue);
 
-		//qDebug() << "OUTPUT[3] = " << cameraValue;
-		//qDebug() << "-RPA =  " << moveRightValue;
-
 		//触发相机
+		static int picNum = 0;
 		if (cameraValue.toFloat() 
 			//&&  g_UpWaveEnable 
 			&& PylonCamera_Thread::ReadyWake()
 			&& Halcon_Camera_Thread::ReadyWake())  //发射触发相机信号
 		{
-			//取上升沿
+		
+			IsWake = true;
 			qDebug() << QString("echo ") + SINAL_CAMERA + " :	" << cameraValue;
-			g_UpWaveEnable = false;
+			//g_UpWaveEnable = false;
+			PylonCamera_Thread::setReadyWake(false);
+			Halcon_Camera_Thread::setReadyWake(false);
 			//emit sendVarValue(varValue1);
 			emit triggerSinal();
+			picNum++;
+			qDebug() << "emit trigger num:		"  << picNum;
+
 		}
 
 		//右侧触发分料
-		if (moveRightValue.toFloat() == SINAL_MOVERIGHT1_THRESHOLD)
+		if (moveRightValue.toFloat() == SINAL_MOVERIGHT1_THRESHOLD
+			&& IsWake)
 		{
 			//qDebug() << QString("echo ") + SINAL_MOVERIGHT1 + " :	" << moveRightValue;
 			//static int num = 0;
@@ -191,9 +197,11 @@ void Galil_Thread::run()
 			//else
 			//	Cmd(CLASSIFIY_GOOD);
 
+				//qDebug() << "enter fengliao lock !!!!		";
 				mutex_Result.lock();
 				if (g_Result_Queue.size())
 				{
+					qDebug() << "Enter g_Result_Queue.size =  "<<g_Result_Queue.size();
 					if (g_Result_Queue.front())
 					{
 						Cmd(CLASSIFIY_GOOD);		//分类良品
@@ -205,7 +213,9 @@ void Galil_Thread::run()
 					g_Result_Queue.pop();
 				}
 				mutex_Result.unlock();
-				
+				//qDebug() << "quit fengliao lock!!!!		";
+				qDebug() << "Quit g_Result_Queue.size = " << g_Result_Queue.size();
+				IsWake = false;
 		}
 	
 		Sleep(50);

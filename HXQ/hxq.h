@@ -148,7 +148,7 @@ public:
 
 	Galil_Thread* m_Galil;	//运动控制卡线程
 
-	static DetectParam g_DetectParam;
+	//static DetectParam g_DetectParam;
 };
 
 #endif // hxq_H

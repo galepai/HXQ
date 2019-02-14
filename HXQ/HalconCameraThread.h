@@ -74,6 +74,7 @@ public:
 
 	static bool m_WaitWake;
 	static bool ReadyWake() { return m_WaitWake; }
+	static void setReadyWake(bool enable) { m_WaitWake = enable; }
 
 	HTuple m_WindowHandle;
 	

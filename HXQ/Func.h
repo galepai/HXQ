@@ -116,17 +116,7 @@ struct DetectResultInfo
 	int next_area;
 };
 
-struct DetectParam
-{
-	float diameterUp;
-	float diameterDown;
-	float slotWidthUP;
-	float slotWidthDown;
-	float gouWidthUP;
-	float gouWidthDown;
-	float maociWidth;
-	float maociHeight;
-};
+
 
 //extern QMutex mutex_Camera;
 //extern QMutex mutex_Result;

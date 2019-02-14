@@ -69,7 +69,9 @@ void Halcon_Camera_Thread::run()
 	
 
 	bool first = true;
-	
+	HImage Image;
+
+
 	while (!m_bIsStop)
 	{
 		try{
@@ -97,20 +99,20 @@ void Halcon_Camera_Thread::run()
 			if (m_bIsStop)
 				break;
 			
-			HImage* pImage = new HImage();
+			//HImage* pImage = new HImage();
 			QTime timedebuge;//声明一个时钟对象
 			timedebuge.start();//开始计时
 		
-			*pImage = m_pGrabber->GrabImage();
+			Image = m_pGrabber->GrabImage();
 			qDebug() << "Camera：" << timedebuge.elapsed() / 1000.0 << "s";//输出计时
 			//Image = m_pGrabber->GrabImageAsync(-1);
 			
 			emit grab_correct_image(1);
-			emit sendImage(pImage);
+			emit sendImage(&Image);
 			//DispColor(Image, m_WindowHandle);
 			if (m_bIsSaveImage)
 			{
-				QueueSaveImage(*pImage, m_MaxNum);
+				QueueSaveImage(Image, m_MaxNum);
 			}	
 		
 		}
@@ -123,15 +125,15 @@ void Halcon_Camera_Thread::run()
 				qDebug() << "Camere enter exception error" << ": " << error << "\n";
 
 				{
-					HImage* pImage = new HImage();
-					*pImage = m_pGrabber->GrabImage();
+
+					Image = m_pGrabber->GrabImage();
 
 					emit grab_correct_image(1);
-					emit sendImage(pImage);
+					emit sendImage(&Image);
 				
 					if (m_bIsSaveImage)
 					{
-						QueueSaveImage(*pImage, m_MaxNum);
+						QueueSaveImage(Image, m_MaxNum);
 					}
 				}
 

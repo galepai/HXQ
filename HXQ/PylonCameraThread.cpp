@@ -70,7 +70,7 @@ public:
 PylonCamera_Thread::PylonCamera_Thread(QString nodeCameraName, QObject *parent)
 	: m_nodeCameraName(nodeCameraName), QThread(parent)
 {
-	m_image_index = 50;
+	m_image_index = 1;
 	m_exposureTime = 200;
 	//m_CameraIdlist.append(CameraId);
 	m_WaitWake = false;

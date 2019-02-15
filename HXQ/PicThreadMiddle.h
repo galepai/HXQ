@@ -31,7 +31,7 @@ public:
 	void setSaveImage(bool enable = true) { m_bIsSaveImage = enable; }
 
 	//save image nums
-	void setSaveImageNum(int num = 50) { m_MaxNum = num; }
+	void setSaveImageNum(int count = 50) { m_MaxNum = count; }
 	int SaveImageNum() { return m_MaxNum; }
 
 	static int num;

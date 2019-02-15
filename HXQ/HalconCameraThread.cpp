@@ -17,7 +17,7 @@ bool Halcon_Camera_Thread::m_WaitWake;
 Halcon_Camera_Thread::Halcon_Camera_Thread(QString nodeCameraName, QObject *parent)
 	:m_nodeCameraName(nodeCameraName),QThread(parent)
 {
-	m_image_index = 50;
+	m_image_index = 1;
 	m_exposureTime = 30.0;
 	m_acquisitionLineRate = 10000.0;
 	m_height = 10000;
@@ -112,7 +112,9 @@ void Halcon_Camera_Thread::run()
 			//DispColor(Image, m_WindowHandle);
 			if (m_bIsSaveImage)
 			{
+				
 				QueueSaveImage(Image, m_MaxNum);
+				
 			}	
 		
 		}
@@ -204,14 +206,20 @@ void Halcon_Camera_Thread::QueueSaveImage(const HObject& Image,int maxnum)
 	if (m_image_index <= maxnum)
 	{
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(m_image_index, 4, 10, QChar('0'));
+		QTime start;
+		start.start();
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		qDebug() << "SaveImage：" << start.elapsed() / 1000.0 << "s";//输出计时
 		m_image_index++;
 	}
 	else
 	{
 		m_image_index = 1;
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(m_image_index, 4, 10, QChar('0'));
+		QTime start;
+		start.start();
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		qDebug() << "SaveImage：" << start.elapsed() / 1000.0 << "s";//输出计时
 		m_image_index++;
 	}
 }

@@ -425,6 +425,8 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 				if (m_Galil->Open(Ip + ""))
 				{
 					genErrorDialog(G2U("控制卡连接成功！"));
+					m_Galil->Cmd(LIGHT_CLOSE);
+					Sleep(50);
 					m_Galil->Cmd(AUTOSTOP);
 					Sleep(100);
 					m_Galil->Cmd(AUTOSTART);
@@ -1078,26 +1080,26 @@ void hxq::receiveLeftImageAndHandle(void* image)
 	//OnHandleImageThread(*ima, LeftView);
 	//delete ima;
 
-	//HImage ima = *(HImage*)image;
-	//DispPic(ima, LeftView);
-	//OnHandleImageThread(ima, LeftView);
+	HImage ima = *(HImage*)image;
+	DispPic(ima, LeftView);
+	OnHandleImageThread(ima, LeftView);
 
 	
-	m_LeftImage = *(HImage*)image;
+	/*m_LeftImage = *(HImage*)image;
 	DispPic(m_LeftImage, LeftView);
-	OnHandleImageThread(m_LeftImage, LeftView);
+	OnHandleImageThread(m_LeftImage, LeftView);*/
 
 }
 
 void hxq::receiveMiddleImageAndHandle(void* image)
 {
-	/*HImage ima = *(HImage*)image;
+	HImage ima = *(HImage*)image;
 	DispPic(ima, MiddleView);
-	OnHandleImageThread(ima, MiddleView);*/
+	OnHandleImageThread(ima, MiddleView);
 
-	m_MiddleImage = *(HImage*)image;
+	/*m_MiddleImage = *(HImage*)image;
 	DispPic(m_MiddleImage, MiddleView);
-	OnHandleImageThread(m_MiddleImage, MiddleView);
+	OnHandleImageThread(m_MiddleImage, MiddleView);*/
 }
 
 void hxq::receiveSecondRightImageAndHandle(void* image)
@@ -1132,7 +1134,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		if (!m_bOneDetect)
 		{
 			pPicThread->setSaveImage(true);
-			pPicThread->setSaveImageDirName("Images/Top/Bad/");
+			pPicThread->setSaveImageDirName(SaveTopBadImageDir);
 			pPicThread->setSaveImageNum(100);
 			connect(pPicThread, SIGNAL(resultReady(int, int)), this, SLOT(OnHandleResults(int, int)));
 		}
@@ -1153,7 +1155,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		if (!m_bOneDetect)
 		{
 			pPicThread->setSaveImage(true);
-			pPicThread->setSaveImageDirName("Images/Side/Bad/");
+			pPicThread->setSaveImageDirName(SaveSideBadImageDir);
 			pPicThread->setSaveImageNum(100);
 			connect(pPicThread, SIGNAL(resultReady(int, int)), this, SLOT(OnHandleResults(int, int)));
 		}

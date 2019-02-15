@@ -131,7 +131,7 @@ void PicThreadMiddle::OnHandle(HObject& image, const HTuple& WindowHandle, HTupl
 void PicThreadMiddle::QueueSaveImage(const HObject& Image, int maxnum)
 {
 
-	if (g_SaveTopBadIndex <= maxnum)
+	if (g_SaveSideBadIndex <= maxnum)
 	{
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveSideBadIndex, 4, 10, QChar('0'));
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
@@ -139,7 +139,7 @@ void PicThreadMiddle::QueueSaveImage(const HObject& Image, int maxnum)
 	}
 	else
 	{
-		g_SaveTopBadIndex = 1;
+		g_SaveSideBadIndex = 1;
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveSideBadIndex, 4, 10, QChar('0'));
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
 		g_SaveSideBadIndex++;

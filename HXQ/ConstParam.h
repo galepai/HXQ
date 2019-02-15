@@ -81,8 +81,18 @@
 
 #define LineCameraId_Pylon_Basler_Side  "Basler raL2048-48gm#0030531D42B0#192.168.5.7:3956"	//Basler Camera
 
-#define SaveTopImageDir					"Images/Top/All/"		//	Images/Top/All/
-#define SaveSideImageDir				"Images/Side/All/"		//	Images/Side/All/
+//#define SaveTopImageDir					"Images/Top/All/"		//	Images/Top/All/
+//#define SaveSideImageDir				"Images/Side/All/"		//	Images/Side/All/
+
+//#define SaveTopBadImageDir					"Images/Top/Bad/"		//	Images/Top/Bad/
+//#define SaveTopBadImageDir					"Images/Side/Bad/"		//	Images/Top/Bad/
+
+
+#define SaveTopImageDir					"e:/Images/Top/All/"		//	Images/Top/All/
+#define SaveSideImageDir				"e:/Images/Side/All/"		//	Images/Side/All/
+
+#define SaveTopBadImageDir					"e:/Images/Top/Bad/"		//	Images/Top/All/
+#define SaveSideBadImageDir					"e:/Images/Side/Bad/"		//	Images/Top/All/
 
 
 #endif 

@@ -161,11 +161,18 @@ void Galil_Thread::run()
 	bool IsWake = true;
 	while (!m_StopThread)
 	{
+	//	QTime start;
+	//	start.start();
+
 		CmdT(SINAL_CAMERA, cameraValue);
+		//Sleep(10);
 		CmdT(SINAL_MOVERIGHT1, moveRightValue);
 
 		//触发相机
 		static int picNum = 0;
+		if (cameraValue.toFloat())
+			qDebug() << "light on";
+
 		if (cameraValue.toFloat() 
 			//&&  g_UpWaveEnable 
 			&& PylonCamera_Thread::ReadyWake()
@@ -173,7 +180,7 @@ void Galil_Thread::run()
 		{
 		
 			IsWake = true;
-			qDebug() << QString("echo ") + SINAL_CAMERA + " :	" << cameraValue;
+			//qDebug() << QString("echo ") + SINAL_CAMERA + " :	" << cameraValue;
 			//g_UpWaveEnable = false;
 			PylonCamera_Thread::setReadyWake(false);
 			Halcon_Camera_Thread::setReadyWake(false);
@@ -201,7 +208,7 @@ void Galil_Thread::run()
 				mutex_Result.lock();
 				if (g_Result_Queue.size())
 				{
-					qDebug() << "Enter g_Result_Queue.size =  "<<g_Result_Queue.size();
+					//qDebug() << "Enter g_Result_Queue.size =  "<<g_Result_Queue.size();
 					if (g_Result_Queue.front())
 					{
 						Cmd(CLASSIFIY_GOOD);		//分类良品
@@ -214,11 +221,13 @@ void Galil_Thread::run()
 				}
 				mutex_Result.unlock();
 				//qDebug() << "quit fengliao lock!!!!		";
-				qDebug() << "Quit g_Result_Queue.size = " << g_Result_Queue.size();
+				//qDebug() << "Quit g_Result_Queue.size = " << g_Result_Queue.size();
 				IsWake = false;
 		}
 	
-		Sleep(50);
+		Sleep(80);
+
+	//	qDebug() << "Each Galil_Loop  time:		" << start.elapsed() / 1000.0 << "s";
 	}
 
 }

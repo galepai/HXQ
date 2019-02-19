@@ -142,7 +142,7 @@ void PylonCamera_Thread::run()
 		
 			if (m_bIsMutexTrigger)
 			{
-				mutex_Camera.lock();
+				g_mutex_Camera.lock();
 				if (first) {
 					emit ReadyOk(1);
 					first = false;
@@ -150,8 +150,8 @@ void PylonCamera_Thread::run()
 
 				Sleep(10);
 				m_WaitWake = true;
-				condition_Camera.wait(&mutex_Camera);
-				mutex_Camera.unlock();
+				g_condition_Camera.wait(&g_mutex_Camera);
+				g_mutex_Camera.unlock();
 
 				m_WaitWake = false;
 			}
@@ -364,7 +364,7 @@ void PylonCamera_Thread::setSaveImageDirName(const QString& ImageDirName)
 
 void PylonCamera_Thread::QueueSaveImage(const HObject& Image,int maxnum)
 {
-
+	g_mutex_SaveImage.lock();
 	if (m_image_index <= maxnum)
 	{
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(m_image_index, 4, 10, QChar('0'));
@@ -378,6 +378,7 @@ void PylonCamera_Thread::QueueSaveImage(const HObject& Image,int maxnum)
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
 		m_image_index++;
 	}
+	g_mutex_SaveImage.unlock();
 }
 
 void PylonCamera_Thread::ParserCamParamAndSetCamera(CBaslerGigEInstantCamera& Camera, std::vector <std::pair<std::pair<QString, QString>, QString>>& CamParam)

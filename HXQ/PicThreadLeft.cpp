@@ -10,6 +10,7 @@
 
 
 int PicThreadLeft::num = 0;
+HImage PicThreadLeft::m_Image;
 
 void PicThreadLeft::run()
 {
@@ -22,9 +23,9 @@ void PicThreadLeft::run()
 			HTuple hv_IsBad;
 
 			OnHandle(m_Image,m_WindowHandle,&hv_IsBad);
-			int result = hv_IsBad.I();
+			//int result = hv_IsBad.I();
 
-			//int result = 1;
+			int result = 0;
 			switch (result)
 			{
 			case Good:
@@ -161,18 +162,19 @@ void PicThreadLeft::OnHandle(HObject& image,const HTuple& WindowHandle,HTuple* R
 
 void PicThreadLeft::QueueSaveImage(const HObject& Image, int maxnum)
 {
-
-	if (g_SaveTopBadIndex <= maxnum)
+	g_mutex_SaveImage.lock();
+	if (g_SaveParam.SaveTopBadIndex <= maxnum)
 	{
-		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveTopBadIndex, 4, 10, QChar('0'));
+		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveParam.SaveTopBadIndex, 4, 10, QChar('0'));
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
-		g_SaveTopBadIndex++;
+		g_SaveParam.SaveTopBadIndex++;
 	}
 	else
 	{
-		g_SaveTopBadIndex = 1;
-		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveTopBadIndex, 4, 10, QChar('0'));
+		g_SaveParam.SaveTopBadIndex = 1;
+		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveParam.SaveTopBadIndex, 4, 10, QChar('0'));
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
-		g_SaveTopBadIndex++;
+		g_SaveParam.SaveTopBadIndex++;
 	}
+	g_mutex_SaveImage.unlock();
 }

@@ -82,8 +82,35 @@ hxq::hxq(QWidget *parent)
 	std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent2;
 	if (ParserXmlNode(QString(XML_Configure), QString(Node_Save), xmlContent2))
 	{
-		 g_SaveTopBadIndex = xmlContent2[0].second.toInt();
+		/* g_SaveTopBadIndex = xmlContent2[0].second.toInt();
 		 g_SaveSideBadIndex = xmlContent2[1].second.toInt();
+		 g_IsSaveTopBad = xmlContent2[1].second.toInt();
+		 g_IsSaveSideBad = xmlContent2[1].second.toInt();
+		 g_IsSaveTopAll = xmlContent2[1].second.toInt();
+		 g_IsSaveSideAll = xmlContent2[1].second.toInt();
+		 g_SaveTopBadPath = xmlContent2[1].second.toInt();
+		 g_SaveSideBadPath = xmlContent2[1].second.toInt();
+		 g_SaveTopAllPath = xmlContent2[1].second.toInt();
+		 g_SaveSideAllPath = xmlContent2[1].second.toInt();*/
+
+		 g_SaveParam.SaveTopBadIndex = xmlContent2[0].second.toInt();
+		 g_SaveParam.SaveSideBadIndex = xmlContent2[1].second.toInt();
+
+		 g_SaveParam.IsSaveTopBad = xmlContent2[2].second.toInt();
+		 g_SaveParam.IsSaveSideBad = xmlContent2[3].second.toInt();
+		 g_SaveParam.IsSaveTopAll = xmlContent2[4].second.toInt();
+		 g_SaveParam.IsSaveSideAll = xmlContent2[5].second.toInt();
+
+		 g_SaveParam.SaveTopBadNum = xmlContent2[6].second.toInt();
+		 g_SaveParam.SaveSideBadNum = xmlContent2[7].second.toInt();
+		 g_SaveParam.SaveTopAllNum = xmlContent2[8].second.toInt();
+		 g_SaveParam.SaveSideAllNum = xmlContent2[9].second.toInt();
+
+
+		 g_SaveParam.SaveTopBadPath = xmlContent2[10].second;
+		 g_SaveParam.SaveSideBadPath = xmlContent2[11].second;
+		 g_SaveParam.SaveTopAllPath = xmlContent2[12].second;
+		 g_SaveParam.SaveSideAllPath = xmlContent2[13].second;
 	}
 
 	m_bOneDetect = false;
@@ -124,8 +151,8 @@ void hxq::FullScreenShow()
 
 hxq::~hxq()
 {
-	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("TopBad"), QString("%1").arg(g_SaveTopBadIndex));
-	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("SideBad"), QString("%1").arg(g_SaveSideBadIndex));
+	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("TopBad"), QString("%1").arg(g_SaveParam.SaveTopBadIndex));
+	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("SideBad"), QString("%1").arg(g_SaveParam.SaveSideBadIndex));
 }
 
 void hxq::OnEngineer()
@@ -537,7 +564,7 @@ void hxq::OnClearCameraThread()
 		m_Pylon_camera_thread_10_Clock->setStopStatus(true);
 
 	Sleep(20);
-	condition_Camera.wakeAll();
+	g_condition_Camera.wakeAll();
 
 	if (Halcon_Camera_Thread::IsExistCameraId(topCameraId))
 	{
@@ -637,14 +664,14 @@ void hxq::receiveTriggerSinal(QByteArray str)
 void hxq::OnWakeCamera()
 {
 	Sleep(10);
-	mutex_Camera.lock();
-	condition_Camera.wakeAll();
-	mutex_Camera.unlock();
+	g_mutex_Camera.lock();
+	g_condition_Camera.wakeAll();
+	g_mutex_Camera.unlock();
 	
 	Sleep(10);
-	mutex_Camera.lock();
-	condition_Camera.wakeAll();
-	mutex_Camera.unlock();
+	g_mutex_Camera.lock();
+	g_condition_Camera.wakeAll();
+	g_mutex_Camera.unlock();
 }
 
 void hxq::OnModToRight()
@@ -933,11 +960,10 @@ void hxq::OnOpenCameras()
 	//ui.OnLineRun->setEnabled(false);
 
 	/****************************/
-
 	m_TopCameraThread = new Halcon_Camera_Thread(QString(Camera_Top), this);
-	m_TopCameraThread->setSaveImageDirName(SaveTopImageDir);
-	m_TopCameraThread->setSaveImageNum(200);
-	m_TopCameraThread->setSaveImage(true);
+	m_TopCameraThread->setSaveImageDirName(g_SaveParam.SaveTopAllPath);
+	m_TopCameraThread->setSaveImageNum(g_SaveParam.SaveTopAllNum);
+	m_TopCameraThread->setSaveImage(g_SaveParam.IsSaveTopAll);
 	m_TopCameraThread->setMutexTrigger(true);
 	//emit OpenCameraSinal(m_pGrabber, &isCorretOpen);
 	connect(m_TopCameraThread, SIGNAL(OpenCameraSinal(void**, QString,int*)), this, SLOT(OpenPreCamera(void**, QString,int*)), Qt::DirectConnection);
@@ -968,10 +994,10 @@ void hxq::OnOpenCameras()
 	
 	//m_Pylon_camera_thread_10_Clock = new PylonCamera_Thread(PylonCamera_Thread::ConnectionType::GigEVision, LineCameraId_Pylon_Basler_Side, this);
 	m_Pylon_camera_thread_10_Clock = new PylonCamera_Thread(QString(Camera_Side), this);
-	m_Pylon_camera_thread_10_Clock->setSaveImageDirName(SaveSideImageDir);
-	m_Pylon_camera_thread_10_Clock->setSaveImageNum(200);
-	m_Pylon_camera_thread_10_Clock->SetExposureTime(350);
-	m_Pylon_camera_thread_10_Clock->setSaveImage(true);
+	m_Pylon_camera_thread_10_Clock->setSaveImageDirName(g_SaveParam.SaveSideAllPath);
+	m_Pylon_camera_thread_10_Clock->setSaveImageNum(g_SaveParam.SaveSideAllNum);
+	//m_Pylon_camera_thread_10_Clock->SetExposureTime(350);
+	m_Pylon_camera_thread_10_Clock->setSaveImage(g_SaveParam.IsSaveSideAll);
 	m_Pylon_camera_thread_10_Clock->setMutexTrigger(true);
 	//connect(m_Pylon_camera_thread_10_Clock, SIGNAL(signal_error(QString)), this, SLOT(genErrorDialog(QString)));
 	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
@@ -1024,8 +1050,8 @@ void hxq::OnStop()
 	//m_Result_AllQueue;
 	normalButtonStatus();
 
-	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("TopBad"), QString("%1").arg(g_SaveTopBadIndex));
-	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("SideBad"), QString("%1").arg(g_SaveSideBadIndex));
+	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("TopBad"), QString("%1").arg(g_SaveParam.SaveTopBadIndex));
+	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString("SideBad"), QString("%1").arg(g_SaveParam.SaveSideBadIndex));
 
 }
 
@@ -1134,8 +1160,8 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		if (!m_bOneDetect)
 		{
 			pPicThread->setSaveImage(true);
-			pPicThread->setSaveImageDirName(SaveTopBadImageDir);
-			pPicThread->setSaveImageNum(100);
+			pPicThread->setSaveImageDirName(g_SaveParam.SaveTopBadPath);
+			pPicThread->setSaveImageNum(g_SaveParam.SaveTopBadNum);
 			connect(pPicThread, SIGNAL(resultReady(int, int)), this, SLOT(OnHandleResults(int, int)));
 		}
 		
@@ -1155,8 +1181,8 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 		if (!m_bOneDetect)
 		{
 			pPicThread->setSaveImage(true);
-			pPicThread->setSaveImageDirName(SaveSideBadImageDir);
-			pPicThread->setSaveImageNum(100);
+			pPicThread->setSaveImageDirName(g_SaveParam.SaveSideBadPath);
+			pPicThread->setSaveImageNum(g_SaveParam.SaveSideBadNum);
 			connect(pPicThread, SIGNAL(resultReady(int, int)), this, SLOT(OnHandleResults(int, int)));
 		}
 		connect(pPicThread, SIGNAL(finished()), pPicThread, SLOT(deleteLater()));
@@ -1213,12 +1239,12 @@ void hxq::receiveCorrectImage(int value)
 	{
 		//m_total++;
 
-		mutex_Result.lock();
+		g_mutex_Result.lock();
 		if (m_Galil)
 		{
 			m_Galil->Cmd(LIGHT_CLOSE);
 		}
-		mutex_Result.unlock();
+		g_mutex_Result.unlock();
 		imageNum = 0;
 		qDebug() << "	grabed 2 pic !" ;
 
@@ -1302,9 +1328,9 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 		{
 			m_good++;
 
-			mutex_Result.lock();
+			g_mutex_Result.lock();
 			g_Result_Queue.push(true);
-			mutex_Result.unlock();
+			g_mutex_Result.unlock();
 
 			qDebug() << "Send Good!!!	";
 			ui.lcdNumber_good->display(m_good);
@@ -1313,9 +1339,9 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 		else
 		{
 
-				mutex_Result.lock();
+				g_mutex_Result.lock();
 				g_Result_Queue.push(false);
-				mutex_Result.unlock();
+				g_mutex_Result.unlock();
 
 			qDebug() << "Send Bad!!!	";
 			if (m_detectResult.current_area == Gou || m_detectResult.current_line == Gou)

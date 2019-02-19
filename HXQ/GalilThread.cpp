@@ -204,11 +204,11 @@ void Galil_Thread::run()
 			//else
 			//	Cmd(CLASSIFIY_GOOD);
 
-				//qDebug() << "enter fengliao lock !!!!		";
-				mutex_Result.lock();
+				qDebug() << "enter fengliao lock !!!!		";
+				g_mutex_Result.lock();
 				if (g_Result_Queue.size())
 				{
-					//qDebug() << "Enter g_Result_Queue.size =  "<<g_Result_Queue.size();
+					qDebug() << "Enter g_Result_Queue.size =  "<<g_Result_Queue.size();
 					if (g_Result_Queue.front())
 					{
 						Cmd(CLASSIFIY_GOOD);		//·ÖÀàÁ¼Æ·
@@ -219,9 +219,9 @@ void Galil_Thread::run()
 					}
 					g_Result_Queue.pop();
 				}
-				mutex_Result.unlock();
-				//qDebug() << "quit fengliao lock!!!!		";
-				//qDebug() << "Quit g_Result_Queue.size = " << g_Result_Queue.size();
+				g_mutex_Result.unlock();
+				qDebug() << "quit fengliao lock!!!!		";
+				qDebug() << "Quit g_Result_Queue.size = " << g_Result_Queue.size();
 				IsWake = false;
 		}
 	

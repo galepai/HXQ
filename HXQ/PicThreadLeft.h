@@ -20,7 +20,7 @@ public:
 	}
 
 	static int num;
-	HImage m_Image;
+	static HImage m_Image;
 	HTuple m_WindowHandle;
 
 	void OnHandle(HObject& image, const HTuple& WindowHandle,HTuple* Result);

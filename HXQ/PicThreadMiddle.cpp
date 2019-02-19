@@ -8,6 +8,8 @@
 #include "Detect.h"
 
 int PicThreadMiddle::num = 0;
+HImage PicThreadMiddle::m_Image;
+
 void PicThreadMiddle::run()
 {
 	//qDebug() << "Worker Run Thread : " << QThread::currentThreadId();
@@ -20,9 +22,9 @@ void PicThreadMiddle::run()
 			
 			HTuple  hv_IsBad;
 			OnHandle(m_Image, m_WindowHandle, &hv_IsBad);
-			int result = hv_IsBad.I();
+			//int result = hv_IsBad.I();
 
-			//int result = 1;
+			int result = 0;
 			switch (result)
 			{
 			case Good:
@@ -130,18 +132,19 @@ void PicThreadMiddle::OnHandle(HObject& image, const HTuple& WindowHandle, HTupl
 
 void PicThreadMiddle::QueueSaveImage(const HObject& Image, int maxnum)
 {
-
-	if (g_SaveSideBadIndex <= maxnum)
+	g_mutex_SaveImage.lock();
+	if (g_SaveParam.SaveSideBadIndex <= maxnum)
 	{
-		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveSideBadIndex, 4, 10, QChar('0'));
+		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveParam.SaveSideBadIndex, 4, 10, QChar('0'));
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
-		g_SaveSideBadIndex++;
+		g_SaveParam.SaveSideBadIndex++;
 	}
 	else
 	{
-		g_SaveSideBadIndex = 1;
-		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveSideBadIndex, 4, 10, QChar('0'));
+		g_SaveParam.SaveSideBadIndex = 1;
+		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveParam.SaveSideBadIndex, 4, 10, QChar('0'));
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
-		g_SaveSideBadIndex++;
+		g_SaveParam.SaveSideBadIndex++;
 	}
+	g_mutex_SaveImage.unlock();
 }

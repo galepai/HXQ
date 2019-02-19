@@ -81,7 +81,7 @@ void Halcon_Camera_Thread::run()
 			
 			if (m_bIsMutexTrigger)
 			{
-				mutex_Camera.lock();
+				g_mutex_Camera.lock();
 				if (first) {
 					//emit ReadyOk(1);
 					first = false;
@@ -89,8 +89,8 @@ void Halcon_Camera_Thread::run()
 
 				Sleep(10);
 				m_WaitWake = true;
-				condition_Camera.wait(&mutex_Camera);
-				mutex_Camera.unlock();
+				g_condition_Camera.wait(&g_mutex_Camera);
+				g_mutex_Camera.unlock();
 				m_WaitWake = false;
 				
 			}
@@ -202,13 +202,15 @@ bool Halcon_Camera_Thread::OpenCamera(HalconCpp::HFramegrabber* pGrabber)
 
 void Halcon_Camera_Thread::QueueSaveImage(const HObject& Image,int maxnum)
 {
-	
+	g_mutex_SaveImage.lock();
 	if (m_image_index <= maxnum)
 	{
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(m_image_index, 4, 10, QChar('0'));
 		QTime start;
 		start.start();
+		
 		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		
 		qDebug() << "SaveImage：" << start.elapsed() / 1000.0 << "s";//输出计时
 		m_image_index++;
 	}
@@ -222,4 +224,6 @@ void Halcon_Camera_Thread::QueueSaveImage(const HObject& Image,int maxnum)
 		qDebug() << "SaveImage：" << start.elapsed() / 1000.0 << "s";//输出计时
 		m_image_index++;
 	}
+
+	g_mutex_SaveImage.unlock();
 }

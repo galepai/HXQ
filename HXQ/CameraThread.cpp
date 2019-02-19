@@ -48,7 +48,7 @@ void Camera_Thread::run()
 			//time.start();
 			qDebug() << m_CameraId << " ready cap.... ";
 
-	/*		mutex_Camera.lock();
+	/*		g_mutex_Camera.lock();
 			if (first){
 				emit ReadyOk(1);
 				first = false;
@@ -56,8 +56,8 @@ void Camera_Thread::run()
 			
 		/*	Sleep(10);
 			m_WaitWake = true;
-			condition_Camera.wait(&mutex_Camera);
-			mutex_Camera.unlock();
+			g_condition_Camera.wait(&g_mutex_Camera);
+			g_mutex_Camera.unlock();
 			m_WaitWake = false;
 		
 			if (m_bIsStop)

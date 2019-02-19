@@ -361,9 +361,9 @@ bool Delta_Thread::receiveData()
 
 				//			m_QueryMode = OneQueryToDefalutQuene;
 
-				//			mutex_Camera.lock();
-				//			condition_Camera.wakeAll();
-				//			mutex_Camera.unlock();
+				//			g_mutex_Camera.lock();
+				//			g_condition_Camera.wakeAll();
+				//			g_mutex_Camera.unlock();
 
 				//			qDebug() << "receive Y61: " << ++num;
 				//		}

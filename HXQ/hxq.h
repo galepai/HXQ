@@ -129,6 +129,7 @@ private:
 	std::set<int> m_Pic_Set;
 	std::queue<int> m_Result_AllQueue;
 	DetectResultInfo m_detectResult;
+	
 	//bool m_bIsCameraCorrect;
 
 	bool m_bOneDetect;

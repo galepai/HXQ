@@ -30,22 +30,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
-      <string>变量结果</string>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QPushButton" name="confirmButton">
@@ -72,34 +56,6 @@
        </property>
        <property name="text">
         <string>测试</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="goodButton">
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>良品</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="badButton">
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>不良品</string>
        </property>
       </widget>
      </item>

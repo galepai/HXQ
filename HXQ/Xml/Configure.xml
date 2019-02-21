@@ -16,19 +16,21 @@
         <毛刺高 type="float">0.15</毛刺高>
     </Hxq>
     <Save>
-        <TopBad type="int">186</TopBad>
-        <SideBad type="int">33</SideBad>
+        <TopBadIndex type="int">5</TopBadIndex>
+        <SideBadIndex type="int">33</SideBadIndex>
         <IsSaveTopBad type="int">1</IsSaveTopBad>
         <IsSaveSideBad type="int">1</IsSaveSideBad>
         <IsSaveTopAll type="int">1</IsSaveTopAll>
         <IsSaveSideAll type="int">1</IsSaveSideAll>
         <SaveTopBadNum type="int">200</SaveTopBadNum>
         <SaveSideBadNum type="int">200</SaveSideBadNum>
-        <SaveTopAllNum type="int">100</SaveTopAllNum>
-        <SaveSideAllNum type="int">100</SaveSideAllNum>
-        <SaveTopBadPath type="string">E:/Images/Top/Bad/</SaveTopBadPath>
-        <SaveSideBadPath type="string">E:/Images/Side/Bad/</SaveSideBadPath>
-        <SaveTopAllPath type="string">E:/Images/Top/All/</SaveTopAllPath>
-        <SaveSideAllPath type="string">E:/Images/Side/All/</SaveSideAllPath>
+        <SaveTopAllNum type="int">50</SaveTopAllNum>
+        <SaveSideAllNum type="int">50</SaveSideAllNum>
+        <SaveTopBadPath type="string">E:/github/HXQ/HXQ/Images/Top/Bad/</SaveTopBadPath>
+        <SaveSideBadPath type="string">E:/github/HXQ/HXQ/Images/Side/Bad/</SaveSideBadPath>
+        <SaveTopAllPath type="string">E:/github/HXQ/HXQ/Images/Top/All/</SaveTopAllPath>
+        <SaveSideAllPath type="string">E:/github/HXQ/HXQ/Images/Side/All/</SaveSideAllPath>
+        <SaveImageFormat type="string">tiff</SaveImageFormat>
+        <IsSaveLog type="int">0</IsSaveLog>
     </Save>
 </fivision>

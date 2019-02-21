@@ -209,7 +209,7 @@ void Halcon_Camera_Thread::QueueSaveImage(const HObject& Image,int maxnum)
 		QTime start;
 		start.start();
 		
-		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		WriteImage(Image, g_SaveParam.SaveImageFormat.toStdString().c_str(), 0, saveImagePath.toStdString().c_str());
 		
 		qDebug() << "SaveImage：" << start.elapsed() / 1000.0 << "s";//输出计时
 		m_image_index++;
@@ -220,7 +220,7 @@ void Halcon_Camera_Thread::QueueSaveImage(const HObject& Image,int maxnum)
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(m_image_index, 4, 10, QChar('0'));
 		QTime start;
 		start.start();
-		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		WriteImage(Image, g_SaveParam.SaveImageFormat.toStdString().c_str(), 0, saveImagePath.toStdString().c_str());
 		qDebug() << "SaveImage：" << start.elapsed() / 1000.0 << "s";//输出计时
 		m_image_index++;
 	}

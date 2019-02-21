@@ -123,7 +123,10 @@
       <Filter>Source Files\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="Global.cpp">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Widgets\saveWidget.cpp">
+      <Filter>Source Files\Widgets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +184,9 @@
     <QtUic Include="Widgets\detectWidget.ui">
       <Filter>Form Files\Widgets</Filter>
     </QtUic>
+    <QtUic Include="Widgets\saveWidget.ui">
+      <Filter>Form Files\Widgets</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CHH.h">
@@ -225,6 +231,9 @@
     <ClInclude Include="Detect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_saveWidget.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\qss\css.h">
@@ -264,6 +273,9 @@
       <Filter>Header Files\Widgets</Filter>
     </QtMoc>
     <QtMoc Include="Widgets\detectWidget.h">
+      <Filter>Header Files\Widgets</Filter>
+    </QtMoc>
+    <QtMoc Include="Widgets\saveWidget.h">
       <Filter>Header Files\Widgets</Filter>
     </QtMoc>
   </ItemGroup>

@@ -8,6 +8,9 @@
 #ifndef CONSTPARAM_H
 #define CONSTPARAM_H
 
+#define ENGINEER
+//#define OPERATOR
+
 #define LIGHT_OPEN			"SB3"					//"SB3"
 #define LIGHT_CLOSE			"CB3"					//"CB3"
 #define CLASSIFIY_BAD		"SB4"					//"SB4"
@@ -32,15 +35,34 @@
 
 
 /*******************    XML-ConfigureParam    **************************/
-#define XML_Configure		"Xml/Configure.xml"			//"Xml/Configure.xml"
+#define XML_Configure				"Xml/Configure.xml"			//"Xml/Configure.xml"
 
-#define Node_Camera			"Camera"					//"Camera"
-#define Camera_Top			"Camera_Top"				// "Camera_Top"
-#define Camera_Side			"Camera_Side"				// "Camera_Side"
+#define Node_Camera					"Camera"					
+#define Camera_Top					"Camera_Top"				
+#define Camera_Side					"Camera_Side"				
 
-#define Node_Hxq			"Hxq"						//"Hxq"
+#define Node_Hxq					"Hxq"		
 
-#define Node_Save			"Save"						//Save
+
+#define Node_Save					"Save"					
+#define Save_TopBadIndex			"TopBadIndex"				
+#define Save_SideBadIndex			"SideBadIndex"			
+#define Save_IsSaveTopBad			"IsSaveTopBad"				
+#define Save_IsSaveSideBad			"IsSaveSideBad"				
+#define Save_IsSaveTopAll			"IsSaveTopAll"					
+#define Save_IsSaveSideAll			"IsSaveSideAll"				
+#define Save_SaveTopBadNum			"SaveTopBadNum"					
+#define Save_SaveSideBadNum			"SaveSideBadNum"				
+#define Save_SaveTopAllNum			"SaveTopAllNum"				
+#define Save_SaveSideAllNum			"SaveSideAllNum"			
+#define Save_SaveTopBadPath			"SaveTopBadPath"			
+#define Save_SaveSideBadPath		"SaveSideBadPath"			
+#define Save_SaveTopAllPath			"SaveTopAllPath"				
+#define Save_SaveSideAllPath		"SaveSideAllPath"						
+#define Save_SaveImageFormat		"SaveImageFormat"						
+#define Save_IsSaveLog				"IsSaveLog"						
+
+
 
 /********************    Classisfy		****************/
 #define TopCamera			0x00

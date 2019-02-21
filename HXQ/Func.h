@@ -77,6 +77,9 @@ bool ParserXmlNode(QString& path, QString& childNodeName, std::vector <std::pair
 void ParserCamParamAndSetFramerabber(HalconCpp::HFramegrabber* pGrabber, std::vector <std::pair<std::pair<QString, QString>, QString>>& CamParam);
 int UpdateXmlNodeText(QString& path, QString& childNodeName, QString& childrenNodeName, QString& changeValue);
 
+bool isFileExist(QString fullFileName);	//判断文件是否存要
+
+
 enum ChhXml
 {
 	UpdateOK,

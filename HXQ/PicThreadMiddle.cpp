@@ -22,9 +22,9 @@ void PicThreadMiddle::run()
 			
 			HTuple  hv_IsBad;
 			OnHandle(m_Image, m_WindowHandle, &hv_IsBad);
-			//int result = hv_IsBad.I();
+			int result = hv_IsBad.I();
 
-			int result = 0;
+			//int result = 0;
 			switch (result)
 			{
 			case Good:
@@ -136,14 +136,14 @@ void PicThreadMiddle::QueueSaveImage(const HObject& Image, int maxnum)
 	if (g_SaveParam.SaveSideBadIndex <= maxnum)
 	{
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveParam.SaveSideBadIndex, 4, 10, QChar('0'));
-		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		WriteImage(Image, g_SaveParam.SaveImageFormat.toStdString().c_str(), 0, saveImagePath.toStdString().c_str());
 		g_SaveParam.SaveSideBadIndex++;
 	}
 	else
 	{
 		g_SaveParam.SaveSideBadIndex = 1;
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveParam.SaveSideBadIndex, 4, 10, QChar('0'));
-		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		WriteImage(Image, g_SaveParam.SaveImageFormat.toStdString().c_str(), 0, saveImagePath.toStdString().c_str());
 		g_SaveParam.SaveSideBadIndex++;
 	}
 	g_mutex_SaveImage.unlock();

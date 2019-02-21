@@ -24,9 +24,6 @@ public:
 public slots:
 	void SaveToXml();
 	void OnTest();
-	void OnGood();
-	void OnBad();
-	void OnReceiveVarValue(QString varValue);
 
 private:
 	Ui::motionCardWidget *ui;

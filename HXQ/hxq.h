@@ -84,7 +84,6 @@ public slots:
 	//生成错误对话提示框
 	void genErrorDialog(QString error);
 	void receiveCorrectImage(int value);
-	void OnReadyOk(int num);
 
 	//
 	void OnWakeCamera();
@@ -122,7 +121,7 @@ private:
 	HImage m_Image, m_LeftImage, m_MiddleImage, m_SecondRightImage, m_RightImage;
 	int m_AllResult;
 	int m_good, m_bad, m_gou, m_cao, m_liantong, m_total;
-	bool m_peviousProductDectectEnd;
+	//bool m_peviousProductDectectEnd;
 	bool m_bIsOnLine; //打开相机时,选择是否与PLC联机
 	QString m_BottomModel;
 	QString m_GBModel;

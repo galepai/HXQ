@@ -6,6 +6,7 @@
 #include <QElapsedTimer>
 #include "Func.h"
 #include <QTime>
+#include "Global.h"
 
 #define STARTLOGO
 //#define OUTPUTLOG
@@ -65,11 +66,54 @@ void MessageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
 	mutex.unlock();
 }
 
+void ReadGlobal()
+{
+	std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent;
+	if (ParserXmlNode(QString(XML_Configure), QString(Node_Hxq), xmlContent))
+	{
+		int total = sizeof(g_DetectParam) / sizeof(float);
+		float* p = (float*)&g_DetectParam;
+		for (int index = 0; index<total; index++)
+		{
+			*p = xmlContent[index].second.toFloat();
+			p++;
+		}
+	}
+
+	std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent2;
+	if (ParserXmlNode(QString(XML_Configure), QString(Node_Save), xmlContent2))
+	{
+		g_SaveParam.SaveTopBadIndex = xmlContent2[0].second.toInt();
+		g_SaveParam.SaveSideBadIndex = xmlContent2[1].second.toInt();
+
+		g_SaveParam.IsSaveTopBad = xmlContent2[2].second.toInt();
+		g_SaveParam.IsSaveSideBad = xmlContent2[3].second.toInt();
+		g_SaveParam.IsSaveTopAll = xmlContent2[4].second.toInt();
+		g_SaveParam.IsSaveSideAll = xmlContent2[5].second.toInt();
+
+		g_SaveParam.SaveTopBadNum = xmlContent2[6].second.toInt();
+		g_SaveParam.SaveSideBadNum = xmlContent2[7].second.toInt();
+		g_SaveParam.SaveTopAllNum = xmlContent2[8].second.toInt();
+		g_SaveParam.SaveSideAllNum = xmlContent2[9].second.toInt();
+
+
+		g_SaveParam.SaveTopBadPath = xmlContent2[10].second;
+		g_SaveParam.SaveSideBadPath = xmlContent2[11].second;
+		g_SaveParam.SaveTopAllPath = xmlContent2[12].second;
+		g_SaveParam.SaveSideAllPath = xmlContent2[13].second;
+
+		g_SaveParam.SaveImageFormat = xmlContent2[14].second;
+
+		g_SaveParam.IsSaveLog = xmlContent2[15].second.toInt();
+	}
+}
+
 int main(int argc, char *argv[])
 {
-#ifdef OUTPUTLOG
-	qInstallMessageHandler(MessageOutput);
-#endif
+	ReadGlobal();
+	if (g_SaveParam.IsSaveLog)
+		qInstallMessageHandler(MessageOutput);
+
 
 	QApplication a(argc, argv);
 

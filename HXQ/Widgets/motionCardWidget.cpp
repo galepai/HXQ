@@ -13,8 +13,7 @@ motionCardWidget::motionCardWidget(QWidget *parent) :
 
 	connect(ui->confirmButton, SIGNAL(clicked()), this, SLOT(SaveToXml()));
 	connect(ui->testButton, SIGNAL(clicked()), this, SLOT(OnTest()));
-	connect(ui->goodButton, SIGNAL(clicked()), this, SLOT(OnGood()));
-	connect(ui->badButton, SIGNAL(clicked()), this, SLOT(OnBad()));
+
 	ReadFromXml();
 	m_pGalil = nullptr;
 }
@@ -35,11 +34,6 @@ motionCardWidget::~motionCardWidget()
 
 void motionCardWidget::ReadFromXml()
 {
-
-	//QVariant Value;
-	//ReadConfigure("config.ini", "MotionCard", "Ip", Value);
-	//ui->lineEdit_Ip->setText(Value.toString());
-	
 	
 	std::vector <std::pair<std::pair<QString, QString>, QString>> xmlContent;
 	if (ParserXmlNode(QString(XML_MotionCard), QString(Node_MotionCard), xmlContent))
@@ -125,18 +119,13 @@ void motionCardWidget::OnTest()
 {
 	if (!m_pGalil)
 	{
-		m_pGalil = new Galil_Thread(this);
-		connect(m_pGalil, SIGNAL(sendVarValue(QString)), this, SLOT(OnReceiveVarValue(QString)));
+		m_pGalil = new Galil_Thread();
 		connect(m_pGalil, SIGNAL(finished()), m_pGalil, SLOT(deleteLater()));
 
 
 		QString Revision, ip, varName1, varName2;
 		QLineEdit* pLineEdit = (QLineEdit*)vector_lineEdits[0];
 		ip = pLineEdit->text();
-		pLineEdit = (QLineEdit*)vector_lineEdits[1];
-		varName1 = pLineEdit->text();
-		pLineEdit = (QLineEdit*)vector_lineEdits[2];
-		varName2 = pLineEdit->text();
 
 		if (m_pGalil->Open(ip))
 		{
@@ -153,23 +142,7 @@ void motionCardWidget::OnTest()
 			return;
 		}
 
-		m_pGalil->setVarName1(varName1);
-		m_pGalil->setVarName2(varName2);
-		m_pGalil->start();
-		ui->testButton->setText(G2U("ÒÑÁ¬½Ó"));
 	}
 }
-void motionCardWidget::OnGood()
-{
-	
-}
 
-void motionCardWidget::OnBad()
-{
-	
-}
 
-void motionCardWidget::OnReceiveVarValue(QString varValue)
-{
-	ui->label->setText(varValue);
-}

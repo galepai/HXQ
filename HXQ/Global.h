@@ -46,6 +46,10 @@ struct SaveParam
 	QString SaveSideBadPath;
 	QString SaveTopAllPath;
 	QString SaveSideAllPath;
+
+	QString SaveImageFormat;
+
+	int IsSaveLog;
 };
 
 extern QMutex g_mutex_Camera;
@@ -54,9 +58,6 @@ extern QMutex g_mutex_SaveImage;
 extern QWaitCondition g_condition_Camera;
 extern bool g_UpWaveEnable;
 extern std::queue<bool> g_Result_Queue;
-//extern int g_SaveTopBadIndex,g_SaveSideBadIndex;
-extern int g_IsSaveTopBad, g_IsSaveSideBad, g_IsSaveTopAll, g_IsSaveSideAll;
-extern QString  SaveTopBadPath,g_SaveSideBadPath ,g_SaveTopAllPathg_SaveSideAllPath;
 extern DetectParam g_DetectParam;
 extern SaveParam g_SaveParam;
 

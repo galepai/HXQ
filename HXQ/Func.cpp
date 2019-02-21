@@ -604,3 +604,13 @@ void ParserCamParamAndSetFramerabber(HalconCpp::HFramegrabber* pGrabber, std::ve
 
 	}
 }
+
+bool isFileExist(QString fullFileName)
+{
+	QFileInfo fileInfo(fullFileName);
+	if (fileInfo.isFile())
+	{
+		return true;
+	}
+	return false;
+}

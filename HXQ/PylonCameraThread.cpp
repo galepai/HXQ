@@ -368,14 +368,14 @@ void PylonCamera_Thread::QueueSaveImage(const HObject& Image,int maxnum)
 	if (m_image_index <= maxnum)
 	{
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(m_image_index, 4, 10, QChar('0'));
-		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		WriteImage(Image, g_SaveParam.SaveImageFormat.toStdString().c_str(), 0, saveImagePath.toStdString().c_str());
 		m_image_index++;
 	}
 	else
 	{
 		m_image_index = 1;
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(m_image_index, 4, 10, QChar('0'));
-		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		WriteImage(Image, g_SaveParam.SaveImageFormat.toStdString().c_str(), 0, saveImagePath.toStdString().c_str());
 		m_image_index++;
 	}
 	g_mutex_SaveImage.unlock();

@@ -23,9 +23,9 @@ void PicThreadLeft::run()
 			HTuple hv_IsBad;
 
 			OnHandle(m_Image,m_WindowHandle,&hv_IsBad);
-			//int result = hv_IsBad.I();
+			int result = hv_IsBad.I();
 
-			int result = 0;
+			//int result = 0;
 			switch (result)
 			{
 			case Good:
@@ -119,7 +119,8 @@ void PicThreadLeft::run()
 			emit resultReady(Bad, m_CameraId);
 			CHH::disp_message(m_WindowHandle, HTuple("无正确分类号"), "image", 120, 12, "red", "true");
 			qDebug() << "ThreadLeft error:  " << error;
-			QueueSaveImage(m_Image, SaveImageNum());
+			if (IsSaveImage())
+				QueueSaveImage(m_Image, SaveImageNum());
 		}
 
 		
@@ -166,14 +167,31 @@ void PicThreadLeft::QueueSaveImage(const HObject& Image, int maxnum)
 	if (g_SaveParam.SaveTopBadIndex <= maxnum)
 	{
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveParam.SaveTopBadIndex, 4, 10, QChar('0'));
-		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+
+		WriteImage(Image, g_SaveParam.SaveImageFormat.toStdString().c_str(), 0, saveImagePath.toStdString().c_str());
+		
+		//QTime start;
+		//start.start();
+
+		//for(int i=0;i<100;++i)	
+		//	WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		//qDebug() << "SaveImage1：" << start.elapsed() / 100000.0 << "s";//输出计时
+		////
+		//QTime start1;
+		//start1.start();
+
+		//for (int i = 0; i<100; ++i)
+		//	WriteImage(Image, "jpg", 0, saveImagePath.toStdString().c_str());
+		//qDebug() << "SaveImage2：" << start1.elapsed() / 100000.0 << "s";//输出计时
+
+
 		g_SaveParam.SaveTopBadIndex++;
 	}
 	else
 	{
 		g_SaveParam.SaveTopBadIndex = 1;
 		QString saveImagePath = QString(m_SaveImageDirName + "%1").arg(g_SaveParam.SaveTopBadIndex, 4, 10, QChar('0'));
-		WriteImage(Image, "tiff", 0, saveImagePath.toStdString().c_str());
+		WriteImage(Image, g_SaveParam.SaveImageFormat.toStdString().c_str(), 0, saveImagePath.toStdString().c_str());
 		g_SaveParam.SaveTopBadIndex++;
 	}
 	g_mutex_SaveImage.unlock();

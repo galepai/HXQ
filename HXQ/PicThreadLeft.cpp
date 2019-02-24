@@ -20,12 +20,12 @@ void PicThreadLeft::run()
 	{
 		try
 		{
-			HTuple hv_IsBad;
+			HTuple hv_IsBad=0;
 
 			OnHandle(m_Image,m_WindowHandle,&hv_IsBad);
-			int result = hv_IsBad.I();
+			//int result = hv_IsBad.I();
 
-			//int result = 0;
+			int result = 0;
 			switch (result)
 			{
 			case Good:
@@ -117,6 +117,8 @@ void PicThreadLeft::run()
 			QString error = e.ErrorMessage().Text();
 			DispText(m_WindowHandle, "LeftThread handle Error.", "image", 120, 12, "red", HTuple(), HTuple());
 			emit resultReady(Bad, m_CameraId);
+			num++;
+			CHH::disp_message(m_WindowHandle, HTuple("number: ") + num, "image", 12, 12, "black", "true");
 			CHH::disp_message(m_WindowHandle, HTuple("无正确分类号"), "image", 120, 12, "red", "true");
 			qDebug() << "ThreadLeft error:  " << error;
 			if (IsSaveImage())

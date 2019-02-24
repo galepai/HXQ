@@ -304,7 +304,7 @@
         <widget class="QLCDNumber" name="lcdNumber_good">
          <property name="geometry">
           <rect>
-           <x>560</x>
+           <x>640</x>
            <y>20</y>
            <width>64</width>
            <height>31</height>
@@ -320,7 +320,7 @@
         <widget class="QLabel" name="label_5">
          <property name="geometry">
           <rect>
-           <x>520</x>
+           <x>600</x>
            <y>30</y>
            <width>54</width>
            <height>12</height>
@@ -335,6 +335,42 @@
          </property>
          <property name="text">
           <string>良品：</string>
+         </property>
+        </widget>
+        <widget class="QLCDNumber" name="lcdNumber_bad">
+         <property name="geometry">
+          <rect>
+           <x>490</x>
+           <y>20</y>
+           <width>64</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(255, 0, 0);</string>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_6">
+         <property name="geometry">
+          <rect>
+           <x>450</x>
+           <y>30</y>
+           <width>54</width>
+           <height>12</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Aharoni</family>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string> 其他：</string>
          </property>
         </widget>
        </widget>

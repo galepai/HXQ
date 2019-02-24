@@ -20,11 +20,11 @@ void PicThreadMiddle::run()
 		try
 		{
 			
-			HTuple  hv_IsBad;
+			HTuple  hv_IsBad=0;
 			OnHandle(m_Image, m_WindowHandle, &hv_IsBad);
-			int result = hv_IsBad.I();
+			//int result = hv_IsBad.I();
 
-			//int result = 0;
+			int result = 0;
 			switch (result)
 			{
 			case Good:
@@ -104,6 +104,8 @@ void PicThreadMiddle::run()
 			DispText(m_WindowHandle, "MiddleThread handle Error.", "image", 120, 12, "red", HTuple(), HTuple());
 			//g_UpWaveEnable = true;
 			emit resultReady(Bad, m_CameraId);
+			num++;
+			CHH::disp_message(m_WindowHandle, HTuple("number: ") + num, "image", 12, 12, "black", "true");
 			CHH::disp_message(m_WindowHandle, HTuple("代码处理异常"), "image", 120, 12, "red", "true");
 			if (IsSaveImage())
 				QueueSaveImage(m_Image, SaveImageNum());

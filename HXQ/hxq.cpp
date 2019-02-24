@@ -1117,7 +1117,7 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 		//qDebug() << "acquice 2 pic....";
 		m_Pic_Set.clear();
 
-		qDebug() << "Image num:	" << ++m_total;
+		qDebug() << "Image total num:	" << ++m_total;
 
 		if (!(m_detectResult.current_area + m_detectResult.current_line))
 		{
@@ -1142,18 +1142,41 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 			if (m_detectResult.current_area == Gou || m_detectResult.current_line == Gou)
 			{
 				ui.lcdNumber_gou->display(++m_gou);
+				qDebug() << "Send Gou Bad!!!	";
 			}
 			else if (m_detectResult.current_area == Cao || m_detectResult.current_line == Cao)
 			{
 				ui.lcdNumber_cao->display(++m_cao);
+				qDebug() << "Send Cao Bad!!!	";
 			}
-			else if (m_detectResult.current_area == Liantong || m_detectResult.current_area == Liantong)
+			else if (m_detectResult.current_area == Liantong || m_detectResult.current_line == Liantong)
 			{
 				ui.lcdNumber_liantong->display(++m_liantong);
+				qDebug() << "Send Liangtong Bad!!!	";
+			}
+			else if(m_detectResult.current_line == Gou || m_detectResult.current_area == Gou)
+			{
+				ui.lcdNumber_gou->display(++m_gou);
+				qDebug() << "Send Gou Bad!!!	";
+			}
+			else if (m_detectResult.current_line == Cao || m_detectResult.current_area == Cao)
+			{
+				ui.lcdNumber_cao->display(++m_cao);
+				qDebug() << "Send Cao Bad!!!	";
+			}
+			else if (m_detectResult.current_line == Liantong || m_detectResult.current_area == Liantong)
+			{
+				ui.lcdNumber_liantong->display(++m_liantong);
+				qDebug() << "Send Liangtong Bad!!!	";
+			}
+			else
+			{
+				ui.lcdNumber_bad->display(++m_bad);
+				qDebug() << "Send area bad:		" << m_detectResult.current_area<< "Send line bad:	"<<m_detectResult.current_line;
 			}
 		}
 
-		ui.lcdNumber_total->display(ui.lcdNumber_gou->intValue() + ui.lcdNumber_cao->intValue() + ui.lcdNumber_liantong->intValue() + ui.lcdNumber_good->intValue());
+		ui.lcdNumber_total->display(ui.lcdNumber_bad->intValue() + ui.lcdNumber_gou->intValue() + ui.lcdNumber_cao->intValue() + ui.lcdNumber_liantong->intValue() + ui.lcdNumber_good->intValue());
 
 		//m_peviousProductDectectEnd = true;
 

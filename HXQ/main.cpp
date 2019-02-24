@@ -6,6 +6,7 @@
 #include <QElapsedTimer>
 #include "Func.h"
 #include <QTime>
+#include <QProcess>
 #include "Global.h"
 
 #define STARTLOGO
@@ -108,8 +109,22 @@ void ReadGlobal()
 	}
 }
 
+void ResetEth(const QString ethName)
+{
+	QProcess p(0);
+	p.start("cmd", QStringList() << "/C" << QString("netsh interface set interface ") + ethName + (" disabled"));
+	p.waitForStarted();
+	p.waitForFinished();
+
+	QProcess p1(0);
+	p1.start("cmd", QStringList() << "/C" << QString("netsh interface set interface ") + ethName + " enabled");
+	p1.waitForStarted();
+	p1.waitForFinished();
+}
+
 int main(int argc, char *argv[])
 {
+	ResetEth("\"Dalsa5.8\"");
 	ReadGlobal();
 	if (g_SaveParam.IsSaveLog)
 		qInstallMessageHandler(MessageOutput);

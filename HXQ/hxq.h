@@ -142,6 +142,8 @@ private:
 	QString m_startTime;
 	QTimer* m_pTimer;
 
+	QImage m_image_red,m_image_green;
+
 signals:
 	void ReadyLoop();
 

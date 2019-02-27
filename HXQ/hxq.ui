@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1027</width>
+    <width>1308</width>
     <height>810</height>
    </rect>
   </property>
@@ -46,7 +46,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>499</width>
+           <width>639</width>
            <height>343</height>
           </rect>
          </property>
@@ -96,7 +96,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>498</width>
+           <width>639</width>
            <height>343</height>
           </rect>
          </property>
@@ -373,6 +373,84 @@
           <string> 其他：</string>
          </property>
         </widget>
+        <widget class="QLabel" name="label_topcamera">
+         <property name="geometry">
+          <rect>
+           <x>940</x>
+           <y>10</y>
+           <width>61</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>top</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_sidecamera">
+         <property name="geometry">
+          <rect>
+           <x>1070</x>
+           <y>10</y>
+           <width>61</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>side</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_motioncard">
+         <property name="geometry">
+          <rect>
+           <x>1200</x>
+           <y>10</y>
+           <width>61</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>motion</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_topcamera_2">
+         <property name="geometry">
+          <rect>
+           <x>870</x>
+           <y>10</y>
+           <width>61</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>顶部相机：</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_topcamera_3">
+         <property name="geometry">
+          <rect>
+           <x>1000</x>
+           <y>10</y>
+           <width>61</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>侧部相机：</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_topcamera_4">
+         <property name="geometry">
+          <rect>
+           <x>1130</x>
+           <y>10</y>
+           <width>61</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>运动控制：</string>
+         </property>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -384,7 +462,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1027</width>
+     <width>1308</width>
      <height>23</height>
     </rect>
    </property>

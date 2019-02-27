@@ -72,6 +72,15 @@ hxq::hxq(QWidget *parent)
 	m_bOneDetect = false;
 
 	m_pTimer = nullptr;
+
+	//installTimerToUpdateMySql();
+
+	m_image_red.load(":/icon03/Resources/icon03/motion_off.png");
+	m_image_green.load(":/icon03/Resources/icon03/motion_on.png");
+	ui.label_topcamera->setPixmap(QPixmap::fromImage(m_image_red));
+	ui.label_sidecamera->setPixmap(QPixmap::fromImage(m_image_red));
+	ui.label_motioncard->setPixmap(QPixmap::fromImage(m_image_red));
+	
 }
 
 
@@ -340,62 +349,63 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 		if (CameraStatus[0] && CameraStatus[1])
 		{
 			autoStartButtonStatus();
-			genErrorDialog(G2U("相机已正确打开！"));
+			//genErrorDialog(G2U("相机已正确打开！"));
+			ui.label_topcamera->setPixmap(QPixmap::fromImage(m_image_green));
+			ui.label_sidecamera->setPixmap(QPixmap::fromImage(m_image_green));
 
-			{
-				QString type, Ip, varName1, varName2;
+			QString type, Ip;
 
-				ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString(MotionCard_ip), type, Ip);
-				//ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName1"), type, varName1);
-				//ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName2"), type, varName2);
+			ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString(MotionCard_ip), type, Ip);
+			//ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName1"), type, varName1);
+			//ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString("varName2"), type, varName2);
 
 				///****/
-				if (!m_Galil)
-				{
-					m_Galil = new Galil_Thread(this);
-				}
-
-				connect(m_Galil, SIGNAL(triggerSinal()), this, SLOT(OnWakeCamera()), Qt::DirectConnection);
-				connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater()));
-
-				if (m_Galil->Open(Ip + ""))
-				{
-					genErrorDialog(G2U("控制卡连接成功！"));
-					m_Galil->Cmd(LIGHT_CLOSE);
-					Sleep(50);
-					m_Galil->Cmd(AUTOSTOP);
-					Sleep(100);
-					m_Galil->Cmd(AUTOSTART);
-
-					/*std::queue<bool> empty;
-					swap(empty, g_Result_Queue);
-					g_Result_Queue.push(true);*/
-
-					m_Galil->Cmd(CLASSIFIY_BAD);
-
-					m_Galil->start();
-
-					OnLcdDispalyReset();
-
-					installTimerToUpdateMySql();
-
-					PicThreadLeft::num = 0;
-					PicThreadMiddle::num = 0;
-				
-				}
-				else
-				{
-					genErrorDialog(G2U("控制卡连接错误！"));
-					delete m_Galil;
-					m_Galil = nullptr;
-					OnStop();
-					CameraStatus.clear();
-					return;
-				}
-
-				AllButtonFalse();
-				ui.OnStop->setEnabled(true);
+			if (!m_Galil)
+			{
+				m_Galil = new Galil_Thread(this);
 			}
+
+			connect(m_Galil, SIGNAL(triggerSinal()), this, SLOT(OnWakeCamera()), Qt::DirectConnection);
+			connect(m_Galil, SIGNAL(finished()), m_Galil, SLOT(deleteLater()));
+
+			if (m_Galil->Open(Ip + ""))
+			{
+				//genErrorDialog(G2U("控制卡连接成功！"));
+				ui.label_motioncard->setPixmap(QPixmap::fromImage(m_image_green));
+				m_Galil->Cmd(LIGHT_CLOSE);
+				Sleep(50);
+				m_Galil->Cmd(AUTOSTOP);
+				Sleep(100);
+				m_Galil->Cmd(AUTOSTART);
+
+				/*std::queue<bool> empty;
+				swap(empty, g_Result_Queue);
+				g_Result_Queue.push(true);*/
+
+				m_Galil->Cmd(CLASSIFIY_BAD);
+
+				m_Galil->start();
+
+				OnLcdDispalyReset();
+
+				installTimerToUpdateMySql();
+
+				PicThreadLeft::num = 0;
+				PicThreadMiddle::num = 0;
+				
+			}
+			else
+			{
+				genErrorDialog(G2U("控制卡连接错误！"));
+				delete m_Galil;
+				m_Galil = nullptr;
+				OnStop();
+				CameraStatus.clear();
+				return;
+			}
+
+			AllButtonFalse();
+			ui.OnStop->setEnabled(true);
 
 		}
 		else
@@ -897,9 +907,9 @@ void hxq::OnStop()
 	{
 		m_pTimer->stop();
 		m_pTimer->deleteLater();
+		updateMySql();
 	}
 
-	updateMySql();
 }
 
 //检测完成信号
@@ -1138,8 +1148,6 @@ void hxq::OnMotionCardDebug()
 	if(gali.Open(Ip))
 		gali.Cmd(LIGHT_CLOSE);
 
-	
-		
 }
 
 

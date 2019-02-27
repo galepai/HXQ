@@ -385,6 +385,8 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 				m_Galil->Cmd(CLASSIFIY_BAD);
 
 				m_Galil->start();
+				
+				ui.OnMotionCard->setEnabled(true);
 
 				OnLcdDispalyReset();
 

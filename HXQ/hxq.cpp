@@ -14,6 +14,7 @@
 #include "PicThreadRight.h"
 #include "PicThreadSecondRight.h"
 #include <QtXml\QDomDocument>
+#include <QtSql/QSqlDatabase>
 #include <map>
 
 
@@ -70,6 +71,40 @@ hxq::hxq(QWidget *parent)
 
 	m_bOneDetect = false;
 
+}
+
+
+// 安装定时器插入新行，并更新数据库
+void hxq::installTimerToUpdateMySql()
+{
+	m_startTime = MySql_Now();
+	if (MySql_Connect(m_sqlDatabase, "localhost", 3306, "hxq", "ycgd", "ycgd"))
+	{
+		MySql_Query(m_sqlDatabase, QString("INSERT INTO total (startTime) VALUES ('%1')").arg(m_startTime));
+	}
+
+	m_pTimer = new QTimer(this);
+	connect(m_pTimer, SIGNAL(timeout()), this, SLOT(updateMySql()));
+	m_pTimer->start(5000);
+
+	
+}
+
+// 更新数据库
+void hxq::updateMySql()
+{
+	QTime start;
+	start.start();
+	MySql_Query(m_sqlDatabase, QString("UPDATE total SET endTime='%1',gou=%2,cao=%3,maoci=%4,other=%5,good=%6,total=%7 WHERE startTime='%8'").
+		arg(MySql_Now()).
+		arg(ui.lcdNumber_gou->value()).
+		arg(ui.lcdNumber_cao->value()).
+		arg(ui.lcdNumber_liantong->value()).
+		arg(ui.lcdNumber_bad->value()).
+		arg(ui.lcdNumber_good->value()).
+		arg(ui.lcdNumber_total->value()).
+		arg(m_startTime));
+	qDebug() << "update new data time:	" << start.elapsed() / 1000.0 << "s";
 }
 
 
@@ -336,6 +371,8 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 					g_Result_Queue.push(true);
 
 					m_Galil->start();
+
+					installTimerToUpdateMySql();
 				
 				}
 				else
@@ -848,6 +885,10 @@ void hxq::OnStop()
 	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString(Save_TopBadIndex), QString("%1").arg(g_SaveParam.SaveTopBadIndex));
 	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString(Save_SideBadIndex), QString("%1").arg(g_SaveParam.SaveSideBadIndex));
 
+	m_pTimer->stop();
+	m_pTimer->deleteLater();
+
+	updateMySql();
 }
 
 //检测完成信号
@@ -1177,7 +1218,8 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 		}
 
 		ui.lcdNumber_total->display(ui.lcdNumber_bad->intValue() + ui.lcdNumber_gou->intValue() + ui.lcdNumber_cao->intValue() + ui.lcdNumber_liantong->intValue() + ui.lcdNumber_good->intValue());
-
+		
+		//updateMySql();
 		//m_peviousProductDectectEnd = true;
 
 		return;

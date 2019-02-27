@@ -7,6 +7,8 @@
 #include <bitset>
 #include <qdebug.h>
 #include <QtXml\QDomElement>
+#include <QtSql/QSqlQuery>
+#include <QtSql/QSqlError>
 
 //QMutex g_mutex_Camera;
 //QMutex g_mutex_Result;
@@ -613,4 +615,37 @@ bool isFileExist(QString fullFileName)
 		return true;
 	}
 	return false;
+}
+
+bool MySql_Connect(QSqlDatabase& db, const QString& hostName, const int& port, const QString& dataBaseName, const QString& userName,
+	const QString& passWord)
+{
+	db = QSqlDatabase::addDatabase("QMYSQL");
+	db.setHostName(hostName);      //连接数据库主机名，这里需要注意（若填的为”127.0.0.1“，出现不能连接，则改为localhost)
+	db.setPort(port);                 //连接数据库端口号，与设置一致
+	db.setDatabaseName(dataBaseName);      //连接数据库名，与设置一致
+	db.setUserName(userName);          //数据库用户名，与设置一致
+	db.setPassword(passWord);    //数据库密码，与设置一致
+	db.open();
+	if (!db.open())
+	{
+		qDebug() << "connect to mysql error" << db.lastError().text();
+		return false;
+	}
+	else
+	{
+		qDebug() << "connect to mysql OK";
+		return true;
+	}
+}
+
+void MySql_Query(QSqlDatabase& db, const QString& expression)	//数据库查询
+{	
+	QSqlQuery query(db);
+	query.exec(expression);
+}
+
+QString MySql_Now()	//返回当前时间
+{
+	return QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
 }

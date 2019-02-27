@@ -14,6 +14,7 @@
 #include <QTextStream>
 #include <QMutex>
 #include <QWaitCondition>
+#include <QtSql/QSqlDatabase>
 #include <HalconCpp.h>
 #include <queue>
 
@@ -79,6 +80,14 @@ int UpdateXmlNodeText(QString& path, QString& childNodeName, QString& childrenNo
 
 bool isFileExist(QString fullFileName);	//判断文件是否存要
 
+/**	操作数据库
+*
+*
+*/
+bool MySql_Connect(QSqlDatabase& db, const QString& hostName, const int& port, const QString& dataBaseName, const QString& userName,
+	const QString& passWord);	//l连接数据库
+void MySql_Query(QSqlDatabase& db, const QString& expression);	//数据库查询
+QString MySql_Now();	//返回当前时间						
 
 enum ChhXml
 {
@@ -118,6 +127,8 @@ struct DetectResultInfo
 	int current_area;
 	int next_area;
 };
+
+
 
 
 

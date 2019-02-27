@@ -100,6 +100,8 @@ public slots:
 	//void OpenSideCamera(void**, int*);
 	void OpenPreCamera(void** pGrabber, QString nodeCameraName,int* isCorrectOpen);
 
+	void updateMySql();
+
 private:
 	void OnClearCameraThread();	//清理相机线程
 	void FullScreenShow();	//全屏显示
@@ -109,6 +111,7 @@ private:
 	void SetPicViewScroll(int width, int height, LocationView location); //指定视图的滚动条长度
 	void OnOpenCameras();	//打开相机
 
+	void installTimerToUpdateMySql();// 安装定时器插入新行，并更新数据库
 
 private:
 	Ui::hxqClass ui;
@@ -132,6 +135,10 @@ private:
 	//bool m_bIsCameraCorrect;
 
 	bool m_bOneDetect;
+
+	QSqlDatabase m_sqlDatabase;
+	QString m_startTime;
+	QTimer* m_pTimer;
 
 signals:
 	void ReadyLoop();

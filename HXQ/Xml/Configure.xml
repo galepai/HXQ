@@ -16,8 +16,8 @@
         <毛刺高 type="float">0.15</毛刺高>
     </Hxq>
     <Save>
-        <TopBadIndex type="int">88</TopBadIndex>
-        <SideBadIndex type="int">78</SideBadIndex>
+        <TopBadIndex type="int">110</TopBadIndex>
+        <SideBadIndex type="int">58</SideBadIndex>
         <IsSaveTopBad type="int">1</IsSaveTopBad>
         <IsSaveSideBad type="int">1</IsSaveSideBad>
         <IsSaveTopAll type="int">1</IsSaveTopAll>

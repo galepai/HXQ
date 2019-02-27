@@ -71,6 +71,7 @@ hxq::hxq(QWidget *parent)
 
 	m_bOneDetect = false;
 
+	m_pTimer = nullptr;
 }
 
 
@@ -104,7 +105,7 @@ void hxq::updateMySql()
 		arg(ui.lcdNumber_good->value()).
 		arg(ui.lcdNumber_total->value()).
 		arg(m_startTime));
-	qDebug() << "update new data time:	" << start.elapsed() / 1000.0 << "s";
+	//qDebug() << "update new data time:	" << start.elapsed() / 1000.0 << "s";
 }
 
 
@@ -366,13 +367,20 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 					Sleep(100);
 					m_Galil->Cmd(AUTOSTART);
 
-					std::queue<bool> empty;
+					/*std::queue<bool> empty;
 					swap(empty, g_Result_Queue);
-					g_Result_Queue.push(true);
+					g_Result_Queue.push(true);*/
+
+					m_Galil->Cmd(CLASSIFIY_BAD);
 
 					m_Galil->start();
 
+					OnLcdDispalyReset();
+
 					installTimerToUpdateMySql();
+
+					PicThreadLeft::num = 0;
+					PicThreadMiddle::num = 0;
 				
 				}
 				else
@@ -579,10 +587,10 @@ void hxq::OnWakeCamera()
 	g_condition_Camera.wakeAll();
 	g_mutex_Camera.unlock();
 	
-	Sleep(10);
-	g_mutex_Camera.lock();
-	g_condition_Camera.wakeAll();
-	g_mutex_Camera.unlock();
+	//Sleep(10);
+	//g_mutex_Camera.lock();
+	//g_condition_Camera.wakeAll();
+	//g_mutex_Camera.unlock();
 }
 
 void hxq::OnModToRight()
@@ -885,8 +893,11 @@ void hxq::OnStop()
 	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString(Save_TopBadIndex), QString("%1").arg(g_SaveParam.SaveTopBadIndex));
 	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString(Save_SideBadIndex), QString("%1").arg(g_SaveParam.SaveSideBadIndex));
 
-	m_pTimer->stop();
-	m_pTimer->deleteLater();
+	if (m_pTimer && m_pTimer->isActive())
+	{
+		m_pTimer->stop();
+		m_pTimer->deleteLater();
+	}
 
 	updateMySql();
 }
@@ -1164,22 +1175,24 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 		{
 			m_good++;
 
-			g_mutex_Result.lock();
+			/*g_mutex_Result.lock();
 			g_Result_Queue.push(true);
-			g_mutex_Result.unlock();
+			g_mutex_Result.unlock();*/
 
 			qDebug() << "Send Good!!!	";
+			m_Galil->Cmd(CLASSIFIY_GOOD);
 			ui.lcdNumber_good->display(m_good);
 
 		}
 		else
 		{
 
-				g_mutex_Result.lock();
+				/*g_mutex_Result.lock();
 				g_Result_Queue.push(false);
-				g_mutex_Result.unlock();
+				g_mutex_Result.unlock();*/
 
 			qDebug() << "Send Bad!!!	";
+			m_Galil->Cmd(CLASSIFIY_BAD);
 			if (m_detectResult.current_area == Gou || m_detectResult.current_line == Gou)
 			{
 				ui.lcdNumber_gou->display(++m_gou);
@@ -1236,5 +1249,15 @@ void hxq::OnSetExposure()
 
 }
 
+//统计数字复位清零
+void hxq::OnLcdDispalyReset()
+{
+	ui.lcdNumber_bad->display(0);
+	ui.lcdNumber_gou->display(0);
+	ui.lcdNumber_cao->display(0);
+	ui.lcdNumber_liantong->display(0);
+	ui.lcdNumber_good->display(0);
+	ui.lcdNumber_total->display(0);
+}
 
 

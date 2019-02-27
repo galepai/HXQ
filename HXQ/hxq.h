@@ -42,6 +42,8 @@ public:
 	void autoStartButtonStatus();
 	void normalButtonStatus();
 
+	void OnLcdDispalyReset();
+
 	//bool ParserXml(QString& path, QString& childeNodeName, std::vector<std::pair<QString, QString>>& xmlContent);
 	//void ParserCamParam(HFramegrabber* pGrabber, std::vector<std::pair<QString, QString>>& CamParam);
 

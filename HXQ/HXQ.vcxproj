@@ -220,7 +220,7 @@
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>.\lib;C:\Program Files %28x86%29\Galil\gclib\lib\dynamic\x64;$(PYLON_DEV_DIR)\lib\x64;$(HALCONROOT)\lib\$(HALCONARCH);$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5SerialPort.lib;halconcpp.lib;GCBase_MD_VC120_v3_0_Basler_pylon_v5_0.lib;gclib.lib;gclibo.lib;Qt5WebEngine.lib;Qt5WebEngineCore.lib;Qt5WebEngineWidgets.lib;Qt5Xml.lib;Qt5XmlPatterns.lib;Detect.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5SerialPort.lib;halconcpp.lib;GCBase_MD_VC120_v3_0_Basler_pylon_v5_0.lib;gclib.lib;gclibo.lib;Qt5Sql.lib;Qt5Xml.lib;Qt5XmlPatterns.lib;Detect.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <QtMoc>
       <QTDIR>$(QTDIR)</QTDIR>

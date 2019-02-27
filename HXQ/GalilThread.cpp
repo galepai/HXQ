@@ -166,7 +166,7 @@ void Galil_Thread::run()
 
 		CmdT(SINAL_CAMERA, cameraValue);
 		//Sleep(10);
-		CmdT(SINAL_MOVERIGHT1, moveRightValue);
+		//CmdT(SINAL_MOVERIGHT1, moveRightValue);
 
 		//触发相机
 		static int picNum = 0;
@@ -192,38 +192,40 @@ void Galil_Thread::run()
 		}
 
 		//右侧触发分料
-		if (moveRightValue.toFloat() == SINAL_MOVERIGHT1_THRESHOLD
-			&& IsWake)
-		{
-			//qDebug() << QString("echo ") + SINAL_MOVERIGHT1 + " :	" << moveRightValue;
-			//static int num = 0;
-			//num++;
-			//qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-			//if (num % 3)
-			//	Cmd(CLASSIFIY_BAD);		//分类良品
-			//else
-			//	Cmd(CLASSIFIY_GOOD);
+		//if (moveRightValue.toFloat() == SINAL_MOVERIGHT1_THRESHOLD
+		//	&& IsWake)
+		//{
+		//	//qDebug() << QString("echo ") + SINAL_MOVERIGHT1 + " :	" << moveRightValue;
+		//	//static int num = 0;
+		//	//num++;
+		//	//qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
+		//	//if (num % 3)
+		//	//	Cmd(CLASSIFIY_BAD);		//分类良品
+		//	//else
+		//	//	Cmd(CLASSIFIY_GOOD);
 
-				qDebug() << "enter fengliao lock !!!!		";
-				g_mutex_Result.lock();
-				if (g_Result_Queue.size())
-				{
-					qDebug() << "Enter g_Result_Queue.size =  "<<g_Result_Queue.size();
-					if (g_Result_Queue.front())
-					{
-						Cmd(CLASSIFIY_GOOD);		//分类良品
-					}
-					else
-					{
-						Cmd(CLASSIFIY_BAD);		//分类不良品
-					}
-					g_Result_Queue.pop();
-				}
-				g_mutex_Result.unlock();
-				qDebug() << "quit fengliao lock!!!!		";
-				qDebug() << "Quit g_Result_Queue.size = " << g_Result_Queue.size();
-				IsWake = false;
-		}
+		//		qDebug() << "enter fengliao lock !!!!		";
+		//		g_mutex_Result.lock();
+		//		if (g_Result_Queue.size())
+		//		{
+		//			qDebug() << "Enter g_Result_Queue.size =  "<<g_Result_Queue.size();
+		//			if (g_Result_Queue.front())
+		//			{
+		//				//Cmd(CLASSIFIY_GOOD);		//分类良品
+		//				qDebug() << "Galil send Good";
+		//			}
+		//			else
+		//			{
+		//				//Cmd(CLASSIFIY_BAD);		//分类不良品
+		//				qDebug() << "Galil send Bad";
+		//			}
+		//			g_Result_Queue.pop();
+		//		}
+		//		g_mutex_Result.unlock();
+		//		qDebug() << "quit fengliao lock!!!!		";
+		//		qDebug() << "Quit g_Result_Queue.size = " << g_Result_Queue.size();
+		//		IsWake = false;
+		//}
 	
 		Sleep(80);
 

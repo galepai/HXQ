@@ -23,9 +23,9 @@ void PicThreadLeft::run()
 			HTuple hv_IsBad=0;
 
 			OnHandle(m_Image,m_WindowHandle,&hv_IsBad);
-			//int result = hv_IsBad.I();
+			int result = hv_IsBad.I();
 
-			int result = 0;
+			//int result = 0;
 			switch (result)
 			{
 			case Good:

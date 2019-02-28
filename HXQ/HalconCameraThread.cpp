@@ -71,7 +71,7 @@ void Halcon_Camera_Thread::run()
 	bool first = true;
 	HImage Image;
 
-
+	m_pGrabber->GrabImageStart(-1);
 	while (!m_bIsStop)
 	{
 		try{
@@ -82,10 +82,10 @@ void Halcon_Camera_Thread::run()
 			if (m_bIsMutexTrigger)
 			{
 				g_mutex_Camera.lock();
-				if (first) {
-					//emit ReadyOk(1);
-					first = false;
-				}
+				//if (first) {
+				//	//emit ReadyOk(1);
+				//	first = false;
+				//}
 
 				Sleep(10);
 				m_WaitWake = true;
@@ -102,7 +102,7 @@ void Halcon_Camera_Thread::run()
 			//HImage* pImage = new HImage();
 			QTime timedebuge;//声明一个时钟对象
 			timedebuge.start();//开始计时
-		
+
 			Image = m_pGrabber->GrabImage();
 			qDebug() << "Camera：" << timedebuge.elapsed() / 1000.0 << "s";//输出计时
 			//Image = m_pGrabber->GrabImageAsync(-1);

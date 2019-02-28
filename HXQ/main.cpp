@@ -8,6 +8,9 @@
 #include <QTime>
 #include <QProcess>
 #include "Global.h"
+#include "HalconCpp.h"
+
+using namespace HalconCpp;
 
 #define STARTLOGO
 //#define OUTPUTLOG
@@ -45,7 +48,7 @@ void MessageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
 	QFile file1("log1.txt");
 	QFile file2("log2.txt");
 	file1.open(QIODevice::WriteOnly | QIODevice::Append);
-	if (file1.size() >= 5*1024*1024)
+	if (file1.size() >= 2*1024*1024)
 	{
 		file1.close();
 		file2.remove();
@@ -126,6 +129,11 @@ int main(int argc, char *argv[])
 {
 	ResetEth("\"Dalsa5.8\"");
 	ReadGlobal();
+
+	/*HObject test;
+	ReadImage(&test,"test.tif");
+	WriteImage(test,"tiff" ,0, "test2.tif");*/
+
 	if (g_SaveParam.IsSaveLog)
 		qInstallMessageHandler(MessageOutput);
 
@@ -147,7 +155,7 @@ int main(int argc, char *argv[])
 
 
 #ifdef STARTLOGO 
-	int delayTime = 3;
+	int delayTime = 6;
 	QElapsedTimer timer;
 	timer.start();
 	while (timer.elapsed() < (delayTime * 1000))

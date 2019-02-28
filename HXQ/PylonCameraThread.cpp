@@ -99,7 +99,7 @@ void PylonCamera_Thread::run()
 	HImage Image;
 	QTime time;
 
-	bool first = true;
+	//bool first = true;
 	//m_camera.StartGrabbing();  //ÅäºÏWaitForFrameTriggerReady°æ±¾
 	while (!m_bIsStop)
 	{
@@ -143,10 +143,10 @@ void PylonCamera_Thread::run()
 			if (m_bIsMutexTrigger)
 			{
 				g_mutex_Camera.lock();
-				if (first) {
+			/*	if (first) {
 					emit ReadyOk(1);
 					first = false;
-				}
+				}*/
 
 				Sleep(10);
 				m_WaitWake = true;

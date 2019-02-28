@@ -161,24 +161,29 @@ void Galil_Thread::run()
 	bool IsWake = true;
 	while (!m_StopThread)
 	{
-	//	QTime start;
+	//QTime start;
 	//	start.start();
 
+	//	qDebug() << "start Galil_Loop  time:	";
+		g_mutex_Result.lock();
 		CmdT(SINAL_CAMERA, cameraValue);
+		g_mutex_Result.unlock();
+
 		//Sleep(10);
 		//CmdT(SINAL_MOVERIGHT1, moveRightValue);
-
+//		qDebug() << "start Galil_Loop  time2:	";
 		//触发相机
 		static int picNum = 0;
 		if (cameraValue.toFloat())
 			qDebug() << "light on";
 
+//		qDebug() << "start Galil_Loop  time3:	";
 		if (cameraValue.toFloat() 
 			//&&  g_UpWaveEnable 
 			&& PylonCamera_Thread::ReadyWake()
 			&& Halcon_Camera_Thread::ReadyWake())  //发射触发相机信号
 		{
-		
+	//		qDebug() << "start Galil_Loop  time4:	";
 			IsWake = true;
 			//qDebug() << QString("echo ") + SINAL_CAMERA + " :	" << cameraValue;
 			//g_UpWaveEnable = false;
@@ -229,7 +234,7 @@ void Galil_Thread::run()
 	
 		Sleep(80);
 
-	//	qDebug() << "Each Galil_Loop  time:		" << start.elapsed() / 1000.0 << "s";
+//	qDebug() << "end Galil_Loop  time:	" ;
 	}
 
 }

@@ -16,6 +16,7 @@
 #include <QtXml\QDomDocument>
 #include <QtSql/QSqlDatabase>
 #include <map>
+#include <atomic>
 
 
 hxq::hxq(QWidget *parent)
@@ -81,6 +82,7 @@ hxq::hxq(QWidget *parent)
 	ui.label_sidecamera->setPixmap(QPixmap::fromImage(m_image_red));
 	ui.label_motioncard->setPixmap(QPixmap::fromImage(m_image_red));
 	
+	qDebug() << "main  threadId:	" << QThread::currentThreadId();
 }
 
 
@@ -388,8 +390,8 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 				
 				ui.OnMotionCard->setEnabled(true);
 
+				m_good = m_bad = m_gou = m_cao = m_liantong = m_total = 0;
 				OnLcdDispalyReset();
-
 				installTimerToUpdateMySql();
 
 				PicThreadLeft::num = 0;
@@ -817,7 +819,7 @@ void hxq:: AllButtonFalse()
 	ui.OnRun->setEnabled(false);
 
 	ui.OnAreaCamera->setEnabled(false);
-	ui.OnMotionCard->setEnabled(false);
+	ui.OnMotionCard->setEnabled(true);
 	ui.OnConfigure->setEnabled(false);
 
 	ui.OnLineRun->setEnabled(false);
@@ -866,7 +868,7 @@ void hxq::OnOpenCameras()
 	connect(m_TopCameraThread, SIGNAL(OpenCameraSinal(void**, QString,int*)), this, SLOT(OpenPreCamera(void**, QString,int*)), Qt::DirectConnection);
 	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
 	connect(m_TopCameraThread, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
-	connect(m_TopCameraThread, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
+	connect(m_TopCameraThread, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)),Qt::DirectConnection);
 	connect(m_TopCameraThread, SIGNAL(sendImage(void*)), this, SLOT(receiveLeftImageAndHandle(void*)));	//左视图显示
 	connect(m_TopCameraThread, SIGNAL(finished()), m_TopCameraThread, SLOT(deleteLater()));
 	m_TopCameraThread->start();
@@ -879,7 +881,7 @@ void hxq::OnOpenCameras()
 	m_Pylon_camera_thread_10_Clock->setMutexTrigger(true);
 	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(CameraErrorInformation(QString)), this, SLOT(genErrorDialog(QString)));
 	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(CameraErrorInformation(bool)), this, SLOT(OnOpenCameraIsCorrect(bool)));
-	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)));
+	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(grab_correct_image(int)), this, SLOT(receiveCorrectImage(int)), Qt::DirectConnection);
 	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(signal_image(void*)), this, SLOT(receiveMiddleImageAndHandle(void*)));	//中视图显示
 	connect(m_Pylon_camera_thread_10_Clock, SIGNAL(finished()), m_Pylon_camera_thread_10_Clock, SLOT(deleteLater()));
 	m_Pylon_camera_thread_10_Clock->start();
@@ -891,13 +893,20 @@ void hxq::OnStop()
 {
 	if (m_Galil && m_Galil->isRunning())
 	{
+		g_mutex_Result.lock();
 		m_Galil->Cmd(AUTOSTOP);
+		g_mutex_Result.unlock();
+
 		m_Galil->stop();
 		m_Galil->wait();
 		m_Galil = nullptr;
 	}
+	ui.label_motioncard->setPixmap(QPixmap::fromImage(m_image_red));
 
 	OnClearCameraThread();
+
+	ui.label_topcamera->setPixmap(QPixmap::fromImage(m_image_red));
+	ui.label_sidecamera->setPixmap(QPixmap::fromImage(m_image_red));
 
 	//m_Result_AllQueue;
 	normalButtonStatus();
@@ -910,7 +919,7 @@ void hxq::OnStop()
 		m_pTimer->stop();
 		m_pTimer->deleteLater();
 		updateMySql();
-	}
+	}	
 
 }
 
@@ -1091,10 +1100,10 @@ void hxq::genErrorDialog(QString error)
 //收到正确图片数,检测完成
 void hxq::receiveCorrectImage(int value)
 {
-	static int imageNum = 0;
+	static std::atomic_int imageNum = 0;
 	imageNum += value;
 
-	if (imageNum == 2)  //收到1张图片
+	if (imageNum == 2)  //收到2张图片
 	{
 		//m_total++;
 
@@ -1107,8 +1116,9 @@ void hxq::receiveCorrectImage(int value)
 		imageNum = 0;
 		qDebug() << "	grabed 2 pic !" ;
 
+		qDebug() << "recevive Correctimage threadId:	" << QThread::currentThreadId();
 		//上升沿使能
-		g_UpWaveEnable = true;
+		//g_UpWaveEnable = true;
 
 		//ui.lcdNumber_total->display(m_total);
 	}
@@ -1190,8 +1200,11 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 			g_mutex_Result.unlock();*/
 
 			qDebug() << "Send Good!!!	";
+			g_mutex_Result.lock();
 			m_Galil->Cmd(CLASSIFIY_GOOD);
+			g_mutex_Result.unlock();
 			ui.lcdNumber_good->display(m_good);
+	
 
 		}
 		else
@@ -1202,7 +1215,10 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 				g_mutex_Result.unlock();*/
 
 			qDebug() << "Send Bad!!!	";
+			g_mutex_Result.lock();
 			m_Galil->Cmd(CLASSIFIY_BAD);
+			g_mutex_Result.unlock();
+
 			if (m_detectResult.current_area == Gou || m_detectResult.current_line == Gou)
 			{
 				ui.lcdNumber_gou->display(++m_gou);
@@ -1240,9 +1256,11 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 			}
 		}
 
-		ui.lcdNumber_total->display(ui.lcdNumber_bad->intValue() + ui.lcdNumber_gou->intValue() + ui.lcdNumber_cao->intValue() + ui.lcdNumber_liantong->intValue() + ui.lcdNumber_good->intValue());
-		
-		//updateMySql();
+		ui.lcdNumber_total->display(ui.lcdNumber_bad->intValue() +
+														ui.lcdNumber_gou->intValue() + 
+														ui.lcdNumber_cao->intValue() + 
+														ui.lcdNumber_liantong->intValue() + 
+														ui.lcdNumber_good->intValue());
 		//m_peviousProductDectectEnd = true;
 
 		return;

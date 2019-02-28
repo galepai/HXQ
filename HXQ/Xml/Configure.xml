@@ -16,8 +16,8 @@
         <毛刺高 type="float">0.15</毛刺高>
     </Hxq>
     <Save>
-        <TopBadIndex type="int">110</TopBadIndex>
-        <SideBadIndex type="int">58</SideBadIndex>
+        <TopBadIndex type="int">106</TopBadIndex>
+        <SideBadIndex type="int">9</SideBadIndex>
         <IsSaveTopBad type="int">1</IsSaveTopBad>
         <IsSaveSideBad type="int">1</IsSaveSideBad>
         <IsSaveTopAll type="int">1</IsSaveTopAll>
@@ -31,6 +31,6 @@
         <SaveTopAllPath type="string">E:/Images/Top/All/</SaveTopAllPath>
         <SaveSideAllPath type="string">E:/Images/Side/All/</SaveSideAllPath>
         <SaveImageFormat type="string">tiff</SaveImageFormat>
-        <IsSaveLog type="int">0</IsSaveLog>
+        <IsSaveLog type="int">1</IsSaveLog>
     </Save>
 </fivision>

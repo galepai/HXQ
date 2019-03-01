@@ -24,7 +24,7 @@ hxq::hxq(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	//HIDDLE_DIALOG_BUTTON
+	HIDDLE_DIALOG_BUTTON
 	FullScreenShow();	//全屏显示
 
 	//信号槽连接
@@ -43,9 +43,9 @@ hxq::hxq(QWidget *parent)
 
 #ifdef OPERATOR
 	//初始操作员状态
-	//ui.OnOperator->setChecked(true);
-	//ui.OnEngineer->setChecked(false);
-	//OnOperatorStatus();
+	ui.OnOperator->setChecked(true);
+	ui.OnEngineer->setChecked(false);
+	OnOperatorStatus();
 #endif // OPERATOR
 
 
@@ -1152,13 +1152,15 @@ void hxq::OnMotionCardDebug()
 	//OnWakeCamera();
 
 
-	QString type, Ip;
+	//QString type, Ip;
 
-	///****/
-	ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString(MotionCard_ip), type, Ip);
-	Galil_Thread gali;
-	if(gali.Open(Ip))
-		gali.Cmd(LIGHT_CLOSE);
+	/////****/
+	//ReadXmlElementText(QString(XML_MotionCard), QString(Node_MotionCard), QString(MotionCard_ip), type, Ip);
+	//Galil_Thread gali;
+	//if(gali.Open(Ip))
+	//	gali.Cmd(LIGHT_CLOSE);
+
+	OnWakeCamera();
 
 }
 

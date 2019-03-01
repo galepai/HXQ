@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 
 
 #ifdef STARTLOGO 
-	int delayTime = 6;
+	int delayTime = 10;
 	QElapsedTimer timer;
 	timer.start();
 	while (timer.elapsed() < (delayTime * 1000))

@@ -8,8 +8,8 @@
 #ifndef CONSTPARAM_H
 #define CONSTPARAM_H
 
-#define ENGINEER
-//#define OPERATOR
+//#define ENGINEER
+#define OPERATOR
 
 #define LIGHT_OPEN			"SB3"					//"SB3"
 #define LIGHT_CLOSE			"CB3"					//"CB3"

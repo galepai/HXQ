@@ -30,13 +30,13 @@ void PicThreadMiddle::run()
 			case Good:
 
 				emit resultReady(Good, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("良品 "), "image", 120, 12, "black", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("良品 "), "image", 120, 12, "black", "true");
 				break;
 
 			case Bad:
 
 				emit resultReady(Bad, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("不良品 "), "image", 120, 12, "black", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("不良品 "), "image", 120, 12, "black", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;
@@ -44,7 +44,7 @@ void PicThreadMiddle::run()
 			case Gou:
 
 				emit resultReady(Gou, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("钩不良 "), "image", 120, 12, "red", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("钩不良 "), "image", 120, 12, "red", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;
@@ -52,7 +52,7 @@ void PicThreadMiddle::run()
 			case Cao:
 
 				emit resultReady(Cao, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("槽不良 "), "image", 120, 12, "red", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("槽不良 "), "image", 120, 12, "red", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;
@@ -60,7 +60,7 @@ void PicThreadMiddle::run()
 			case Liantong:
 
 				emit resultReady(Liantong, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("连铜 "), "image", 120, 12, "red", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("连铜 "), "image", 120, 12, "red", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;
@@ -68,7 +68,7 @@ void PicThreadMiddle::run()
 			default:
 
 				emit resultReady(Bad, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("无正确分类号"), "image", 120, 12, "red", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("无正确分类号"), "image", 120, 12, "red", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;

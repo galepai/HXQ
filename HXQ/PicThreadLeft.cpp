@@ -31,13 +31,13 @@ void PicThreadLeft::run()
 			case Good:
 
 				emit resultReady(Good, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("良品 "), "image", 120, 12, "black", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("良品 "), "image", 120, 12, "black", "true");
 				break;
 
 			case Bad:
 
 				emit resultReady(Bad, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("不良品 "), "image", 120, 12, "black", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("不良品 "), "image", 120, 12, "black", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;
@@ -45,7 +45,7 @@ void PicThreadLeft::run()
 			case Gou:
 
 				emit resultReady(Gou, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("钩不良 "), "image", 120, 12, "red", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("钩不良 "), "image", 120, 12, "red", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;
@@ -53,7 +53,7 @@ void PicThreadLeft::run()
 			case Cao:
 
 				emit resultReady(Cao, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("槽不良 "), "image", 120, 12, "red", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("槽不良 "), "image", 120, 12, "red", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;
@@ -61,7 +61,7 @@ void PicThreadLeft::run()
 			case Liantong:
 
 				emit resultReady(Liantong, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("连铜 "), "image", 120, 12, "red", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("连铜 "), "image", 120, 12, "red", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;
@@ -69,7 +69,7 @@ void PicThreadLeft::run()
 			default:
 
 				emit resultReady(Bad, m_CameraId);
-				CHH::disp_message(m_WindowHandle, HTuple("无正确分类号"), "image", 120, 12, "red", "true");
+				//CHH::disp_message(m_WindowHandle, HTuple("无正确分类号"), "image", 120, 12, "red", "true");
 				if (IsSaveImage())
 					QueueSaveImage(m_Image, SaveImageNum());
 				break;
@@ -119,7 +119,7 @@ void PicThreadLeft::run()
 			emit resultReady(Bad, m_CameraId);
 			num++;
 			CHH::disp_message(m_WindowHandle, HTuple("number: ") + num, "image", 12, 12, "black", "true");
-			CHH::disp_message(m_WindowHandle, HTuple("无正确分类号"), "image", 120, 12, "red", "true");
+			CHH::disp_message(m_WindowHandle, HTuple("代码处理异常"), "image", 120, 12, "red", "true");
 			qDebug() << "ThreadLeft error:  " << error;
 			if (IsSaveImage())
 				QueueSaveImage(m_Image, SaveImageNum());

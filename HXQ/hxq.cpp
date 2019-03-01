@@ -90,8 +90,6 @@ void hxq::PreInitWindowHandle()
 	HImage LeftImage, MiddleImage;
 	ReadImage(&LeftImage, "top.test");
 	ReadImage(&MiddleImage, "side.test");
-	SetOpenWindowHandle(LeftImage, &m_LeftWindowHandle, LeftView);
-	SetOpenWindowHandle(MiddleImage, &m_MiddleWindowHandle, MiddleView);
 	DispPic(LeftImage, LeftView);
 	DispPic(MiddleImage, MiddleView);
 }
@@ -650,11 +648,11 @@ void hxq::DispPic(HImage& Image, LocationView location)
 	switch (location)
 	{
 	case RightView:
-		pWindowHandle = &m_RightWindowHandle;;
+		pWindowHandle = &m_RightWindowHandle;
 		break;
 
 	case SecondRightView:
-		pWindowHandle = &m_SecondRightWindowHandle;;
+		pWindowHandle = &m_SecondRightWindowHandle;
 		break;
 
 	case LeftView:

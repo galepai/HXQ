@@ -66,6 +66,7 @@ public slots:
 	void OnShutDown();			//关闭系统
 	void OnMotionCardDebug();	//开启motionCard调试程序
 	void OnDisplayAreaCamera();
+	void OnReportTable();
 
 	/***********右端电气功能************/
 	void OnStart();
@@ -114,6 +115,8 @@ private:
 	void OnOpenCameras();	//打开相机
 
 	void installTimerToUpdateMySql();// 安装定时器插入新行，并更新数据库
+
+	void PreInitWindowHandle();//提前打开显示WindowHandle,预防启动第1次运行检测时，程序运行慢，出错
 
 private:
 	Ui::hxqClass ui;

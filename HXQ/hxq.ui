@@ -517,8 +517,8 @@
    <addaction name="OnRun"/>
    <addaction name="separator"/>
    <addaction name="OnAreaCamera"/>
-   <addaction name="OnMotionCard"/>
    <addaction name="OnConfigure"/>
+   <addaction name="OnReportTable"/>
    <addaction name="separator"/>
    <addaction name="OnLineRun"/>
    <addaction name="OnStop"/>
@@ -551,7 +551,10 @@
      <selectedoff>:/icon03/Resources/icon03/one_on.png</selectedoff>:/icon03/Resources/icon03/one_on.png</iconset>
    </property>
    <property name="text">
-    <string>单次</string>
+    <string>单次检测</string>
+   </property>
+   <property name="toolTip">
+    <string>单次检测</string>
    </property>
   </action>
   <action name="OnOpen">
@@ -562,7 +565,10 @@
     </iconset>
    </property>
    <property name="text">
-    <string>Open</string>
+    <string>打开图片</string>
+   </property>
+   <property name="toolTip">
+    <string>打开图片</string>
    </property>
   </action>
   <action name="OnAbout">
@@ -681,10 +687,23 @@
      <selectedon>:/icon03/Resources/icon03/camera_on.png</selectedon>:/icon03/Resources/icon03/camera_on.png</iconset>
    </property>
    <property name="text">
-    <string>实时面阵</string>
+    <string>触发拍照</string>
    </property>
    <property name="toolTip">
-    <string>实时面阵</string>
+    <string>触发拍照</string>
+   </property>
+  </action>
+  <action name="OnReportTable">
+   <property name="icon">
+    <iconset resource="HXQ.qrc">
+     <normaloff>:/icon03/Resources/icon03/report_on.png</normaloff>
+     <activeoff>:/icon03/Resources/icon03/report_off.png</activeoff>:/icon03/Resources/icon03/report_on.png</iconset>
+   </property>
+   <property name="text">
+    <string>检测报表</string>
+   </property>
+   <property name="toolTip">
+    <string>检测报表</string>
    </property>
   </action>
  </widget>

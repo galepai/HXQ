@@ -24,7 +24,7 @@ hxq::hxq(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	HIDDLE_DIALOG_BUTTON
+	//HIDDLE_DIALOG_BUTTON
 	FullScreenShow();	//全屏显示
 
 	//信号槽连接
@@ -82,8 +82,20 @@ hxq::hxq(QWidget *parent)
 	ui.label_sidecamera->setPixmap(QPixmap::fromImage(m_image_red));
 	ui.label_motioncard->setPixmap(QPixmap::fromImage(m_image_red));
 	
-	qDebug() << "main  threadId:	" << QThread::currentThreadId();
+	Sleep(2000);
 }
+
+void hxq::PreInitWindowHandle()
+{
+	HImage LeftImage, MiddleImage;
+	ReadImage(&LeftImage, "top.test");
+	ReadImage(&MiddleImage, "side.test");
+	SetOpenWindowHandle(LeftImage, &m_LeftWindowHandle, LeftView);
+	SetOpenWindowHandle(MiddleImage, &m_MiddleWindowHandle, MiddleView);
+	DispPic(LeftImage, LeftView);
+	DispPic(MiddleImage, MiddleView);
+}
+
 
 
 // 安装定时器插入新行，并更新数据库
@@ -137,8 +149,10 @@ void hxq::toolConnect()
 	connect(ui.OnStop, SIGNAL(triggered()), this, SLOT(OnStop()));
 	connect(ui.OnConfigure, SIGNAL(triggered()), this, SLOT(OnConfigure()));
 	connect(ui.OnShutDown, SIGNAL(triggered()), this, SLOT(OnShutDown()));
-	connect(ui.OnMotionCard, SIGNAL(triggered()), this, SLOT(OnMotionCardDebug()));
-	connect(ui.OnAreaCamera, SIGNAL(triggered()), this, SLOT(OnDisplayAreaCamera()));
+	//connect(ui.OnMotionCard, SIGNAL(triggered()), this, SLOT(OnMotionCardDebug()));
+	//connect(ui.OnAreaCamera, SIGNAL(triggered()), this, SLOT(OnDisplayAreaCamera()));
+	connect(ui.OnReportTable, SIGNAL(triggered()), this, SLOT(OnReportTable()));
+	connect(ui.OnAreaCamera, SIGNAL(triggered()), this, SLOT(OnWakeCamera()));
 
 }
 
@@ -387,6 +401,8 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 				m_Galil->Cmd(CLASSIFIY_BAD);
 
 				m_Galil->start();
+
+				PreInitWindowHandle();  //提前初始化windowhandle并加载图片显示
 				
 				ui.OnMotionCard->setEnabled(true);
 
@@ -475,6 +491,14 @@ void hxq::OnShutDown()
 		reply = QMessageBox::information(this, G2U("提示"), G2U("请先停止系统,请点击左侧的'停止''按钮"));
 
 	}
+
+}
+
+void hxq::OnReportTable()
+{
+	//process->start("f:/github/HXQ/x64/Release/ReportTable.exe", QStringList("f:/github/HXQ/x64/Release/ReportTable.exe"));
+	//process->startDetached("f:/github/HXQ/x64/Release/ReportTable.exe", QStringList("f:/github/HXQ/x64/Release/ReportTable.exe"));
+	process->startDetached("ReportTable.exe", QStringList("ReportTable.exe"));
 
 }
 
@@ -605,6 +629,7 @@ void hxq::OnWakeCamera()
 	//g_mutex_Camera.lock();
 	//g_condition_Camera.wakeAll();
 	//g_mutex_Camera.unlock();
+
 }
 
 void hxq::OnModToRight()
@@ -1116,7 +1141,7 @@ void hxq::receiveCorrectImage(int value)
 		imageNum = 0;
 		qDebug() << "	grabed 2 pic !" ;
 
-		qDebug() << "recevive Correctimage threadId:	" << QThread::currentThreadId();
+		//qDebug() << "recevive Correctimage threadId:	" << QThread::currentThreadId();
 		//上升沿使能
 		//g_UpWaveEnable = true;
 
@@ -1224,37 +1249,37 @@ void hxq::OnHandleResults(int singleResult, int cameraId)
 			if (m_detectResult.current_area == Gou || m_detectResult.current_line == Gou)
 			{
 				ui.lcdNumber_gou->display(++m_gou);
-				qDebug() << "Send Gou Bad!!!	";
+				//qDebug() << "Send Gou Bad!!!	";
 			}
 			else if (m_detectResult.current_area == Cao || m_detectResult.current_line == Cao)
 			{
 				ui.lcdNumber_cao->display(++m_cao);
-				qDebug() << "Send Cao Bad!!!	";
+				//qDebug() << "Send Cao Bad!!!	";
 			}
 			else if (m_detectResult.current_area == Liantong || m_detectResult.current_line == Liantong)
 			{
 				ui.lcdNumber_liantong->display(++m_liantong);
-				qDebug() << "Send Liangtong Bad!!!	";
+				//qDebug() << "Send Liangtong Bad!!!	";
 			}
 			else if(m_detectResult.current_line == Gou || m_detectResult.current_area == Gou)
 			{
 				ui.lcdNumber_gou->display(++m_gou);
-				qDebug() << "Send Gou Bad!!!	";
+				//qDebug() << "Send Gou Bad!!!	";
 			}
 			else if (m_detectResult.current_line == Cao || m_detectResult.current_area == Cao)
 			{
 				ui.lcdNumber_cao->display(++m_cao);
-				qDebug() << "Send Cao Bad!!!	";
+				//qDebug() << "Send Cao Bad!!!	";
 			}
 			else if (m_detectResult.current_line == Liantong || m_detectResult.current_area == Liantong)
 			{
 				ui.lcdNumber_liantong->display(++m_liantong);
-				qDebug() << "Send Liangtong Bad!!!	";
+				//qDebug() << "Send Liangtong Bad!!!	";
 			}
 			else
 			{
 				ui.lcdNumber_bad->display(++m_bad);
-				qDebug() << "Send area bad:		" << m_detectResult.current_area<< "Send line bad:	"<<m_detectResult.current_line;
+				//qDebug() << "Send area bad:		" << m_detectResult.current_area<< "Send line bad:	"<<m_detectResult.current_line;
 			}
 		}
 

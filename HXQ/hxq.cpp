@@ -426,7 +426,7 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 
 			AllButtonFalse();
 			ui.OnStop->setEnabled(true);
-
+			ui.OnAreaCamera->setEnabled(true);
 		}
 		else
 		{

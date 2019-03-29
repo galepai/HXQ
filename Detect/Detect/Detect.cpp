@@ -3,6 +3,8 @@
 void DetectModule::detectTop(HalconCpp::HObject& input_Image, const HTuple& input_WindowHandle,
 	const HTuple& input_Param_BaoluoDiameterUp, const HTuple& input_Param_BaoluoDiameterDown,
 	const HTuple& input_Param_GouWidthUp, const HTuple& input_Param_GouWidthDown,
+	const HTuple& input_Scale_1, const HTuple& input_Scale_2,
+	const HTuple& input_Scale_3, const HTuple& input_Scale_4,
 	HTuple* output_Result, HTuple* output_ExceptionInformtion)
 {
 	// √Ê’ÛÕº∆¨ºÏ≤‚
@@ -28,6 +30,8 @@ void DetectModule::detectTop(HalconCpp::HObject& input_Image, const HTuple& inpu
 void DetectModule::detectSide(HalconCpp::HObject& input_Image, const HTuple& input_WindowHandle,
 	const HTuple& input_Param_CaoWidthUp, const HTuple& input_Param_CaoWidthDown,
 	const HTuple& input_Param_MaociWidth, const HTuple& input_Param_GouWidthHeight,
+	const HTuple& input_Scale_1, const HTuple& input_Scale_2,
+	const HTuple& input_Scale_3, const HTuple& input_Scale_4,
 	HTuple* output_Result, HTuple* output_ExceptionInformtion)
 {
 	// œﬂ’ÛÕº∆¨ºÏ≤‚

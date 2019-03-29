@@ -14,6 +14,14 @@
         <钩宽下限 type="float">1.5</钩宽下限>
         <毛刺宽 type="float">0.15</毛刺宽>
         <毛刺高 type="float">0.15</毛刺高>
+        <包络线比例 type="float">1.001</包络线比例>
+        <比例2 type="float">1.0</比例2>
+        <比例3 type="float">1.0</比例3>
+        <比例4 type="float">1.0</比例4>
+        <比例5 type="float">1.0</比例5>
+        <比例6 type="float">1.0</比例6>
+        <比例7 type="float">1.0</比例7>
+        <比例8 type="float">1.0</比例8>
     </Hxq>
     <Save>
         <TopBadIndex type="int">106</TopBadIndex>

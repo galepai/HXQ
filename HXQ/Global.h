@@ -25,6 +25,15 @@ struct DetectParam
 	float gouWidthDown;
 	float maociWidth;
 	float maociHeight;
+	float scale_1;
+	float scale_2;
+	float scale_3;
+	float scale_4;
+	float scale_5;
+	float scale_6;
+	float scale_7;
+	float scale_8;
+
 };
 
 struct SaveParam

@@ -157,6 +157,10 @@ void PicThreadLeft::OnHandle(HObject& image,const HTuple& WindowHandle,HTuple* R
 		g_DetectParam.diameterDown,
 		g_DetectParam.gouWidthUP, 
 		g_DetectParam.gouWidthDown,
+		g_DetectParam.scale_1,
+		g_DetectParam.scale_2,
+		g_DetectParam.scale_3,
+		g_DetectParam.scale_4,
 		Result,
 		&output_ExceptionInformtion);
 

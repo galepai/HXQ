@@ -126,6 +126,10 @@ void PicThreadMiddle::OnHandle(HObject& image, const HTuple& WindowHandle, HTupl
 		g_DetectParam.slotWidthDown,
 		g_DetectParam.maociWidth,
 		g_DetectParam.maociHeight,
+		g_DetectParam.scale_5,
+		g_DetectParam.scale_6,
+		g_DetectParam.scale_7,
+		g_DetectParam.scale_8,
 		Result, 
 		&output_ExceptionInformation);
 

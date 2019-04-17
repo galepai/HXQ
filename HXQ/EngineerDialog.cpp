@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "EngineerDialog.h"
 #include "ui_EngineerDialog.h"
 #include "Func.h"
@@ -28,7 +30,7 @@ void EngineerDialog::login()
 	}
 	else
 	{
-		ui->label_error->setText(G2U("ÃÜÂë´íÎó£¡"));
+		ui->label_error->setText(tr("ÃÜÂë´íÎó£¡"));
 	}
 
 }

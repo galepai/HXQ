@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "TestDialog.h"
 #include "ui_TestDialog.h"
 #include "DeltaThread.h"
@@ -43,13 +45,13 @@ TestDialog::TestDialog(QWidget *parent) :
 	m_Galil->GcLibVersion();
 	if (m_Galil->Open(ip + ""))
 	{
-		ui->label_status->setText(G2U("已连接！"));
+		ui->label_status->setText(tr("已连接！"));
 		ui->label_status->setStyleSheet(QStringLiteral("color: rgb(0, 255, 0);"));
 		m_Galil->start();
 	}
 	else
 	{
-		ui->label_status->setText(G2U("未连接！"));
+		ui->label_status->setText(tr("未连接！"));
 		ui->label_status->setStyleSheet(QStringLiteral("color: rgb(255, 0, 0);"));
 		delete m_Galil;
 	}

@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "HXQ.h"
 #include <QtWidgets/QApplication>
 #include <QFile>
@@ -150,9 +152,8 @@ int main(int argc, char *argv[])
 	QPixmap pixmap("Resources/logo.bmp");
 	QSplashScreen* screen=new QSplashScreen(pixmap);
 	screen->show();
-	screen->showMessage(G2U("初始化..."), Qt::AlignTop | Qt::AlignLeft, Qt::black);
+	screen->showMessage(QObject::tr("初始化..."), Qt::AlignTop | Qt::AlignLeft, Qt::black);
 	
-
 
 #ifdef STARTLOGO 
 	int delayTime = 10;

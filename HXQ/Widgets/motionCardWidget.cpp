@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "motionCardWidget.h"
 #include "ui_motionCardWidget.h"
 #include "Func.h"
@@ -110,7 +112,7 @@ void motionCardWidget::SaveToXml()
 	if (sucessCount == count && sucessCount != 0)
 	{
 		QMessageBox::StandardButton reply;
-		reply = QMessageBox::information(this, G2U("信息"), G2U("参数成功写入配置文件"));
+		reply = QMessageBox::information(this, tr("信息"), tr("参数成功写入配置文件"));
 	}
 
 }
@@ -131,12 +133,12 @@ void motionCardWidget::OnTest()
 		{
 			m_pGalil->CmdT("\x12\x16", Revision);
 			QMessageBox::StandardButton reply;
-			reply = QMessageBox::information(this, G2U("控制卡信息"), Revision + (G2U("\r\n连接成功！")));
+			reply = QMessageBox::information(this, tr("控制卡信息"), Revision + (tr("\r\n连接成功！")));
 		}
 		else
 		{
 			QMessageBox::StandardButton reply;
-			reply = QMessageBox::warning(this, G2U("信息"), G2U("控制卡连接失败"));
+			reply = QMessageBox::warning(this, tr("信息"), tr("控制卡连接失败"));
 			delete m_pGalil;
 			m_pGalil = nullptr;
 			return;

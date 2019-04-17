@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "saveWidget.h"
 #include "ui_saveWidget.h"
 #include "Func.h"
@@ -141,7 +143,7 @@ void saveWidget::SaveToXml()
 	}
 
 	QMessageBox::StandardButton reply;
-	reply = QMessageBox::information(this, G2U("信息"), G2U("参数成功写入配置文件"));
+	reply = QMessageBox::information(this, tr("信息"), tr("参数成功写入配置文件"));
 
 }
 
@@ -150,7 +152,7 @@ void saveWidget::SaveToSingleXml(QString& name,QString& value)
 	if (UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), name,value) != ChhXml::UpdateOK)
 	{
 		QMessageBox::StandardButton reply;
-		reply = QMessageBox::warning(this, G2U("信息"), G2U("参数设置失败"));
+		reply = QMessageBox::warning(this, tr("信息"), tr("参数设置失败"));
 	}
 }
 
@@ -160,28 +162,28 @@ void saveWidget::OnTest()
 }
 void saveWidget::OnSaveTopBadPath( )
 {
-	QString path = QFileDialog::getExistingDirectory(this, G2U("更改顶部不良品图片保存路径"));
+	QString path = QFileDialog::getExistingDirectory(this, tr("更改顶部不良品图片保存路径"));
 	if(!path.isEmpty())
 		ui->textEdit_SaveTopBadPath->setText(path + "/");
 }
 
 void saveWidget::OnSaveSideBadPath()
 {
-	QString path = QFileDialog::getExistingDirectory(this, G2U("更改侧部不良品图片保存路径"));
+	QString path = QFileDialog::getExistingDirectory(this, tr("更改侧部不良品图片保存路径"));
 	if (!path.isEmpty())
 		ui->textEdit_SaveSideBadPath->setText(path + "/");
 }
 
 void saveWidget::OnSaveTopAllPath()
 {
-	QString path = QFileDialog::getExistingDirectory(this, G2U("更改顶部图片保存路径"));
+	QString path = QFileDialog::getExistingDirectory(this, tr("更改顶部图片保存路径"));
 	if (!path.isEmpty())
 		ui->textEdit_SaveSideBadPath->setText(path + "/");
 }
 
 void saveWidget::OnSaveSideAllPath()
 {
-	QString path = QFileDialog::getExistingDirectory(this, G2U("更改侧部图片保存路径"));
+	QString path = QFileDialog::getExistingDirectory(this, tr("更改侧部图片保存路径"));
 	if (!path.isEmpty())
 		ui->textEdit_SaveSideBadPath->setText(path + "/");
 }

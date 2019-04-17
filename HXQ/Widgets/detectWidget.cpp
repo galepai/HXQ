@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "detectWidget.h"
 #include "ui_detectWidget.h"
 #include "ConstParam.h"
@@ -63,7 +65,7 @@ void detectWidget::SaveToXml()
 	if (sucessCount == count && sucessCount != 0)
 	{
 		QMessageBox::StandardButton reply;
-		reply = QMessageBox::information(this, G2U("信息"), G2U("参数成功写入配置文件"));
+		reply = QMessageBox::information(this, tr("信息"), tr("参数成功写入配置文件"));
 	}
 
 

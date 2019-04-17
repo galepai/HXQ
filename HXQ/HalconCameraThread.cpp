@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "HalconCameraThread.h"
 #include <QMessageBox>
 #include <QTime>
@@ -52,13 +54,13 @@ void Halcon_Camera_Thread::run()
 		break;
 
 	case Code::XmlError:
-		emit CameraErrorInformation(G2U("无法连接相机:\r\n相机ID：") + CameraId() + G2U("\r\n\r\n原因：\r\n1.读取配置文件错误"));
+		emit CameraErrorInformation(tr("无法连接相机:\r\n相机ID：") + CameraId() + tr("\r\n\r\n原因：\r\n1.读取配置文件错误"));
 		emit CameraErrorInformation(false);
 		return;
 		break;
 
 	case Code::ParamError:
-		emit CameraErrorInformation(G2U("无法连接相机:\r\n相机ID：") + CameraId() + G2U("\r\n\r\n原因：\r\n1.相机线缆未正确连接。\r\n2.相机ID错误。"));
+		emit CameraErrorInformation(tr("无法连接相机:\r\n相机ID：") + CameraId() + tr("\r\n\r\n原因：\r\n1.相机线缆未正确连接。\r\n2.相机ID错误。"));
 		emit CameraErrorInformation(false);
 		return;
 		break;
@@ -191,7 +193,8 @@ bool Halcon_Camera_Thread::OpenCamera(HalconCpp::HFramegrabber* pGrabber)
 		//emit signal_error(e.ErrorMessage().Text());
 
 		QString eror = e.ErrorMessage().Text();
-		emit CameraErrorInformation(QTextCodec::codecForName("GBK")->toUnicode("不能获取相机，请检测相机ID是否正确"));
+		//emit CameraErrorInformation(QTextCodec::codecForName("GBK")->toUnicode("不能获取相机，请检测相机ID是否正确"));
+		emit CameraErrorInformation(tr("不能获取相机，请检测相机ID是否正确"));
 		emit CameraErrorInformation(false);
 		//m_mutex.unlock();
 		return false;

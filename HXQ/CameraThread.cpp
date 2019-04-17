@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "CameraThread.h"
 #include <QMessageBox>
 #include <QTime>
@@ -232,7 +234,7 @@ bool Camera_Thread::OpenCamera()
 		//emit signal_error(e.ErrorMessage().Text());
 
 		QString eror = e.ErrorMessage().Text();
-		emit signal_error(G2U("不能获取相机，请检测相机ID是否正确"));
+		emit signal_error(tr("不能获取相机，请检测相机ID是否正确"));
 		emit signal_bool(false);
 		m_mutex.unlock();
 		return false;

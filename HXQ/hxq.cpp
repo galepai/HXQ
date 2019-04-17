@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "hxq.h"
 #include <qfiledialog.h>
 #include <QMessageBox>
@@ -83,6 +85,7 @@ hxq::hxq(QWidget *parent)
 	ui.label_motioncard->setPixmap(QPixmap::fromImage(m_image_red));
 	
 	Sleep(2000);
+
 }
 
 void hxq::PreInitWindowHandle()
@@ -102,11 +105,12 @@ void hxq::installTimerToUpdateMySql()
 	m_startTime = MySql_Now();
 	if (MySql_Connect(m_sqlDatabase, "localhost", 3306, "hxq", "ycgd", "ycgd"))
 	{
-		MySql_Query(m_sqlDatabase, QString("INSERT INTO total (startTime) VALUES ('%1')").arg(m_startTime));
+		MySql_Query(m_sqlDatabase, QString("INSERT INTO total (开始时间) VALUES ('%1')").arg(m_startTime));
 	}
 
 	m_pTimer = new QTimer(this);
 	connect(m_pTimer, SIGNAL(timeout()), this, SLOT(updateMySql()));
+
 	m_pTimer->start(5000);
 
 	
@@ -115,9 +119,11 @@ void hxq::installTimerToUpdateMySql()
 // 更新数据库
 void hxq::updateMySql()
 {
-	QTime start;
-	start.start();
-	MySql_Query(m_sqlDatabase, QString("UPDATE total SET endTime='%1',gou=%2,cao=%3,maoci=%4,other=%5,good=%6,total=%7 WHERE startTime='%8'").
+	//QTime start;
+	//start.start();
+
+	//MySql_Query(m_sqlDatabase, QString("UPDATE total SET endTime='%1',gou=%2,cao=%3,maoci=%4,other=%5,good=%6,total=%7 WHERE startTime='%8'").
+	MySql_Query(m_sqlDatabase, QString("UPDATE total SET 结束时间='%1',钩不良=%2,槽不良=%3,粘铜毛刺=%4,其他不良=%5,良品=%6,检测总数=%7 WHERE 开始时间='%8'").
 		arg(MySql_Now()).
 		arg(ui.lcdNumber_gou->value()).
 		arg(ui.lcdNumber_cao->value()).
@@ -247,7 +253,7 @@ void hxq::OnOpen()
 		}
 			
 
-		statusBar()->showMessage(QString(G2U("单次检测图像: ")) + path);
+		statusBar()->showMessage(QString(("单次检测图像: ")) + path);
 
 		
 	}
@@ -266,7 +272,7 @@ void hxq::OnOpen()
 		ReadImage(&m_MiddleImage, ImagePath.toLocal8Bit().constData());
 		DispPic(m_MiddleImage, MiddleView);
 
-		statusBar()->showMessage(QString(G2U("单次检测图像: ")) + path);
+		statusBar()->showMessage(QString(("单次检测图像: ")) + path);
 
 		
 	}
@@ -414,7 +420,7 @@ void hxq::OnOpenCameraIsCorrect(bool enable)
 			}
 			else
 			{
-				genErrorDialog(G2U("控制卡连接错误！"));
+				genErrorDialog(("控制卡连接错误！"));
 				delete m_Galil;
 				m_Galil = nullptr;
 				OnStop();
@@ -476,7 +482,7 @@ void hxq::OnShutDown()
 	if (!ui.OnStop->isEnabled())
 	{
 		QMessageBox::StandardButton reply;
-		reply = QMessageBox::question(this, G2U("系统"), G2U("确认退出系统"));
+		reply = QMessageBox::question(this, tr("系统"), tr("确认退出系统"));
 		if (reply == QMessageBox::StandardButton::Yes)
 		{
 			//OnClearCameraThread();
@@ -486,7 +492,7 @@ void hxq::OnShutDown()
 	else
 	{
 		QMessageBox::StandardButton reply;
-		reply = QMessageBox::information(this, G2U("提示"), G2U("请先停止系统,请点击左侧的'停止''按钮"));
+		reply = QMessageBox::information(this, tr("提示"), tr("请先停止系统,请点击左侧的'停止''按钮"));
 
 	}
 
@@ -1115,7 +1121,7 @@ void hxq::OnHandleImageThread(HImage& ima, LocationView view)
 void hxq::genErrorDialog(QString error)
 {
 	QMessageBox::StandardButton reply;
-	reply = QMessageBox::warning(this, G2U("错误"), error);
+	reply = QMessageBox::warning(this, tr("错误"), error);
 }
 
 

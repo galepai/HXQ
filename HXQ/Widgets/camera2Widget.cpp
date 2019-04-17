@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "camera2Widget.h"
 #include "ui_camera2Widget.h"
 #include "Func.h"
@@ -117,7 +119,7 @@ void camera2Widget::SaveToXml()
 	if (sucessCount == count && sucessCount!=0)
 	{
 		QMessageBox::StandardButton reply;
-		reply = QMessageBox::information(this, G2U("信息"), G2U("曝光参数成功写入配置文件"));
+		reply = QMessageBox::information(this, tr("信息"), tr("曝光参数成功写入配置文件"));
 	}
 }
 
@@ -263,7 +265,7 @@ void camera2Widget::OnTest()
 		}
 
 		QMessageBox::StandardButton reply;
-		reply = QMessageBox::information(this, G2U("提示"), G2U("CCD连接设置正确"));
+		reply = QMessageBox::information(this, tr("提示"), tr("CCD连接设置正确"));
 		delete pGrabber;
 		pGrabber = nullptr;
 
@@ -271,7 +273,7 @@ void camera2Widget::OnTest()
 	catch (HException& e)
 	{
 		QMessageBox::StandardButton reply;
-		reply = QMessageBox::information(this, G2U("提示"), QString(e.ErrorMessage().Text()) + "\r\n"  + name1 + "\r\n"  + type1 + "\r\n" + value1 );
+		reply = QMessageBox::information(this, tr("提示"), QString(e.ErrorMessage().Text()) + "\r\n"  + name1 + "\r\n"  + type1 + "\r\n" + value1 );
 		delete pGrabber;
 		pGrabber = nullptr;
 	}

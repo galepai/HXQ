@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "HikVisionCameraThread.h"
 //#include <QMessageBox>
 //#include <QTime>
@@ -38,7 +40,7 @@ bool HikVision_Camera_Thread::OpenCamera(HalconCpp::HFramegrabber* pGrabber)
 		//emit signal_error(e.ErrorMessage().Text());
 
 		QString eror = e.ErrorMessage().Text();
-		emit CameraErrorInformation(G2U("不能获取相机，请检测相机ID是否正确"));
+		emit CameraErrorInformation(tr("不能获取相机，请检测相机ID是否正确"));
 		emit CameraErrorInformation(false);
 		//m_mutex.unlock();
 		return false;

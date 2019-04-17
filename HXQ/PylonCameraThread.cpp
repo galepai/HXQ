@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include "PylonCameraThread.h"
 #include <QMessageBox>
 #include <QTime>
@@ -87,7 +89,7 @@ void PylonCamera_Thread::run()
 	
 	if (!OpenCamera())
 	{
-		emit CameraErrorInformation(G2U("无法连接相机:\r\n相机ID：") + CameraId() );
+		emit CameraErrorInformation(tr("无法连接相机:\r\n相机ID：") + CameraId() );
 		emit CameraErrorInformation(false);
 		return;
 	}

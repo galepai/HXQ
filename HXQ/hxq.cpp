@@ -173,6 +173,9 @@ hxq::~hxq()
 {
 	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString(Save_TopBadIndex), QString("%1").arg(g_SaveParam.SaveTopBadIndex));
 	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString(Save_SideBadIndex), QString("%1").arg(g_SaveParam.SaveSideBadIndex));
+
+	UpdateXmlNodeText(QString(_XML_Configure), QString(Node_Save), QString(Save_TopBadIndex), QString("%1").arg(g_SaveParam.SaveTopBadIndex));
+	UpdateXmlNodeText(QString(_XML_Configure), QString(Node_Save), QString(Save_SideBadIndex), QString("%1").arg(g_SaveParam.SaveSideBadIndex));
 }
 
 void hxq::OnEngineer()
@@ -942,6 +945,9 @@ void hxq::OnStop()
 
 	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString(Save_TopBadIndex), QString("%1").arg(g_SaveParam.SaveTopBadIndex));
 	UpdateXmlNodeText(QString(XML_Configure), QString(Node_Save), QString(Save_SideBadIndex), QString("%1").arg(g_SaveParam.SaveSideBadIndex));
+
+	UpdateXmlNodeText(QString(_XML_Configure), QString(Node_Save), QString(Save_TopBadIndex), QString("%1").arg(g_SaveParam.SaveTopBadIndex));
+	UpdateXmlNodeText(QString(_XML_Configure), QString(Node_Save), QString(Save_SideBadIndex), QString("%1").arg(g_SaveParam.SaveSideBadIndex));
 
 	if (m_pTimer && m_pTimer->isActive())
 	{

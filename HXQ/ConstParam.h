@@ -35,7 +35,9 @@
 
 
 /*******************    XML-ConfigureParam    **************************/
-#define XML_Configure				"Xml/Configure.xml"			//"Xml/Configure.xml"
+#define XML_Configure				"Xml/Configure.xml"				//"Xml/Configure.xml"
+#define _XML_Configure				"Xml/_Configure.xml"			//"Xml/_Configure.xml"
+#define XML_Configure_Origin		"Xml/Configure_Origin.xml"		//"Xml/Configure_Origin.xml"
 
 #define Node_Camera					"Camera"					
 #define Camera_Top					"Camera_Top"				

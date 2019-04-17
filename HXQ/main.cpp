@@ -111,6 +111,77 @@ void ReadGlobal()
 		g_SaveParam.SaveImageFormat = xmlContent2[14].second;
 
 		g_SaveParam.IsSaveLog = xmlContent2[15].second.toInt();
+
+		if (QFile::exists(_XML_Configure))
+			QFile::remove(_XML_Configure);
+
+		QFile::copy(XML_Configure, _XML_Configure);
+
+	}
+	else if(ParserXmlNode(QString(_XML_Configure), QString(Node_Save), xmlContent2))
+	{
+		g_SaveParam.SaveTopBadIndex = xmlContent2[0].second.toInt();
+		g_SaveParam.SaveSideBadIndex = xmlContent2[1].second.toInt();
+
+		g_SaveParam.IsSaveTopBad = xmlContent2[2].second.toInt();
+		g_SaveParam.IsSaveSideBad = xmlContent2[3].second.toInt();
+		g_SaveParam.IsSaveTopAll = xmlContent2[4].second.toInt();
+		g_SaveParam.IsSaveSideAll = xmlContent2[5].second.toInt();
+
+		g_SaveParam.SaveTopBadNum = xmlContent2[6].second.toInt();
+		g_SaveParam.SaveSideBadNum = xmlContent2[7].second.toInt();
+		g_SaveParam.SaveTopAllNum = xmlContent2[8].second.toInt();
+		g_SaveParam.SaveSideAllNum = xmlContent2[9].second.toInt();
+
+
+		g_SaveParam.SaveTopBadPath = xmlContent2[10].second;
+		g_SaveParam.SaveSideBadPath = xmlContent2[11].second;
+		g_SaveParam.SaveTopAllPath = xmlContent2[12].second;
+		g_SaveParam.SaveSideAllPath = xmlContent2[13].second;
+
+		g_SaveParam.SaveImageFormat = xmlContent2[14].second;
+
+		g_SaveParam.IsSaveLog = xmlContent2[15].second.toInt();
+
+		if (QFile::exists(XML_Configure)) 
+			QFile::remove(XML_Configure);
+
+		QFile::copy(_XML_Configure, XML_Configure);
+	}
+	else if (ParserXmlNode(QString(XML_Configure_Origin), QString(Node_Save), xmlContent2))
+	{
+		g_SaveParam.SaveTopBadIndex = xmlContent2[0].second.toInt();
+		g_SaveParam.SaveSideBadIndex = xmlContent2[1].second.toInt();
+
+		g_SaveParam.IsSaveTopBad = xmlContent2[2].second.toInt();
+		g_SaveParam.IsSaveSideBad = xmlContent2[3].second.toInt();
+		g_SaveParam.IsSaveTopAll = xmlContent2[4].second.toInt();
+		g_SaveParam.IsSaveSideAll = xmlContent2[5].second.toInt();
+
+		g_SaveParam.SaveTopBadNum = xmlContent2[6].second.toInt();
+		g_SaveParam.SaveSideBadNum = xmlContent2[7].second.toInt();
+		g_SaveParam.SaveTopAllNum = xmlContent2[8].second.toInt();
+		g_SaveParam.SaveSideAllNum = xmlContent2[9].second.toInt();
+
+
+		g_SaveParam.SaveTopBadPath = xmlContent2[10].second;
+		g_SaveParam.SaveSideBadPath = xmlContent2[11].second;
+		g_SaveParam.SaveTopAllPath = xmlContent2[12].second;
+		g_SaveParam.SaveSideAllPath = xmlContent2[13].second;
+
+		g_SaveParam.SaveImageFormat = xmlContent2[14].second;
+
+		g_SaveParam.IsSaveLog = xmlContent2[15].second.toInt();
+
+		if (QFile::exists(XML_Configure))
+			QFile::remove(XML_Configure);
+
+		QFile::copy(XML_Configure_Origin, XML_Configure);
+
+		if (QFile::exists(_XML_Configure))
+			QFile::remove(_XML_Configure);
+
+		QFile::copy(XML_Configure_Origin, _XML_Configure);
 	}
 }
 

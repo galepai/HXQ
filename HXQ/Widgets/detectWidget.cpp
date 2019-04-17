@@ -59,6 +59,16 @@ void detectWidget::SaveToXml()
 			*p = xmlContent[index].second.toFloat();
 			p++;
 		}
+
+		if (QFile::exists(_XML_Configure))
+			QFile::remove(_XML_Configure);
+
+		QFile::copy(XML_Configure, _XML_Configure);
+
+		if (QFile::exists(XML_Configure_Origin))
+			QFile::remove(XML_Configure_Origin);
+
+		QFile::copy(XML_Configure, XML_Configure_Origin);
 	}
 
 

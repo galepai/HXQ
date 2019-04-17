@@ -21,7 +21,7 @@
         <比例5 type="float">1.0</比例5>
         <比例6 type="float">1.0</比例6>
         <比例7 type="float">1.0</比例7>
-        <比例8 type="float">1.0</比例8>
+        <比例8 type="float">0.88</比例8>
     </Hxq>
     <Save>
         <TopBadIndex type="int">106</TopBadIndex>

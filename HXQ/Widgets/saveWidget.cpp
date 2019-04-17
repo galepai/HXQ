@@ -6,6 +6,7 @@
 #include "ConstParam.h"
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QFile>
 #include "Global.h"
 
 
@@ -140,7 +141,18 @@ void saveWidget::SaveToXml()
 		g_SaveParam.SaveImageFormat = xmlContent2[14].second;
 
 		g_SaveParam.IsSaveLog = xmlContent2[15].second.toInt();
+
+		if (QFile::exists(_XML_Configure))
+			QFile::remove(_XML_Configure);
+
+		QFile::copy(XML_Configure, _XML_Configure);
+
+		if (QFile::exists(XML_Configure_Origin))
+			QFile::remove(XML_Configure_Origin);
+
+		QFile::copy(XML_Configure, XML_Configure_Origin);
 	}
+
 
 	QMessageBox::StandardButton reply;
 	reply = QMessageBox::information(this, tr("信息"), tr("参数成功写入配置文件"));

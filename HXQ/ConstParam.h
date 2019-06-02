@@ -104,6 +104,7 @@
 
 
 #define LineCameraId_Pylon_Basler_Side  "Basler raL2048-48gm#0030531D42B0#192.168.5.7:3956"	//Basler Camera
+#define Ip_SideCamera	"192.168.5.7"
 
 //#define SaveTopImageDir					"Images/Top/All/"		//	Images/Top/All/
 //#define SaveSideImageDir				"Images/Side/All/"		//	Images/Side/All/

@@ -185,27 +185,9 @@ void ReadGlobal()
 	}
 }
 
-void ResetEth(const QString ethName)
-{
-	QProcess p(0);
-	p.start("cmd", QStringList() << "/C" << QString("netsh interface set interface ") + ethName + (" disabled"));
-	p.waitForStarted();
-	p.waitForFinished();
-
-	QProcess p1(0);
-	p1.start("cmd", QStringList() << "/C" << QString("netsh interface set interface ") + ethName + " enabled");
-	p1.waitForStarted();
-	p1.waitForFinished();
-}
-
 int main(int argc, char *argv[])
 {
-	ResetEth("\"Dalsa5.8\"");
-	ReadGlobal();
-
-	/*HObject test;
-	ReadImage(&test,"test.tif");
-	WriteImage(test,"tiff" ,0, "test2.tif");*/
+	ResetEth("\"Basler5.8\"");
 
 	if (g_SaveParam.IsSaveLog)
 		qInstallMessageHandler(MessageOutput);
@@ -223,11 +205,46 @@ int main(int argc, char *argv[])
 	QPixmap pixmap("Resources/logo.bmp");
 	QSplashScreen* screen=new QSplashScreen(pixmap);
 	screen->show();
-	screen->showMessage(QObject::tr("初始化..."), Qt::AlignTop | Qt::AlignLeft, Qt::black);
+	screen->showMessage(QObject::tr("初始化CCD"), Qt::AlignTop | Qt::AlignLeft, Qt::black);
 	
+	static int cout = 0;
+	while (!isPingOk(Ip_SideCamera))
+	{
+		Sleep(200);
+		++cout;
+		if (cout > 50)
+		{
+			break;
+		}
+			
+	}
+
+	QString str = QString("第1次初始化CCD时间：%1").arg(cout*0.2);
+	screen->showMessage(str, Qt::AlignTop | Qt::AlignLeft, Qt::black);
+
+	ResetEth("\"Basler5.8\"");
+	cout = 0;
+	while (!isPingOk(Ip_SideCamera))
+	{
+		Sleep(200);
+		++cout;
+		if (cout > 50)
+			break;
+	}
+
+	str = QString("第2次初始化CCD时间：%1").arg(cout*0.2);
+	screen->showMessage(str, Qt::AlignTop | Qt::AlignLeft, Qt::black);
+
+	ReadGlobal();
+	Sleep(500);
+
+	screen->showMessage(QObject::tr("读取配置参数"), Qt::AlignTop | Qt::AlignLeft, Qt::black);
+	Sleep(200);
+
+	screen->showMessage(QObject::tr("初始化完成"), Qt::AlignTop | Qt::AlignLeft, Qt::black);
 
 #ifdef STARTLOGO 
-	int delayTime = 10;
+	int delayTime = 0.5;
 	QElapsedTimer timer;
 	timer.start();
 	while (timer.elapsed() < (delayTime * 1000))
@@ -235,7 +252,7 @@ int main(int argc, char *argv[])
 		a.processEvents();
 	}
 #endif  
-
+	
 	hxq w;
 	//w.setWindowTitle(G2U("内存"));
 	//w.showMaximized();

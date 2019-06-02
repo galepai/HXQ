@@ -84,7 +84,7 @@ hxq::hxq(QWidget *parent)
 	ui.label_sidecamera->setPixmap(QPixmap::fromImage(m_image_red));
 	ui.label_motioncard->setPixmap(QPixmap::fromImage(m_image_red));
 	
-	Sleep(2000);
+	//Sleep(2000);
 
 }
 
@@ -841,7 +841,21 @@ void hxq::OnStart()
 {
 	m_bOneDetect = false;
 	AllButtonFalse();
-	OnOpenCameras();
+	
+	if (isPingOk(Ip_SideCamera))
+	{
+		OnOpenCameras();
+	}
+	else
+	{
+		ResetEth("\"Basler5.8\"");
+		while (!isPingOk(Ip_SideCamera))
+		{
+			Sleep(200);
+		}
+		OnOpenCameras();
+	}
+	
 	//OnOpenCameraIsCorrect()   打开控制卡线程
 }
 

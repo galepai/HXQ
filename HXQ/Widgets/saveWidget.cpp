@@ -44,7 +44,7 @@ void saveWidget::InitWidget()
 	ui->comboBox_IsSaveTopBad->addItems(items);
 
 	items.clear();
-	items << "tiff" << "jpg";
+	items << "tiff" << "bmp";
 	ui->comboBox_SaveImageFormat->addItems(items);
 }
 

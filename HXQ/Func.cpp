@@ -1,3 +1,4 @@
+#pragma execution_character_set("utf-8")
 
 #include "Func.h"
 #include <QTime>
@@ -9,6 +10,7 @@
 #include <QtXml\QDomElement>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
+#include <QProcess>
 
 //QMutex g_mutex_Camera;
 //QMutex g_mutex_Result;
@@ -648,4 +650,37 @@ void MySql_Query(QSqlDatabase& db, const QString& expression)	//数据库查询
 QString MySql_Now()	//返回当前时间
 {
 	return QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+}
+
+void ResetEth(const QString& ethName)
+{
+	QProcess p(0);
+	p.start("cmd", QStringList() << "/C" << QString("netsh interface set interface ") + ethName + (" disabled"));
+	p.waitForStarted();
+	p.waitForFinished();
+
+	QProcess p1(0);
+	p1.start("cmd", QStringList() << "/C" << QString("netsh interface set interface ") + ethName + " enabled");
+	p1.waitForStarted();
+	p1.waitForFinished();
+}
+
+bool isPingOk(const QString& ip)
+{
+	QTextCodec* codec = QTextCodec::codecForName("GBK");
+	QProcess exc;
+	QString cmdstr = "ping -n 1 ";
+	cmdstr += ip;
+	exc.start(cmdstr);
+	exc.waitForFinished();
+	QString outstr = codec->toUnicode(exc.readAll());
+
+	if ((-1 != outstr.indexOf("往返行程的估计时间")))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

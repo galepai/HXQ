@@ -53,7 +53,7 @@
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_SQL_LIB;QT_WIDGETS_LIB;QT_XML_LIB;QT_XMLPATTERNS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;.;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include;.\GeneratedFiles\$(ConfigurationName);F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtCore;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtGui;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtANGLE;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtSql;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtWidgets;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtXml;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtXmlPatterns;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtXmlPatterns;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -62,33 +62,33 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\qtmaind.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5Cored.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5Guid.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5Sqld.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5Widgetsd.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5Xmld.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5XmlPatternsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Sqld.lib;Qt5Widgetsd.lib;Qt5Xmld.lib;Qt5XmlPatternsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <QtMoc>
       <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <IncludePath>.\GeneratedFiles;.;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include;.\GeneratedFiles\$(ConfigurationName);F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtCore;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtGui;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtANGLE;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtSql;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtWidgets;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtXml;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtXmlPatterns;%(AdditionalIncludeDirectories)</IncludePath>
+      <IncludePath>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtXmlPatterns;%(AdditionalIncludeDirectories)</IncludePath>
       <Define>UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_SQL_LIB;QT_WIDGETS_LIB;QT_XML_LIB;QT_XMLPATTERNS_LIB;%(PreprocessorDefinitions)</Define>
-      <QTDIR>F:\Qt\Qt5.9.6\5.9.6\msvc2015_64</QTDIR>
+      <QTDIR>$(QTDIR)</QTDIR>
     </QtMoc>
     <QtUic>
       <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
       <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
-      <QTDIR>F:\Qt\Qt5.9.6\5.9.6\msvc2015_64</QTDIR>
+      <QTDIR>$(QTDIR)</QTDIR>
     </QtUic>
     <QtRcc>
       <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
       <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
-      <QTDIR>F:\Qt\Qt5.9.6\5.9.6\msvc2015_64</QTDIR>
+      <QTDIR>$(QTDIR)</QTDIR>
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_SQL_LIB;QT_WIDGETS_LIB;QT_XML_LIB;QT_XMLPATTERNS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;.;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include;.\GeneratedFiles\$(ConfigurationName);F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtCore;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtGui;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtANGLE;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtSql;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtWidgets;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtXml;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtXmlPatterns;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtXmlPatterns;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat />
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -96,26 +96,26 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\qtmain.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5Core.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5Gui.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5Sql.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5Widgets.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5Xml.lib;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\lib\Qt5XmlPatterns.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Sql.lib;Qt5Widgets.lib;Qt5Xml.lib;Qt5XmlPatterns.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <QtMoc>
       <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <IncludePath>.\GeneratedFiles;.;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include;.\GeneratedFiles\$(ConfigurationName);F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtCore;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtGui;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtANGLE;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtSql;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtWidgets;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtXml;F:\Qt\Qt5.9.6\5.9.6\msvc2015_64\include\QtXmlPatterns;%(AdditionalIncludeDirectories)</IncludePath>
+      <IncludePath>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtXmlPatterns;%(AdditionalIncludeDirectories)</IncludePath>
       <Define>UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_SQL_LIB;QT_WIDGETS_LIB;QT_XML_LIB;QT_XMLPATTERNS_LIB;%(PreprocessorDefinitions)</Define>
-      <QTDIR>F:\Qt\Qt5.9.6\5.9.6\msvc2015_64</QTDIR>
+      <QTDIR>$(QTDIR)</QTDIR>
     </QtMoc>
     <QtUic>
       <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
       <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
-      <QTDIR>F:\Qt\Qt5.9.6\5.9.6\msvc2015_64</QTDIR>
+      <QTDIR>$(QTDIR)</QTDIR>
     </QtUic>
     <QtRcc>
       <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
       <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
-      <QTDIR>F:\Qt\Qt5.9.6\5.9.6\msvc2015_64</QTDIR>
+      <QTDIR>$(QTDIR)</QTDIR>
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -142,7 +142,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="0" lreleaseOptions="" MocOptions="" />
+      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="0" lreleaseOptions="" Qt5Version_x0020_x64="msvc2015_64" MocOptions="" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
